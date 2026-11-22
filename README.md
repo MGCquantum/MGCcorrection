@@ -1,6 +1,6 @@
 # MGC: erasure-aware decoding of the Gross code
 
-Infleqtion Challenge 1 (ML-assisted QEC decoding), MidQWest 2026. The challenge brief is in [CHALLENGE.md](CHALLENGE.md).
+Infleqtion Challenge 1 (ML-assisted QEC decoding), MidQWest 2026. See [AUDIT.md](AUDIT.md) for the submission readiness checks. The challenge brief is in [CHALLENGE.md](CHALLENGE.md).
 
 **Question:** on neutral-atom hardware, some errors can be converted into *erasures* that come with a flag saying where they happened (idealized heralded erasure conversion; real atom loss is detected later, see limits). How much does a decoder gain on the [[144,12,12]] Gross code by using those flags, and can ML cut decoding time without losing accuracy?
 
@@ -40,9 +40,9 @@ Logical error rate per cycle (95% CI) and failed pairs, same test shots for ever
 |---|---|---|---|---|---|
 | 0.003 | 3.3e-5 (2/5,000) | 3.3e-4 (20/5,000) | 3.3e-5 (2/5,000) | 3.3e-5 (2/5,000) | 4.2e-5 / 4.7e-4 |
 | 0.004 | 6.3e-4 (15/2,000) | 4.1e-3 (97/2,000) | 6.3e-4 (15/2,000) | 6.3e-4 (15/2,000) | 8.7e-4 / 4.4e-3 |
-| 0.005 | 6.3e-3 (145/2,000) | *pending* | 6.3e-3 (145/2,000) | 6.3e-3 (145/2,000) | 6.9e-3 / 2.3e-2 |
+| 0.005 | 6.3e-3 (145/2,000) | 2.2e-2 (469/2,000) | 6.3e-3 (145/2,000) | 6.3e-3 (145/2,000) | 6.9e-3 / 2.3e-2 |
 
-Both hybrids lose no accuracy relative to relay-BP at any p. The hybrid is close to relay-BP with an early exit: relay-BP's first leg is BP, and the kit runs it until 5 solutions agree (`stop_nconv=5`), while the hybrid accepts BP's first converged answer.
+Both hybrids have the same observed failed-pair count as relay-BP at all three tested noise levels; this finite sample does not prove equal underlying error rates. The hybrid is close to relay-BP with an early exit: relay-BP's first leg is BP, and the kit runs it until 5 solutions agree (`stop_nconv=5`), while the hybrid accepts BP's first converged answer.
 
 **Decode time** (one idle laptop, 1 thread, 300 X+Z pairs per p):
 
@@ -73,7 +73,7 @@ The router does not beat a single threshold. BP's own convergence check is alrea
   - The slowest 1% of shots do not get faster.
   - There is no speedup at p = 0.005.
   - Flag-aware decoding costs about 6× more time.
-  - The ML router ties a simple rule.
+  - The ML router does not outperform the simple convergence rule.
   - Error bars at p = 0.003 are wide, with only 2–3 failures.
 - **Model limits:** erasures are *idealized*. Flags fire instantly at the gate with the exact location, and the qubit returns to the code space. Real atom loss is detected later and a lost atom keeps causing errors. Preparation and measurement errors are not converted.
 
