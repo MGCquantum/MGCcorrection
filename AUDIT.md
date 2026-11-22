@@ -36,3 +36,13 @@ The correction recovers multiplicities from the herald probability and adds
 mutually exclusive outcomes instead of XOR-combining their probabilities.
 The no-erasure sweep is unaffected. Erasure headline numbers are under revalidation;
 the old results must not be presented as evidence for the corrected decoder yet.
+
+On the Gross code at p=0.004, f=0.5, the fix changes component multiplicities
+in 1,440 X-basis columns and 1,584 Z-basis columns (31,968 columns per basis).
+The one-qubit regression separately verifies the expected conditional flip
+probability of 1/2 by sampling the original circuit.
+
+Stim documents that heralded-erasure outcomes become independent approximations
+in a DEM: [HERALDED_ERASE reference](https://github.com/quantumlib/Stim/blob/main/doc/gates.md#heralded_erase).
+We sample circuits, not DEMs. Corrected per-column marginals still do not make
+BP-OSD an exact joint decoder of mutually exclusive Pauli outcomes.
