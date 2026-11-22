@@ -1,0 +1,139 @@
+{
+ "split": "validation",
+ "pairing": "analyze.z_partner (independent X/Z pairs)",
+ "note": "Frozen models and thresholds, unchanged; only the pairing of validation shots differs from selection time.",
+ "modes": {
+  "speed": {
+   "file": "aegis_router.joblib",
+   "tier1": "relay1",
+   "tier2": "relay",
+   "model": "gbm",
+   "threshold": 0.16638288403323945,
+   "failures": 181,
+   "relay_failures": 196,
+   "mean_ms": 289.52921621725625,
+   "rule": "no more failures than relay-BP at every p",
+   "rule_holds": true,
+   "per_setting": {
+    "p=0.003 f=0.0": {
+     "threshold": 0.16638288403323945,
+     "failures_pair": 3,
+     "ler": 6.252149467522727e-05,
+     "ms_mean": 21.619074638551865,
+     "escalated": 0.000375,
+     "relay_failures": 3,
+     "relay_ms": 47.61003214345328,
+     "pairs": 4000
+    },
+    "p=0.004 f=0.0": {
+     "threshold": 0.16638288403323945,
+     "failures_pair": 20,
+     "ler": 0.0005572603519752306,
+     "ms_mean": 151.10508413475085,
+     "escalated": 0.008666666666666666,
+     "relay_failures": 21,
+     "relay_ms": 279.65307846205906,
+     "pairs": 3000
+    },
+    "p=0.005 f=0.0": {
+     "threshold": 0.16638288403323945,
+     "failures_pair": 158,
+     "ler": 0.006834474908923527,
+     "ms_mean": 695.863489878466,
+     "escalated": 0.07450000000000001,
+     "relay_failures": 172,
+     "relay_ms": 812.6025366905669,
+     "pairs": 2000
+    }
+   }
+  },
+  "accuracy": {
+   "file": "aegis_router_accuracy.joblib",
+   "tier1": "relay1",
+   "tier2": "relay",
+   "model": "gbm",
+   "threshold": 0.09597938653983788,
+   "failures": 172,
+   "relay_failures": 196,
+   "mean_ms": 335.0505333295934,
+   "rule": "no slower than relay-BP at every p",
+   "rule_holds": true,
+   "per_setting": {
+    "p=0.003 f=0.0": {
+     "threshold": 0.09597938653983788,
+     "failures_pair": 3,
+     "ler": 6.252149467522727e-05,
+     "ms_mean": 21.666252940552113,
+     "escalated": 0.0005,
+     "relay_failures": 3,
+     "relay_ms": 47.61003214345328,
+     "pairs": 4000
+    },
+    "p=0.004 f=0.0": {
+     "threshold": 0.09597938653983788,
+     "failures_pair": 19,
+     "ler": 0.0005293160271662156,
+     "ms_mean": 175.6052351497541,
+     "escalated": 0.01633333333333333,
+     "relay_failures": 21,
+     "relay_ms": 279.65307846205906,
+     "pairs": 3000
+    },
+    "p=0.005 f=0.0": {
+     "threshold": 0.09597938653983788,
+     "failures_pair": 150,
+     "ler": 0.006475736578073321,
+     "ms_mean": 807.8801118984741,
+     "escalated": 0.11499999999999999,
+     "relay_failures": 172,
+     "relay_ms": 812.6025366905669,
+     "pairs": 2000
+    }
+   }
+  },
+  "heuristic": {
+   "file": "heuristic_router.joblib",
+   "tier1": "relay1",
+   "tier2": "relay",
+   "model": "heuristic: second opinion disagrees",
+   "threshold": 0.11529793501972682,
+   "failures": 170,
+   "relay_failures": 196,
+   "mean_ms": 376.7817595366732,
+   "rule": "no more failures than relay-BP at every p",
+   "rule_holds": true,
+   "per_setting": {
+    "p=0.003 f=0.0": {
+     "threshold": 0.11529793501972682,
+     "failures_pair": 3,
+     "ler": 6.252149467522727e-05,
+     "ms_mean": 22.83405761629455,
+     "escalated": 0.003,
+     "relay_failures": 3,
+     "relay_ms": 47.61003214345328,
+     "pairs": 4000
+    },
+    "p=0.004 f=0.0": {
+     "threshold": 0.11529793501972682,
+     "failures_pair": 19,
+     "ler": 0.0005293160271662156,
+     "ms_mean": 211.08975199275298,
+     "escalated": 0.034333333333333334,
+     "relay_failures": 21,
+     "relay_ms": 279.65307846205906,
+     "pairs": 3000
+    },
+    "p=0.005 f=0.0": {
+     "threshold": 0.11529793501972682,
+     "failures_pair": 148,
+     "ler": 0.006386274207228704,
+     "ms_mean": 896.421469000972,
+     "escalated": 0.17225000000000001,
+     "relay_failures": 172,
+     "relay_ms": 812.6025366905669,
+     "pairs": 2000
+    }
+   }
+  }
+ }
+}
