@@ -1,8 +1,9 @@
 results/
 .venv/
 __pycache__/
-data/
+data/train/
+data/checkpoints/
 .pytest_cache/
 .venv
-experiments/logs/
+results/logs/
 .DS_Store

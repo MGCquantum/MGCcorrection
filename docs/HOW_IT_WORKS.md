@@ -51,8 +51,8 @@ Every number in the results comes from shots that played no part in any choice m
 | train | 1 | fit the risk models |
 | calibration | 4 | Platt scaling |
 | validation | 3 | choose tiers, model, threshold (v1) and per-setting operating points (v2) |
-| test | 2 | v1 evaluation; models frozen first (`experiments/reports/frozen_models.json`) |
-| fresh test / fresh timing | 7 / 8 | v2 evaluation; v2 frozen first (`experiments/reports/v2_frozen.json`) |
+| test | 2 | v1 evaluation; models frozen first (`results/frozen_models.json`) |
+| fresh test / fresh timing | 7 / 8 | v2 evaluation; v2 frozen first (`results/v2_frozen.json`) |
 | demo | 99 | `python -m aegis.demo` |
 
 - **Same shots everywhere:** every decoder decodes the same shots and is scored on the same independent X/Z pairs (`analyze.z_partner`). Statistics are exact: Clopper–Pearson intervals, McNemar tests on paired failures, and bootstrap intervals on speedups.
@@ -74,7 +74,7 @@ Read in this order. Each file starts with a docstring that says what it does and
 | 8 | [`aegis/train.py`](../aegis/train.py) | Fit, calibrate and select v1 on train/calibration/validation shots |
 | 9 | [`aegis/retune.py`](../aegis/retune.py) | v2: per-setting operating points on validation shots, then freeze hashes |
 | 10 | [`aegis/evaluate.py`](../aegis/evaluate.py), [`aegis/evaluate_v2.py`](../aegis/evaluate_v2.py) | Evaluation of v1 (seed 2) and v2 (seeds 7, 8) against the baselines |
-| 11 | [`aegis/report.py`](../aegis/report.py), [`aegis/figures.py`](../aegis/figures.py) | Generate [`RESULTS.md`](RESULTS.md) and every plot from the stored evaluation; no number is typed by hand |
+| 11 | [`aegis/report.py`](../aegis/report.py), [`aegis/figures.py`](../aegis/figures.py) | Generate [`results/tables.md`](../results/tables.md) and every plot in `results/figures/` from the stored evaluation; no number is typed by hand |
 | 12 | [`aegis/demo.py`](../aegis/demo.py) | Live demo on fresh shots |
 
 Supporting modules:
@@ -97,12 +97,12 @@ flowchart TB
     TR --> RT
     TR --> E1["collect.py --split test<br/>evaluate.py"]
     RT --> E2["run_fresh_evaluation.sh<br/>evaluate_v2.py"]
-    E1 --> R["report.py, figures.py<br/>docs/RESULTS.md, docs/figures/"]
+    E1 --> R["report.py, figures.py<br/>results/tables.md, results/figures/"]
     E2 --> R
 ```
 
 | Location | Contents |
 |---|---|
-| `experiments/records/` | Per-shot records (committed) |
-| `experiments/reports/` | Evaluations, selections and frozen hashes |
-| `experiments/manifest.json` | The provenance of every decoding run: command, machine, package versions, wall and CPU time |
+| `data/` | Per-shot records (committed) |
+| `results/` | Evaluations, selections and frozen hashes |
+| `data/manifest.json` | The provenance of every decoding run: command, machine, package versions, wall and CPU time |

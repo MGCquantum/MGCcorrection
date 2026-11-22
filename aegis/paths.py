@@ -6,10 +6,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 KIT = ROOT / "challenge-1-ml-decoder-kit"   # sponsor starter kit plus the team's audited extensions
-DATA = ROOT / "data"                        # regenerable training/calibration records, not committed
-RECORDS = ROOT / "experiments" / "records"  # committed per-shot test, validation and timing records
-REPORTS = ROOT / "experiments" / "reports"  # committed JSON reports written by aegis.train / aegis.evaluate
-MANIFEST = ROOT / "experiments" / "manifest.json"
+DATA = ROOT / "data"                        # per-shot records
+RECORDS = DATA                              # committed: validation, test and timing records
+TRAIN_RECORDS = DATA / "train"              # not committed: training and calibration records (regenerable)
+MANIFEST = DATA / "manifest.json"           # how every record was produced
+REPORTS = ROOT / "results"                  # evaluations, selections, frozen hashes, CSV
+FIGURES = REPORTS / "figures"               # every plot
 MODELS = ROOT / "models"                    # committed risk models chosen on validation shots
 
 if str(KIT) not in sys.path:

@@ -6418,7 +6418,7 @@
  },
  "runs": [
   {
-   "record": "experiments/records/val_X_p0.004.npz",
+   "record": "data/val_X_p0.004.npz",
    "split": "val",
    "basis": "X",
    "p": 0.004,
@@ -6457,7 +6457,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.004.npz",
+   "record": "data/val_Z_p0.004.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.004,
@@ -6496,7 +6496,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.003.npz",
+   "record": "data/val_X_p0.003.npz",
    "split": "val",
    "basis": "X",
    "p": 0.003,
@@ -6535,7 +6535,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.003.npz",
+   "record": "data/val_Z_p0.003.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.003,
@@ -6574,7 +6574,7 @@
    }
   },
   {
-   "record": "data/records/train_X_p0.004.npz",
+   "record": "data/train/train_X_p0.004.npz",
    "split": "train",
    "basis": "X",
    "p": 0.004,
@@ -6606,7 +6606,7 @@
    }
   },
   {
-   "record": "data/records/train_Z_p0.004.npz",
+   "record": "data/train/train_Z_p0.004.npz",
    "split": "train",
    "basis": "Z",
    "p": 0.004,
@@ -6638,7 +6638,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.003.npz",
+   "record": "data/train/calib_X_p0.003.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.003,
@@ -6670,7 +6670,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.003.npz",
+   "record": "data/train/calib_Z_p0.003.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.003,
@@ -6702,7 +6702,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.004.npz",
+   "record": "data/train/calib_X_p0.004.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.004,
@@ -6734,7 +6734,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.004.npz",
+   "record": "data/train/calib_Z_p0.004.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.004,
@@ -6766,7 +6766,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.005.npz",
+   "record": "data/train/calib_X_p0.005.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.005,
@@ -6798,7 +6798,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.005.npz",
+   "record": "data/train/calib_Z_p0.005.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.005,
@@ -6830,7 +6830,7 @@
    }
   },
   {
-   "record": "data/records/train_X_p0.003.npz",
+   "record": "data/train/train_X_p0.003.npz",
    "split": "train",
    "basis": "X",
    "p": 0.003,
@@ -6862,7 +6862,7 @@
    }
   },
   {
-   "record": "data/records/train_Z_p0.003.npz",
+   "record": "data/train/train_Z_p0.003.npz",
    "split": "train",
    "basis": "Z",
    "p": 0.003,
@@ -6894,7 +6894,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.004.npz",
+   "record": "data/val_X_p0.004.npz",
    "split": "val",
    "basis": "X",
    "p": 0.004,
@@ -6926,7 +6926,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.004.npz",
+   "record": "data/val_Z_p0.004.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.004,
@@ -6958,7 +6958,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.003.npz",
+   "record": "data/val_X_p0.003.npz",
    "split": "val",
    "basis": "X",
    "p": 0.003,
@@ -6990,7 +6990,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.003.npz",
+   "record": "data/val_Z_p0.003.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.003,
@@ -7022,7 +7022,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.004.npz",
+   "record": "data/val_X_p0.004.npz",
    "split": "val",
    "basis": "X",
    "p": 0.004,
@@ -7055,7 +7055,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.004.npz",
+   "record": "data/val_Z_p0.004.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.004,
@@ -7088,7 +7088,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.003.npz",
+   "record": "data/val_X_p0.003.npz",
    "split": "val",
    "basis": "X",
    "p": 0.003,
@@ -7121,7 +7121,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.003.npz",
+   "record": "data/val_Z_p0.003.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.003,
@@ -7154,7 +7154,7 @@
    }
   },
   {
-   "record": "data/records/train_X_p0.004.npz",
+   "record": "data/train/train_X_p0.004.npz",
    "split": "train",
    "basis": "X",
    "p": 0.004,
@@ -7187,7 +7187,7 @@
    }
   },
   {
-   "record": "data/records/train_Z_p0.004.npz",
+   "record": "data/train/train_Z_p0.004.npz",
    "split": "train",
    "basis": "Z",
    "p": 0.004,
@@ -7220,7 +7220,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.003.npz",
+   "record": "data/train/calib_X_p0.003.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.003,
@@ -7253,7 +7253,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.003.npz",
+   "record": "data/train/calib_Z_p0.003.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.003,
@@ -7286,7 +7286,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.004.npz",
+   "record": "data/train/calib_X_p0.004.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.004,
@@ -7319,7 +7319,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.004.npz",
+   "record": "data/train/calib_Z_p0.004.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.004,
@@ -7352,7 +7352,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.005.npz",
+   "record": "data/train/calib_X_p0.005.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.005,
@@ -7385,7 +7385,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.005.npz",
+   "record": "data/train/calib_Z_p0.005.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.005,
@@ -7418,7 +7418,7 @@
    }
   },
   {
-   "record": "data/records/train_X_p0.003.npz",
+   "record": "data/train/train_X_p0.003.npz",
    "split": "train",
    "basis": "X",
    "p": 0.003,
@@ -7451,7 +7451,7 @@
    }
   },
   {
-   "record": "data/records/train_Z_p0.003.npz",
+   "record": "data/train/train_Z_p0.003.npz",
    "split": "train",
    "basis": "Z",
    "p": 0.003,
@@ -7484,7 +7484,7 @@
    }
   },
   {
-   "record": "data/records/train_X_p0.005.npz",
+   "record": "data/train/train_X_p0.005.npz",
    "split": "train",
    "basis": "X",
    "p": 0.005,
@@ -7517,7 +7517,7 @@
    }
   },
   {
-   "record": "data/records/train_Z_p0.005.npz",
+   "record": "data/train/train_Z_p0.005.npz",
    "split": "train",
    "basis": "Z",
    "p": 0.005,
@@ -7550,7 +7550,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.005.npz",
+   "record": "data/val_X_p0.005.npz",
    "split": "val",
    "basis": "X",
    "p": 0.005,
@@ -7587,7 +7587,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.005.npz",
+   "record": "data/val_Z_p0.005.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.005,
@@ -7624,7 +7624,7 @@
    }
   },
   {
-   "record": "data/records/train_X_p0.004_f0.25.npz",
+   "record": "data/train/train_X_p0.004_f0.25.npz",
    "split": "train",
    "basis": "X",
    "p": 0.004,
@@ -7657,7 +7657,7 @@
    }
   },
   {
-   "record": "data/records/train_Z_p0.004_f0.25.npz",
+   "record": "data/train/train_Z_p0.004_f0.25.npz",
    "split": "train",
    "basis": "Z",
    "p": 0.004,
@@ -7690,7 +7690,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.004_f0.25.npz",
+   "record": "data/train/calib_X_p0.004_f0.25.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.004,
@@ -7723,7 +7723,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.004_f0.25.npz",
+   "record": "data/train/calib_Z_p0.004_f0.25.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.004,
@@ -7756,7 +7756,7 @@
    }
   },
   {
-   "record": "data/records/train_X_p0.004_f0.5.npz",
+   "record": "data/train/train_X_p0.004_f0.5.npz",
    "split": "train",
    "basis": "X",
    "p": 0.004,
@@ -7789,7 +7789,7 @@
    }
   },
   {
-   "record": "data/records/train_Z_p0.004_f0.5.npz",
+   "record": "data/train/train_Z_p0.004_f0.5.npz",
    "split": "train",
    "basis": "Z",
    "p": 0.004,
@@ -7822,7 +7822,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.004_f0.5.npz",
+   "record": "data/train/calib_X_p0.004_f0.5.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.004,
@@ -7855,7 +7855,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.004_f0.5.npz",
+   "record": "data/train/calib_Z_p0.004_f0.5.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.004,
@@ -7888,7 +7888,7 @@
    }
   },
   {
-   "record": "data/records/train_X_p0.004_f0.75.npz",
+   "record": "data/train/train_X_p0.004_f0.75.npz",
    "split": "train",
    "basis": "X",
    "p": 0.004,
@@ -7921,7 +7921,7 @@
    }
   },
   {
-   "record": "data/records/train_Z_p0.004_f0.75.npz",
+   "record": "data/train/train_Z_p0.004_f0.75.npz",
    "split": "train",
    "basis": "Z",
    "p": 0.004,
@@ -7954,7 +7954,7 @@
    }
   },
   {
-   "record": "data/records/calib_X_p0.004_f0.75.npz",
+   "record": "data/train/calib_X_p0.004_f0.75.npz",
    "split": "calib",
    "basis": "X",
    "p": 0.004,
@@ -7987,7 +7987,7 @@
    }
   },
   {
-   "record": "data/records/calib_Z_p0.004_f0.75.npz",
+   "record": "data/train/calib_Z_p0.004_f0.75.npz",
    "split": "calib",
    "basis": "Z",
    "p": 0.004,
@@ -8020,7 +8020,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.004.npz",
+   "record": "data/test_X_p0.004.npz",
    "split": "test",
    "basis": "X",
    "p": 0.004,
@@ -8057,7 +8057,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.004.npz",
+   "record": "data/test_Z_p0.004.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.004,
@@ -8094,7 +8094,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.003.npz",
+   "record": "data/test_X_p0.003.npz",
    "split": "test",
    "basis": "X",
    "p": 0.003,
@@ -8131,7 +8131,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.003.npz",
+   "record": "data/test_Z_p0.003.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.003,
@@ -8168,7 +8168,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.005.npz",
+   "record": "data/test_X_p0.005.npz",
    "split": "test",
    "basis": "X",
    "p": 0.005,
@@ -8205,7 +8205,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.005.npz",
+   "record": "data/test_Z_p0.005.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.005,
@@ -8242,7 +8242,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.004_f0.5.npz",
+   "record": "data/test_X_p0.004_f0.5.npz",
    "split": "test",
    "basis": "X",
    "p": 0.004,
@@ -8280,7 +8280,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.004_f0.5.npz",
+   "record": "data/test_Z_p0.004_f0.5.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.004,
@@ -8318,7 +8318,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.004_f0.25.npz",
+   "record": "data/test_X_p0.004_f0.25.npz",
    "split": "test",
    "basis": "X",
    "p": 0.004,
@@ -8356,7 +8356,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.004_f0.25.npz",
+   "record": "data/test_Z_p0.004_f0.25.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.004,
@@ -8394,7 +8394,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.004_f0.75.npz",
+   "record": "data/test_X_p0.004_f0.75.npz",
    "split": "test",
    "basis": "X",
    "p": 0.004,
@@ -8432,7 +8432,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.004_f0.75.npz",
+   "record": "data/test_Z_p0.004_f0.75.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.004,
@@ -8470,7 +8470,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.004.npz",
+   "record": "data/test_X_p0.004.npz",
    "split": "test",
    "basis": "X",
    "p": 0.004,
@@ -8502,7 +8502,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.004.npz",
+   "record": "data/test_Z_p0.004.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.004,
@@ -8534,7 +8534,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.003.npz",
+   "record": "data/test_X_p0.003.npz",
    "split": "test",
    "basis": "X",
    "p": 0.003,
@@ -8566,7 +8566,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.003.npz",
+   "record": "data/test_Z_p0.003.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.003,
@@ -8598,7 +8598,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.005.npz",
+   "record": "data/test_X_p0.005.npz",
    "split": "test",
    "basis": "X",
    "p": 0.005,
@@ -8630,7 +8630,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.005.npz",
+   "record": "data/test_Z_p0.005.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.005,
@@ -8662,7 +8662,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.004_f0.25.npz",
+   "record": "data/test_X_p0.004_f0.25.npz",
    "split": "test",
    "basis": "X",
    "p": 0.004,
@@ -8694,7 +8694,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.004_f0.25.npz",
+   "record": "data/test_Z_p0.004_f0.25.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.004,
@@ -8726,7 +8726,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.004_f0.5.npz",
+   "record": "data/test_X_p0.004_f0.5.npz",
    "split": "test",
    "basis": "X",
    "p": 0.004,
@@ -8758,7 +8758,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.004_f0.5.npz",
+   "record": "data/test_Z_p0.004_f0.5.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.004,
@@ -8790,7 +8790,7 @@
    }
   },
   {
-   "record": "experiments/records/test_X_p0.004_f0.75.npz",
+   "record": "data/test_X_p0.004_f0.75.npz",
    "split": "test",
    "basis": "X",
    "p": 0.004,
@@ -8822,7 +8822,7 @@
    }
   },
   {
-   "record": "experiments/records/test_Z_p0.004_f0.75.npz",
+   "record": "data/test_Z_p0.004_f0.75.npz",
    "split": "test",
    "basis": "Z",
    "p": 0.004,
@@ -8854,7 +8854,7 @@
    }
   },
   {
-   "record": "experiments/records/timing_X_p0.003.npz",
+   "record": "data/timing_X_p0.003.npz",
    "split": "timing",
    "basis": "X",
    "p": 0.003,
@@ -8888,7 +8888,7 @@
    }
   },
   {
-   "record": "experiments/records/timing_Z_p0.003.npz",
+   "record": "data/timing_Z_p0.003.npz",
    "split": "timing",
    "basis": "Z",
    "p": 0.003,
@@ -8922,7 +8922,7 @@
    }
   },
   {
-   "record": "experiments/records/timing_X_p0.004.npz",
+   "record": "data/timing_X_p0.004.npz",
    "split": "timing",
    "basis": "X",
    "p": 0.004,
@@ -8956,7 +8956,7 @@
    }
   },
   {
-   "record": "experiments/records/timing_Z_p0.004.npz",
+   "record": "data/timing_Z_p0.004.npz",
    "split": "timing",
    "basis": "Z",
    "p": 0.004,
@@ -8990,7 +8990,7 @@
    }
   },
   {
-   "record": "experiments/records/timing_X_p0.005.npz",
+   "record": "data/timing_X_p0.005.npz",
    "split": "timing",
    "basis": "X",
    "p": 0.005,
@@ -9024,7 +9024,7 @@
    }
   },
   {
-   "record": "experiments/records/timing_Z_p0.005.npz",
+   "record": "data/timing_Z_p0.005.npz",
    "split": "timing",
    "basis": "Z",
    "p": 0.005,
@@ -9058,7 +9058,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.004_f0.25.npz",
+   "record": "data/val_X_p0.004_f0.25.npz",
    "split": "val",
    "basis": "X",
    "p": 0.004,
@@ -9092,7 +9092,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.004_f0.25.npz",
+   "record": "data/val_Z_p0.004_f0.25.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.004,
@@ -9126,7 +9126,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.004_f0.5.npz",
+   "record": "data/val_X_p0.004_f0.5.npz",
    "split": "val",
    "basis": "X",
    "p": 0.004,
@@ -9160,7 +9160,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.004_f0.5.npz",
+   "record": "data/val_Z_p0.004_f0.5.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.004,
@@ -9194,7 +9194,7 @@
    }
   },
   {
-   "record": "experiments/records/val_X_p0.004_f0.75.npz",
+   "record": "data/val_X_p0.004_f0.75.npz",
    "split": "val",
    "basis": "X",
    "p": 0.004,
@@ -9228,7 +9228,7 @@
    }
   },
   {
-   "record": "experiments/records/val_Z_p0.004_f0.75.npz",
+   "record": "data/val_Z_p0.004_f0.75.npz",
    "split": "val",
    "basis": "Z",
    "p": 0.004,
@@ -9262,7 +9262,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.003.npz",
+   "record": "data/test2_X_p0.003.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.003,
@@ -9295,7 +9295,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.003.npz",
+   "record": "data/test2_Z_p0.003.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.003,
@@ -9328,7 +9328,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.003.npz",
+   "record": "data/test2_X_p0.003.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.003,
@@ -9360,7 +9360,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.003.npz",
+   "record": "data/test2_Z_p0.003.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.003,
@@ -9392,7 +9392,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.003.npz",
+   "record": "data/test2_X_p0.003.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.003,
@@ -9424,7 +9424,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.003.npz",
+   "record": "data/test2_Z_p0.003.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.003,
@@ -9456,7 +9456,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.003.npz",
+   "record": "data/test2_X_p0.003.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.003,
@@ -9488,7 +9488,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.003.npz",
+   "record": "data/test2_Z_p0.003.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.003,
@@ -9520,7 +9520,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004.npz",
+   "record": "data/test2_X_p0.004.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -9553,7 +9553,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004.npz",
+   "record": "data/test2_Z_p0.004.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -9586,7 +9586,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004.npz",
+   "record": "data/test2_X_p0.004.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -9618,7 +9618,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004.npz",
+   "record": "data/test2_Z_p0.004.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -9650,7 +9650,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004.npz",
+   "record": "data/test2_X_p0.004.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -9682,7 +9682,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004.npz",
+   "record": "data/test2_Z_p0.004.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -9714,7 +9714,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004.npz",
+   "record": "data/test2_X_p0.004.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -9746,7 +9746,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004.npz",
+   "record": "data/test2_Z_p0.004.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -9778,7 +9778,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.005.npz",
+   "record": "data/test2_X_p0.005.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.005,
@@ -9811,7 +9811,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.005.npz",
+   "record": "data/test2_Z_p0.005.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.005,
@@ -9844,7 +9844,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.005.npz",
+   "record": "data/test2_X_p0.005.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.005,
@@ -9876,7 +9876,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.005.npz",
+   "record": "data/test2_Z_p0.005.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.005,
@@ -9908,7 +9908,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.005.npz",
+   "record": "data/test2_X_p0.005.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.005,
@@ -9940,7 +9940,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.005.npz",
+   "record": "data/test2_Z_p0.005.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.005,
@@ -9972,7 +9972,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.005.npz",
+   "record": "data/test2_X_p0.005.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.005,
@@ -10004,7 +10004,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.005.npz",
+   "record": "data/test2_Z_p0.005.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.005,
@@ -10036,7 +10036,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.25.npz",
+   "record": "data/test2_X_p0.004_f0.25.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10069,7 +10069,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.25.npz",
+   "record": "data/test2_Z_p0.004_f0.25.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10102,7 +10102,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.25.npz",
+   "record": "data/test2_X_p0.004_f0.25.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10134,7 +10134,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.25.npz",
+   "record": "data/test2_Z_p0.004_f0.25.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10166,7 +10166,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.25.npz",
+   "record": "data/test2_X_p0.004_f0.25.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10198,7 +10198,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.25.npz",
+   "record": "data/test2_Z_p0.004_f0.25.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10230,7 +10230,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.25.npz",
+   "record": "data/test2_X_p0.004_f0.25.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10262,7 +10262,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.25.npz",
+   "record": "data/test2_Z_p0.004_f0.25.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10294,7 +10294,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.5.npz",
+   "record": "data/test2_X_p0.004_f0.5.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10327,7 +10327,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.5.npz",
+   "record": "data/test2_Z_p0.004_f0.5.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10360,7 +10360,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.5.npz",
+   "record": "data/test2_X_p0.004_f0.5.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10392,7 +10392,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.5.npz",
+   "record": "data/test2_Z_p0.004_f0.5.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10424,7 +10424,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.5.npz",
+   "record": "data/test2_X_p0.004_f0.5.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10456,7 +10456,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.5.npz",
+   "record": "data/test2_Z_p0.004_f0.5.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10488,7 +10488,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.5.npz",
+   "record": "data/test2_X_p0.004_f0.5.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10520,7 +10520,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.5.npz",
+   "record": "data/test2_Z_p0.004_f0.5.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10552,7 +10552,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_X_p0.004_f0.75.npz",
+   "record": "data/test2_X_p0.004_f0.75.npz",
    "split": "test2",
    "basis": "X",
    "p": 0.004,
@@ -10585,7 +10585,7 @@
    }
   },
   {
-   "record": "experiments/records/test2_Z_p0.004_f0.75.npz",
+   "record": "data/test2_Z_p0.004_f0.75.npz",
    "split": "test2",
    "basis": "Z",
    "p": 0.004,
@@ -10604,6 +10604,1360 @@
    "resumed_chunks": 0,
    "finished": "2026-11-22 04:51:10",
    "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/test2_X_p0.004_f0.75.npz",
+   "split": "test2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.75,
+   "seed": 7,
+   "shots": 5000,
+   "tiers": [
+    "aegis-v1+flags"
+   ],
+   "workers": 8,
+   "chunk": 50,
+   "wall_seconds": 41.3,
+   "cpu_seconds": 267.0,
+   "peak_worker_rss_mb": 206.8,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 04:52:07",
+   "model": "models/aegis_router_loss.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/test2_Z_p0.004_f0.75.npz",
+   "split": "test2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.75,
+   "seed": 7,
+   "shots": 5000,
+   "tiers": [
+    "aegis-v1+flags"
+   ],
+   "workers": 8,
+   "chunk": 50,
+   "wall_seconds": 32.6,
+   "cpu_seconds": 215.7,
+   "peak_worker_rss_mb": 213.2,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 04:52:54",
+   "model": "models/aegis_router_loss.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/test2_X_p0.004_f0.75.npz",
+   "split": "test2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.75,
+   "seed": 7,
+   "shots": 5000,
+   "tiers": [
+    "aegis2-speed+flags"
+   ],
+   "workers": 8,
+   "chunk": 50,
+   "wall_seconds": 38.9,
+   "cpu_seconds": 249.7,
+   "peak_worker_rss_mb": 215.2,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 04:53:48",
+   "model": "models/v2/aegis_speed_p0.004_f0.75.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/test2_Z_p0.004_f0.75.npz",
+   "split": "test2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.75,
+   "seed": 7,
+   "shots": 5000,
+   "tiers": [
+    "aegis2-speed+flags"
+   ],
+   "workers": 8,
+   "chunk": 50,
+   "wall_seconds": 35.3,
+   "cpu_seconds": 230.2,
+   "peak_worker_rss_mb": 215.2,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 04:54:38",
+   "model": "models/v2/aegis_speed_p0.004_f0.75.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/test2_X_p0.004_f0.75.npz",
+   "split": "test2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.75,
+   "seed": 7,
+   "shots": 5000,
+   "tiers": [
+    "aegis2-accuracy+flags"
+   ],
+   "workers": 8,
+   "chunk": 50,
+   "wall_seconds": 52.1,
+   "cpu_seconds": 291.4,
+   "peak_worker_rss_mb": 214.6,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 04:55:46",
+   "model": "models/v2/aegis_accuracy_p0.004_f0.75.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/test2_Z_p0.004_f0.75.npz",
+   "split": "test2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.75,
+   "seed": 7,
+   "shots": 5000,
+   "tiers": [
+    "aegis2-accuracy+flags"
+   ],
+   "workers": 8,
+   "chunk": 50,
+   "wall_seconds": 38.0,
+   "cpu_seconds": 236.9,
+   "peak_worker_rss_mb": 214.6,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 04:56:39",
+   "model": "models/v2/aegis_accuracy_p0.004_f0.75.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.003.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 178.5,
+   "cpu_seconds": 177.4,
+   "peak_worker_rss_mb": 168.0,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:00:28",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.003.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 166.1,
+   "cpu_seconds": 164.6,
+   "peak_worker_rss_mb": 171.9,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:03:16",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.003.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 18.9,
+   "cpu_seconds": 18.4,
+   "peak_worker_rss_mb": 175.1,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:03:36",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.003.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 18.7,
+   "cpu_seconds": 18.4,
+   "peak_worker_rss_mb": 180.0,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:03:56",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.003.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis2-speed"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 18.8,
+   "cpu_seconds": 18.5,
+   "peak_worker_rss_mb": 179.2,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:04:16",
+   "model": "models/v2/aegis_speed_p0.003.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.003.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis2-speed"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 18.8,
+   "cpu_seconds": 18.4,
+   "peak_worker_rss_mb": 180.3,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:04:36",
+   "model": "models/v2/aegis_speed_p0.003.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.003.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis2-accuracy"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 18.8,
+   "cpu_seconds": 18.5,
+   "peak_worker_rss_mb": 176.4,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:04:57",
+   "model": "models/v2/aegis_accuracy_p0.003.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.003.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis2-accuracy"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 18.9,
+   "cpu_seconds": 18.5,
+   "peak_worker_rss_mb": 179.8,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:05:17",
+   "model": "models/v2/aegis_accuracy_p0.003.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.004.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 262.6,
+   "cpu_seconds": 262.3,
+   "peak_worker_rss_mb": 166.9,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:09:41",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.004.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 241.4,
+   "cpu_seconds": 241.0,
+   "peak_worker_rss_mb": 174.3,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:13:44",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.004.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 88.1,
+   "cpu_seconds": 87.6,
+   "peak_worker_rss_mb": 180.6,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:15:14",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.004.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 57.0,
+   "cpu_seconds": 56.5,
+   "peak_worker_rss_mb": 182.2,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:16:12",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.004.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "aegis2-speed"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 45.8,
+   "cpu_seconds": 45.5,
+   "peak_worker_rss_mb": 178.6,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:16:59",
+   "model": "models/v2/aegis_speed_p0.004.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.004.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "aegis2-speed"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 41.4,
+   "cpu_seconds": 41.0,
+   "peak_worker_rss_mb": 182.6,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:17:41",
+   "model": "models/v2/aegis_speed_p0.004.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.004.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "aegis2-accuracy"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 50.8,
+   "cpu_seconds": 50.3,
+   "peak_worker_rss_mb": 180.4,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:18:32",
+   "model": "models/v2/aegis_accuracy_p0.004.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.004.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "aegis2-accuracy"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 46.3,
+   "cpu_seconds": 45.8,
+   "peak_worker_rss_mb": 180.4,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:19:19",
+   "model": "models/v2/aegis_accuracy_p0.004.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.005.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.005,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 500,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 184.8,
+   "cpu_seconds": 184.2,
+   "peak_worker_rss_mb": 169.5,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:22:25",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.005.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.005,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 500,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 165.2,
+   "cpu_seconds": 165.0,
+   "peak_worker_rss_mb": 174.3,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:25:11",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.005.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.005,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 500,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 105.9,
+   "cpu_seconds": 105.6,
+   "peak_worker_rss_mb": 178.2,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:26:57",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.005.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.005,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 500,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 95.3,
+   "cpu_seconds": 95.1,
+   "peak_worker_rss_mb": 180.0,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:28:33",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.005.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.005,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 500,
+   "tiers": [
+    "aegis2-speed"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 93.1,
+   "cpu_seconds": 92.6,
+   "peak_worker_rss_mb": 178.3,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:30:07",
+   "model": "models/v2/aegis_speed_p0.005.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.005.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.005,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 500,
+   "tiers": [
+    "aegis2-speed"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 72.4,
+   "cpu_seconds": 72.1,
+   "peak_worker_rss_mb": 180.0,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:31:20",
+   "model": "models/v2/aegis_speed_p0.005.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.005.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.005,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 500,
+   "tiers": [
+    "aegis2-accuracy"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 137.6,
+   "cpu_seconds": 135.6,
+   "peak_worker_rss_mb": 178.0,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:33:39",
+   "model": "models/v2/aegis_accuracy_p0.005.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.005.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.005,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 500,
+   "tiers": [
+    "aegis2-accuracy"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 106.4,
+   "cpu_seconds": 105.9,
+   "peak_worker_rss_mb": 179.9,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:35:26",
+   "model": "models/v2/aegis_accuracy_p0.005.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.003.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 91.8,
+   "cpu_seconds": 91.3,
+   "peak_worker_rss_mb": 167.9,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:37:39",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.003.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 85.9,
+   "cpu_seconds": 85.2,
+   "peak_worker_rss_mb": 172.7,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:39:05",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.003.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 9.7,
+   "cpu_seconds": 9.4,
+   "peak_worker_rss_mb": 178.4,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:39:16",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.003.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 9.7,
+   "cpu_seconds": 9.5,
+   "peak_worker_rss_mb": 180.3,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:39:26",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.003.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis2-speed"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 9.5,
+   "cpu_seconds": 9.4,
+   "peak_worker_rss_mb": 178.1,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:39:36",
+   "model": "models/v2/aegis_speed_p0.003.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.003.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis2-speed"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 10.0,
+   "cpu_seconds": 9.7,
+   "peak_worker_rss_mb": 182.8,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:39:47",
+   "model": "models/v2/aegis_speed_p0.003.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.003.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis2-accuracy"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 10.0,
+   "cpu_seconds": 9.7,
+   "peak_worker_rss_mb": 178.2,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:39:58",
+   "model": "models/v2/aegis_accuracy_p0.003.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.003.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.003,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 2000,
+   "tiers": [
+    "aegis2-accuracy"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 9.7,
+   "cpu_seconds": 9.5,
+   "peak_worker_rss_mb": 179.9,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:40:08",
+   "model": "models/v2/aegis_accuracy_p0.003.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.004.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 135.5,
+   "cpu_seconds": 135.2,
+   "peak_worker_rss_mb": 170.9,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:42:24",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.004.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "bposd",
+    "relay"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 124.7,
+   "cpu_seconds": 124.3,
+   "peak_worker_rss_mb": 174.2,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:44:30",
+   "model": null,
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_X_p0.004.npz",
+   "split": "timing2",
+   "basis": "X",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 45.8,
+   "cpu_seconds": 45.5,
+   "peak_worker_rss_mb": 181.0,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:45:16",
+   "model": "models/aegis_router.joblib",
+   "threshold": null,
+   "environment": {
+    "python": "3.13.15",
+    "machine": "Darwin arm64",
+    "cores": 10,
+    "commit": "6a6d0b5",
+    "stim": "1.16.0",
+    "ldpc": "2.4.1",
+    "relay-bp": "0.2.2",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1"
+   }
+  },
+  {
+   "record": "data/timing2_Z_p0.004.npz",
+   "split": "timing2",
+   "basis": "Z",
+   "p": 0.004,
+   "f": 0.0,
+   "seed": 8,
+   "shots": 1000,
+   "tiers": [
+    "aegis-v1"
+   ],
+   "workers": 1,
+   "chunk": 50,
+   "wall_seconds": 41.2,
+   "cpu_seconds": 41.1,
+   "peak_worker_rss_mb": 182.1,
+   "resumed_chunks": 0,
+   "finished": "2026-11-22 05:45:58",
+   "model": "models/aegis_router.joblib",
    "threshold": null,
    "environment": {
     "python": "3.13.15",

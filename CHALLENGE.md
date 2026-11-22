@@ -1,4 +1,4 @@
-<img width="2172" height="724" alt="qubits-and-gradients" src="assets/qubits-and-gradients.png" />
+<img width="2172" height="724" alt="qubits-and-gradients" src="docs/challenge-banner.png" />
 
 # Infleqtion Challenge: Qubits & Gradients
 

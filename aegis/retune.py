@@ -19,8 +19,8 @@ risk model and flag-aware relay-BP as the reference. The model overhead in every
 measured per-shot time of the compiled risk model (aegis.model.CompiledTrees).
 
 A routed decoder is configured for the setting it runs at, as the priors of every decoder here
-already are. Writes models/v2/aegis_<mode>_p<p>[_f<f>].joblib, experiments/reports/v2_selection.json
-and experiments/reports/v2_frozen.json (file hashes, recorded before any test2/timing2 decoding).
+already are. Writes models/v2/aegis_<mode>_p<p>[_f<f>].joblib, results/v2_selection.json
+and results/v2_frozen.json (file hashes, recorded before any test2/timing2 decoding).
 """
 import copy
 import hashlib

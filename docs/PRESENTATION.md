@@ -38,12 +38,12 @@ Failed X/Z pairs · mean time per pair (one worker):
 - At p = 0.005, accuracy mode is **significantly more accurate than relay-BP** (LER ratio 0.88, McNemar p = 0.002) at the same mean time.
 - **3–5× fewer failures than BP-OSD** at every p.
 
-![Error rate against p](figures/v2_ler_vs_p.png)
+![Error rate against p](../results/figures/v2_ler_vs_p.png)
 
 ## 5. Limits and next steps
 - **Tail latency:** the slowest 1% are slower than relay-BP, because escalated shots pay for both tiers. The next step is to start tier 2 early, or run it in parallel.
 - **Missed wrong answers:** the risk model misses some (the live demo shows one). On v1's test shots, an oracle router would fail 1.3–1.9× less often, so there is headroom.
 - **Implementation:** Python on a laptop CPU, milliseconds per shot. A real-time decoder needs compiled code on dedicated hardware.
-- **Erasures:** the erasure model is idealized. Our companion study ([ERASURE.md](ERASURE.md)) shows that loss flags alone cut relay-BP failures over 10×.
+- **Erasures:** the erasure model is idealized. Our companion study ([ERASURE.md](../challenge-1-ml-decoder-kit/ERASURE.md)) shows that loss flags alone cut relay-BP failures over 10×.
 
 **Live demo:** `python -m aegis.demo --p 0.005 --shots 15`

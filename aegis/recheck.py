@@ -2,7 +2,7 @@
 
   python -m aegis.recheck
 
-The models in models/ were chosen by aegis.train and frozen (experiments/reports/frozen_models.json)
+The models in models/ were chosen by aegis.train and frozen (results/frozen_models.json)
 before any test shot was decoded. That selection paired X shot k with Z shot k. Same-seed X and Z
 records share Stim's random stream, so those pairs were correlated; the kit's analyze.py, and now
 aegis.policy, pair X shot k with Z shot analyze.z_partner(n)[k] instead.
@@ -15,7 +15,7 @@ selected by (see aegis.train):
   accuracy   no slower than relay-BP on average at every p
   heuristic  as speed
 
-Only validation records (seed 3) are read. Writes experiments/reports/validation_recheck.json.
+Only validation records (seed 3) are read. Writes results/validation_recheck.json.
 """
 import json
 

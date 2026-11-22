@@ -12,7 +12,7 @@ Reported per row: check-matrix size, problem build time, one-time library import
 QEC-Aegis only), decoder setup time (building the decoders and loading the model), peak process memory,
 the memory the decoder adds on top of the problem, model file size and per-shot inference time.
 The shots come from seed 6, which no other split uses; their decode times are a sanity check, not
-a latency benchmark (use the timing records for that). Writes experiments/reports/resources.json.
+a latency benchmark (use the timing records for that). Writes results/resources.json.
 """
 import argparse
 import json

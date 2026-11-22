@@ -2,7 +2,7 @@
 
   python -m aegis.evaluate_v2
 
-Reads experiments/records/test2_* (seed 7; 8 parallel workers) and timing2_* (seed 8; one worker,
+Reads data/test2_* (seed 7; 8 parallel workers) and timing2_* (seed 8; one worker,
 nothing else running). Every decoder at one setting decoded the same shots and is scored on the
 same X/Z pairs (analyze.z_partner), with the conventions of aegis.policy. Rows:
 
@@ -10,7 +10,7 @@ same X/Z pairs (analyze.z_partner), with the conventions of aegis.policy. Rows:
   aegis v1 (online)                     the frozen v1 routed decoder, replicated on fresh shots
   aegis v2 speed / accuracy (online)    the operating points chosen by aegis.retune on validation
 
-Writes experiments/reports/v2_evaluation.json.
+Writes results/v2_evaluation.json.
 """
 import csv
 import json

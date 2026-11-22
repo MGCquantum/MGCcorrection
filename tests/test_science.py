@@ -191,7 +191,7 @@ def test_committed_models_are_the_frozen_ones():
     """models/*.joblib are byte for byte the files recorded before any test shot was decoded."""
     import hashlib
     import json
-    frozen = json.loads((ROOT / "experiments" / "reports" / "frozen_models.json").read_text())["models"]
+    frozen = json.loads((ROOT / "results" / "frozen_models.json").read_text())["models"]
     for name, digest in frozen.items():
         assert hashlib.sha256((ROOT / "models" / name).read_bytes()).hexdigest() == digest, name
 
@@ -208,11 +208,11 @@ def test_frozen_router_still_meets_its_selection_rule_with_independent_pairs():
 
 
 def test_required_evaluation_section_covers_the_challenge_metrics():
-    """docs/RESULTS.md opens with the Challenge 1 sweep: BP-OSD, relay-BP and QEC-Aegis at every p, with
+    """results/tables.md opens with the Challenge 1 sweep: BP-OSD, relay-BP and QEC-Aegis at every p, with
     LER, latency percentiles and resources, all read from the committed reports on the same test pairs."""
     import json
     from aegis import report
-    reports = ROOT / "experiments" / "reports"
+    reports = ROOT / "results"
     ev = json.loads((reports / "evaluation.json").read_text())
     res = json.loads((reports / "resources.json").read_text())
     text = "\n".join(report.required_evaluation(ev, res))

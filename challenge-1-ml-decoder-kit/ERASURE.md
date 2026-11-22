@@ -1,6 +1,6 @@
 # Erasure-aware decoding: using loss flags on the Gross code
 
-This is the first study in this repository, built on the challenge kit in `challenge-1-ml-decoder-kit/`. It asks how much a decoder gains on the [[144,12,12]] Gross code when some noise is converted into heralded erasures whose location is flagged, and whether a learned router can cut decoding time. The learned decoder that came out of it, QEC-Aegis, is described in [EVALUATION.md](EVALUATION.md). Evidence checks for this study are in [AUDIT.md](AUDIT.md).
+This is the first study in this repository, built on the challenge kit in `challenge-1-ml-decoder-kit/`. It asks how much a decoder gains on the [[144,12,12]] Gross code when some noise is converted into heralded erasures whose location is flagged, and whether a learned router can cut decoding time. The learned decoder that came out of it, QEC-Aegis, is described in [docs/RESULTS.md](../docs/RESULTS.md). Evidence checks for this study are in [AUDIT.md](AUDIT.md).
 
 ## 1. Using erasure flags (headline)
 **relay-BP, the strongest decoder in the kit, with the loss flags.** relay-BP has no per-shot prior update, so it is rebuilt for every shot (about 17 ms, included in its time) on the flag-blind matrix, with each flagged location's error probability raised (`lossy.fold_priors`, combining identical effects by parity). 50% of gate/idle noise flagged as erasure; the same shots are decoded with flags ignored and with flags used.
@@ -12,7 +12,7 @@ This is the first study in this repository, built on the challenge kit in `chall
 
 Roughly 20× fewer failed pairs, 2–5× faster on average and 6–11× faster on the slowest 1%. Timing was measured on one Apple laptop, 11 worker processes, both decoders on the same shots under the same load; read it as a ratio, not a latency guarantee. The ~20× is a ratio of small counts: the conservative reading is "over 10× fewer". Seeds 32 and 33 (p = 0.004) and 31 (p = 0.005); files `results/erase4_*`.
 
-![relay flags](../challenge-1-ml-decoder-kit/figures/relay_flags.png)
+![relay flags](figures/relay_flags.png)
 
 **BP-OSD with the loss flags** (the first experiment; the flags enter BP-OSD's priors through its per-shot update):
 These results include the corrected herald-conditioned prior calculation (see [AUDIT.md](AUDIT.md)); the erasure runs were regenerated locally after the fix.
@@ -37,7 +37,7 @@ At 50%, 23 pairs failed with flags hidden versus 3 with flags used. At 50% and 7
 
 **Scope:** this table is BP-OSD only; the relay-BP result above uses a different flag mechanism (rebuild per shot on the blind matrix) and needs no extra columns. The 0% row (4.3e-3 on 1,000 pairs) and the sweep's BP-OSD at p = 0.004 (4.3e-3 on 2,000 different pairs) agree.
 
-![erasure](../challenge-1-ml-decoder-kit/figures/erasure.png)
+![erasure](figures/erasure.png)
 
 - **Cost:** flag-aware BP-OSD is about 6.5× slower per shot at 50% erasure (about 9–10× at 25% and 75%), because the decoder considers each erasure component separately and its priors are updated every shot.
 - **Why the flag-blind line also falls:** an erasure applies a random Pauli, and a quarter of those are the identity, so converting noise to erasure also lowers the effective error rate. The fair comparison is therefore flags hidden vs used **at the same erasure share, on the same shots**.
@@ -63,7 +63,7 @@ Both hybrids have the same observed failed-pair count as relay-BP at all three t
 | 0.004 | 482 / 7,200 ms | 422 / 7,134 ms | 425 ms | 23% |
 | 0.005 | 2,155 / 10,568 ms | 2,165 / 10,712 ms | 2,163 ms | 56% |
 
-![speed](../challenge-1-ml-decoder-kit/figures/speed.png)
+![speed](figures/speed.png)
 
 
 **Additional local comparison with both baselines:** Apple M5, 300 pairs per p, one worker/thread, under concurrent load. Entries are mean / p99 milliseconds per X+Z pair. Every decoder uses the same shots within this run. These are measured comparisons, not idle-machine latency guarantees.
@@ -74,7 +74,7 @@ Both hybrids have the same observed failed-pair count as relay-BP at all three t
 | 0.004 | 285 / 819 | 217 / 2604 | 200 / 2635 | 204 / 2638 |
 | 0.005 | 503 / 970 | 1259 / 6954 | 1253 / 7063 | 1256 / 6958 |
 
-![local speed comparison](../challenge-1-ml-decoder-kit/figures/speed_local.png)
+![local speed comparison](figures/speed_local.png)
 
 ## 3. The ML router (an honest negative result)
 A gradient-boosted classifier reads the alarms per round and predicts whether fast BP will converge, so hard shots can skip it. (It also has a loss-flag-count input, but the sweep has no erasure, so that input is always 0.) Accuracy on held-out shots:
@@ -128,7 +128,7 @@ python analyze.py --dir results_timing --train-dir results    # clean timing tab
 python make_figures.py                                        # figures/erasure.png, figures/speed.png
 python demo.py --p 0.004 --basis X                            # one fresh shot through router and decoder, plus resources
 ```
-- Saved result caches are in the repo. `analyze.py` reproduces accuracy counts without rerunning the decoders; router timings are newly measured and naturally vary. See [RUN.md](../challenge-1-ml-decoder-kit/RUN.md) for full regeneration commands and package versions.
+- Saved result caches are in the repo. `analyze.py` reproduces accuracy counts without rerunning the decoders; router timings are newly measured and naturally vary. See [RUN.md](RUN.md) for full regeneration commands and package versions.
 - **Seeds are not portable across Stim builds:** the same seed can give different shots on another machine. That is why every comparison is made within one results file (all decoders on identical shots), and why `analyze.py` checks metadata, per-round weights and flags before merging extras. Legacy caches lack full sample fingerprints, so this compatibility check is not a proof of shot identity. New runs also record a detector/observable SHA-256 and runtime provenance.
 
 ## Files (in `challenge-1-ml-decoder-kit/`)

@@ -1,6 +1,6 @@
-"""Figures from the stored evaluation (experiments/reports/*.json). No decoding happens here.
+"""Figures from the stored evaluation (results/*.json). No decoding happens here.
 
-  python -m aegis.figures      ->  docs/figures/*.png
+  python -m aegis.figures      ->  results/figures/*.png
 
 Colors identify the decoder and stay the same in every figure. Each decoder also has its own
 marker, so no figure depends on color alone.
@@ -14,10 +14,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
-from .paths import ROOT  # noqa: E402
-
-REPORTS = ROOT / "experiments" / "reports"
-FIGURES = ROOT / "docs" / "figures"
+from .paths import FIGURES, REPORTS  # noqa: E402
 INK, MUTED, GRID, SURFACE = "#0b0b0b", "#52514e", "#e1e0d9", "#fcfcfb"
 # decoder -> (label, color, marker). Fixed order: a decoder keeps its color everywhere.
 STYLE = {
@@ -207,7 +204,7 @@ def calibration():
     save(fig, "calibration.png")
 
 
-# QEC-Aegis v2 on fresh shots (experiments/reports/v2_evaluation.json). v1 keeps the Aegis green.
+# QEC-Aegis v2 on fresh shots (results/v2_evaluation.json). v1 keeps the Aegis green.
 V2_STYLE = {
     "bposd": STYLE["bposd"],
     "relay": STYLE["relay"],

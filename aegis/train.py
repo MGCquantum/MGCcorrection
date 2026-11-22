@@ -20,7 +20,7 @@ Selection is by the end-to-end result on validation shots, not by classification
                  average at every p. For each system the threshold is the smallest that satisfies this.
 
 Model inference time, measured per shot, is part of every decode time.
-Writes models/*.joblib and experiments/reports/training*.json.
+Writes models/*.joblib and results/training*.json.
 """
 import argparse
 import json

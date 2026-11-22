@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.."
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1
 PY=.venv/bin/python
 C="$PY -m aegis.collect"
-shasum -a 256 -c <("$PY" -c "import json; d=json.load(open('experiments/reports/v2_frozen.json'));
+shasum -a 256 -c <("$PY" -c "import json; d=json.load(open('results/v2_frozen.json'));
 print('\n'.join(f'{h}  {f}' for f, h in d['models'].items()))") > /dev/null
 
 shots() { case "$1" in 0.003) echo 30000;; 0.004) echo 10000;; 0.005) echo 5000;; esac; }

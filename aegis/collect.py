@@ -4,8 +4,8 @@
 
 The shots are fixed by (basis, p, f, seed, shots). The seed comes from the split: train 1, test 2,
 validation 3, calibration 4 (override with --seed for extra training data). Records go to
-experiments/records/<split>_<basis>_p<p>[_f<f>].npz for test and validation and to data/records/
-for training data. A second call with more tiers adds them to the same file and decodes nothing
+data/<split>_<basis>_p<p>[_f<f>].npz for test and validation and to data/train/
+for training and calibration data. A second call with more tiers adds them to the same file and decodes nothing
 twice. Work is checkpointed in chunks, so an interrupted run resumes where it stopped.
 
 Reproducibility: relay-BP is a randomized decoder whose random stream runs on from shot to shot.
@@ -32,7 +32,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .paths import DATA, ROOT
+from .paths import DATA, MANIFEST, RECORDS, ROOT, TRAIN_RECORDS
 
 from . import CALIB_SEED, TEST_SEED, TRAIN_SEED, VAL_SEED, features
 from .problem import Problem
@@ -40,9 +40,6 @@ from .problem import Problem
 # test2 and timing2 are fresh shots for QEC-Aegis v2 (aegis.retune), whose design was informed by the
 # seed-2 test results; seed 6 is used by aegis.resources.
 SEEDS = {"train": TRAIN_SEED, "test": TEST_SEED, "val": VAL_SEED, "calib": CALIB_SEED, "timing": 5, "test2": 7, "timing2": 8}
-RECORDS = ROOT / "experiments" / "records"       # committed: test and validation records
-TRAIN_RECORDS = DATA / "records"                 # not committed: regenerate with `make data`
-MANIFEST = ROOT / "experiments" / "manifest.json"
 FIELDS = {"failed": bool, "seconds": float, "converged": bool, "iterations": np.int64, "weight": float}
 _worker = {}
 
