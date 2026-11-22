@@ -93,6 +93,17 @@ The router does not beat a single threshold. BP's own convergence check is alrea
 
 **Upper bound for any router** (from the clean timing cache): even a *perfect* router, which skips BP exactly on the shots where it won't converge, would cut the hybrid's mean time by only 16.5% at p = 0.003, 7.8% at p = 0.004 and 3.7% at p = 0.005. Routing on convergence has little to gain. Learning would be better spent elsewhere, for example on per-shot priors.
 
+### 4. QEC-Aegis: a learned risk model that catches wrong answers hidden behind convergence
+`aegis/` (repository root) routes on a different question: *given that a fast, early-stopping relay-BP (tier 1) converged, is its answer wrong?* A calibrated gradient-boosted model reads tier-1, syndrome, temporal, loss and second-opinion features and sends risky shots to full relay-BP (tier 2). Models, tiers and threshold were chosen on validation shots and frozen (hashes in `experiments/reports/frozen_models.json`) before any test shot was decoded. Test shots are the frozen seed-2 records in `experiments/records/`, with X/Z pairs formed exactly as `analyze.py` does (`z_partner`). The online row is the routed decoder run as one program:
+
+| p | Test pairs | relay-BP failed pairs | QEC-Aegis failed pairs | McNemar p | Mean ms, one worker: relay-BP → QEC-Aegis | Speedup [95%] |
+|---|---|---|---|---|---|---|
+| 0.003 | 30,000 | 26 | 33 | 0.25 | 34 → 12 | 2.9× [2.1–4.2] |
+| 0.004 | 10,000 | 102 | 119 | 0.10 | 125 → 60 | 2.1× [1.7–2.8] |
+| 0.005 | 5,000 | 404 | 398 | 0.75 | 988 → 885 | 1.1× [1.0–1.3] |
+
+Error rates are statistically indistinguishable from relay-BP at every p; the point estimate is worse at p = 0.003 and 0.004 (LER ratio 1.27 and 1.17, both intervals include 1). Times are from separate single-worker timing shots (seed 5). The gain shrinks with noise as more shots need tier 2 (0.05%, 1.1% and 6.8% escalated), and at p = 0.005 the slowest 1% are slower than relay-BP. Full tables, the oracle-router bound, erasure settings, calibration and resources are in [docs/RESULTS.md](docs/RESULTS.md); verify with `scripts/verify_aegis.sh`.
+
 ## Where it works and where it falls short
 - **Works:** using erasure flags gives large, statistically significant accuracy gains on the Gross code, for BP-OSD and for relay-BP; with relay-BP the flags also make decoding 2–5× faster. The simple hybrid keeps relay-BP accuracy and is ~1.7× faster on average at low noise (p = 0.003).
 - **Falls short:**
@@ -132,6 +143,15 @@ python analyze.py --dir results_timing --train-dir results    # clean timing tab
 python make_figures.py                                        # figures/erasure.png, figures/speed.png
 python demo.py --p 0.004 --basis X                            # one fresh shot through router and decoder, plus resources
 ```
+QEC-Aegis runs from the repository root with the same packages:
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r challenge-1-ml-decoder-kit/requirements-dev.txt
+ln -s ../.venv challenge-1-ml-decoder-kit/.venv               # verify_submission.sh expects the kit .venv
+scripts/verify_aegis.sh                                       # tests, frozen-model hashes, records resample, reports, docs
+DECODE=1 scripts/verify_aegis.sh                              # also re-decode one chunk per record and tier, bit for bit
+python -m aegis.collect --split test --basis X --p 0.004 --shots 10000 --tiers bposd relay relay1   # fresh records
+```
+- QEC-Aegis records are functions of (basis, p, f, seed, shots, chunk size) and the package versions in `requirements-local-lock.txt`; `python -m aegis.reproduce` checks them. Training records (`data/`) are not committed and are only needed to refit models with `python -m aegis.train`, which would replace the frozen models.
 - Saved result caches are in the repo. `analyze.py` reproduces accuracy counts without rerunning the decoders; router timings are newly measured and naturally vary. See [RUN.md](challenge-1-ml-decoder-kit/RUN.md) for full regeneration commands and package versions.
 - **Seeds are not portable across Stim builds:** the same seed can give different shots on another machine. That is why every comparison is made within one results file (all decoders on identical shots), and why `analyze.py` checks metadata, per-round weights and flags before merging extras. Legacy caches lack full sample fingerprints, so this compatibility check is not a proof of shot identity. New runs also record a detector/observable SHA-256 and runtime provenance.
 
@@ -146,3 +166,7 @@ python demo.py --p 0.004 --basis X                            # one fresh shot t
 | `audit_submission.py`, `scripts/verify_submission.sh` | Repeatable data checks, tests, evaluation and live demos |
 | `AUDIT.md`, `PITCH.md`, `challenge-1-ml-decoder-kit/RUN.md` | Current evidence, presentation, and reproduction guide |
 | `SPEC.md`, `TEAM_PLAN.md`, `PROMPTS.md` | Historical planning notes; superseded by the audit |
+| `aegis/`, `tests/`, `pyproject.toml` | QEC-Aegis: tiers, features, risk model, routing policy, collection, evaluation, report; imports the kit's `circuit`, `lossy` and `analyze` unchanged |
+| `models/`, `experiments/records/`, `experiments/reports/`, `experiments/manifest.json` | Frozen risk models, committed per-shot validation/test/timing records, generated reports, run provenance |
+| `docs/RESULTS.md`, `docs/figures/` | Generated by `python -m aegis.report` and `python -m aegis.figures`; no number typed by hand |
+| `scripts/verify_aegis.sh` | Kit and Aegis tests, frozen-model hashes, record reproduction, re-check, evaluation, report and figures |

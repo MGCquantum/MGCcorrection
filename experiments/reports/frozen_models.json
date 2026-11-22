@@ -1,0 +1,13 @@
+{
+ "frozen_at": "2026-11-21T22:16:30-0600",
+ "note": "Recorded after `aegis.train` (step 1 of run_frozen_evaluation.sh) and before the routed decoder ran on any test shot. aegis.collect --tiers aegis loads these files; their hashes must not change before the final report.",
+ "commit": "c333d94",
+ "models": {
+  "aegis_router.joblib": "c486a2766a427b0e9bc3d0846220df0227358136c071cccb7ab30896fbd7f39d",
+  "aegis_router_accuracy.joblib": "8b0d56bdf1740fc5613c0e4abd7774d8c34b8bd87c7c82b564dfe2b2ac031c59",
+  "aegis_router_loss.joblib": "75cb0573fcd994d448ac2641e57089160bfe8b1cdc5339e67d23f9bf98fcdc39",
+  "aegis_router_loss_no_loss_features.joblib": "c88e2c8624ef0f18a43b95efeeb864758025e58b175a35630e4eacb4430561c9",
+  "heuristic_router.joblib": "afbf030f0e2f0a14f4342d85ea4b7175f5b734c055bc243c40a86b0aa10137ee"
+ },
+ "selection_log": "logs/frozen_evaluation.log (lines 1-65)"
+}
