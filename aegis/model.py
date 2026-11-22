@@ -58,10 +58,65 @@ class RiskModel:
         return np.where(F[:, CONVERGED] > 0, risk, 1.0)
 
     def risk(self, f):
-        """Calibrated risk of one shot."""
+        """Calibrated risk of one shot. A gbm is evaluated by a compiled tree walk (CompiledTrees)
+        that gives exactly the scikit-learn score without its per-call overhead."""
         if not f[CONVERGED]:
             return 1.0
-        return float(self.risks(f[None, :])[0])
+        if self.kind != "gbm":
+            return float(self.risks(f[None, :])[0])
+        trees = self.__dict__.get("_compiled")
+        if trees is None:
+            trees = self.__dict__["_compiled"] = CompiledTrees(self.estimator)
+        a, b = self.platt
+        score = trees.score(np.asarray(f, np.float64)[self.columns])
+        return float(1 / (1 + np.exp(-(a * score + b))))
+
+    def __getstate__(self):
+        state = dict(self.__dict__)
+        state.pop("_compiled", None)       # rebuilt on first use; keeps model files as they were
+        return state
+
+
+class CompiledTrees:
+    """Decision function of a binary HistGradientBoostingClassifier for one row, without scikit-learn's
+    per-call validation and thread setup (about 600 µs per call here).
+
+    All trees are walked at once, one depth level per step, with the same split rule as scikit-learn's
+    predictor on numerical features (value <= threshold goes left; NaN follows missing_go_to_left).
+    Leaf values are added to the baseline in tree order, as scikit-learn does, so the score is the
+    same float. tests/test_aegis.py checks equality on stored feature vectors.
+    """
+
+    def __init__(self, estimator):
+        if estimator.n_trees_per_iteration_ != 1 or getattr(estimator, "is_categorical_", None) is not None:
+            raise ValueError("only binary models on numerical features are compiled")
+        nodes = [predictors[0].nodes for predictors in estimator._predictors]
+        width = max(len(n) for n in nodes)
+
+        def table(field, dtype):
+            out = np.zeros((len(nodes), width), dtype)
+            for k, n in enumerate(nodes):
+                out[k, :len(n)] = n[field]
+            return out
+        self.feature, self.threshold = table("feature_idx", np.intp), table("num_threshold", np.float64)
+        self.left, self.right = table("left", np.intp), table("right", np.intp)
+        self.leaf, self.missing_left = table("is_leaf", bool), table("missing_go_to_left", bool)
+        self.value = table("value", np.float64)
+        self.depth = int(max(n["depth"].max() for n in nodes))
+        self.trees = np.arange(len(nodes))
+        self.baseline = float(np.ravel(estimator._baseline_prediction)[0])
+
+    def score(self, x):
+        node = np.zeros(len(self.trees), np.intp)
+        for _ in range(self.depth):
+            leaf = self.leaf[self.trees, node]
+            v = x[self.feature[self.trees, node]]
+            left = np.where(np.isnan(v), self.missing_left[self.trees, node], v <= self.threshold[self.trees, node])
+            node = np.where(leaf, node, np.where(left, self.left[self.trees, node], self.right[self.trees, node]))
+        total = self.baseline
+        for value in self.value[self.trees, node].tolist():
+            total += value
+        return total
 
 
 def train(F, y, kind="gbm", groups=tuple(features.GROUPS), feature=None, seed=0):

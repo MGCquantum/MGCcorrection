@@ -259,7 +259,7 @@ def test_threshold_selection():
 
 def test_splits_use_distinct_seeds():
     assert len({TRAIN_SEED, TEST_SEED, VAL_SEED, collect.SEEDS["calib"]}) == 4
-    assert (TRAIN_SEED, TEST_SEED) == (1, 2)   # TEAM_PLAN.md
+    assert (TRAIN_SEED, TEST_SEED) == (1, 2)   # fixed by the team before any decoding
     a, b = Problem("Z", 0.004).sample(10, TRAIN_SEED), Problem("Z", 0.004).sample(10, TEST_SEED)
     assert (a[0] != b[0]).any()
 
@@ -337,3 +337,28 @@ def test_relay_bp_depends_on_history_and_reset_removes_it():
     tier.reset()
     third = [tier.decode_shot(s).iterations for s in syndromes]
     assert first != second and first == third
+
+
+def test_compiled_risk_equals_scikit_learn_exactly():
+    """RiskModel.risk walks the trees itself (CompiledTrees); it must return the same float as the
+    scikit-learn decision function plus Platt scaling, on real tier-1 feature vectors."""
+    import joblib
+    from aegis.collect import RECORDS, load
+    from aegis.paths import MODELS
+    model = joblib.load(MODELS / "aegis_router.joblib")
+    F = load(RECORDS / "val_X_p0.005.npz")[model.meta["tier1"]]["features"]
+    slow = model.risks(F)
+    assert all(model.risk(F[k]) == slow[k] for k in range(len(F)))
+    nan = F[0].copy()
+    nan[model.columns[0]] = np.nan                      # missing values follow scikit-learn's learned direction
+    assert model.risk(nan) == float(model.risks(nan[None, :])[0])
+
+
+def test_demo_runs_on_fresh_shots(monkeypatch, capsys):
+    """python -m aegis.demo decodes a few seed-99 shots with the frozen v2 model and relay-BP."""
+    import sys
+    from aegis import demo
+    monkeypatch.setattr(sys, "argv", ["demo", "--p", "0.003", "--shots", "3"])
+    demo.main()
+    out = capsys.readouterr().out
+    assert "QEC-Aegis v2 (speed)" in out and "3 shots: QEC-Aegis" in out

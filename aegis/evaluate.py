@@ -2,9 +2,9 @@
 
   python -m aegis.evaluate
 
-Reads experiments/records/test_*.npz (seed 2) and the model chosen by aegis.train. Nothing is
+Reads data/test_*.npz (seed 2) and the model chosen by aegis.train. Nothing is
 tuned here: the model, its threshold and the tier pair were fixed on validation data.
-Writes experiments/reports/evaluation.json and prints the tables.
+Writes results/evaluation.json and prints the tables.
 
 Decoders per noise strength:
   bposd, relay            the kit's baselines

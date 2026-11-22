@@ -1,4 +1,4 @@
-"""Write docs/RESULTS.md from the stored reports, so no number in it is typed by hand.
+"""Write results/tables.md from the stored reports, so no number in it is typed by hand.
 
   python -m aegis.report
 """
@@ -8,7 +8,7 @@ from .paths import ROOT
 
 from .train import REPORTS
 
-OUT = ROOT / "docs" / "RESULTS.md"
+OUT = ROOT / "results" / "tables.md"
 ORDER = ["bposd", "relay", "bposd (flags ignored)", "relay (flags ignored)", "bposd+flags", "relay+flags", "tier 1 alone",
          "tier 2 alone", "bp200 -> relay (rule)", "rule (no ML)", "heuristic", "aegis, no loss features", "aegis",
          "aegis (online)", "aegis (accuracy mode)"]
@@ -64,22 +64,174 @@ def routing_table(settings):
     return lines
 
 
+REQUIRED = [("bposd", "BP-OSD"), ("relay", "relay-BP"), ("aegis (online)", "QEC-Aegis")]
+
+
+def span(values, fmt):
+    lo, hi = min(values), max(values)
+    return fmt.format(lo) if fmt.format(lo) == fmt.format(hi) else f"{fmt.format(lo)}–{fmt.format(hi)}"
+
+
+def required_evaluation(ev, res):
+    """The Challenge 1 required sweep in one place: LER, latency and resources of QEC-Aegis and both baselines."""
+    out = ["## Challenge 1 required evaluation: sweep over p = 0.003, 0.004, 0.005", "",
+           "Same test data and noise conditions: at each p, all three decoders decode the identical frozen test shots (seed 2)",
+           "of the kit's Gross-code memory circuits at that p, in X and Z memory, scored on the same X/Z pairs. Latency is from",
+           "separate single-worker timing shots (seed 5) with nothing else running; the contended column is the mean time on",
+           "the test shots, decoded with 8 parallel workers. QEC-Aegis is the online routed decoder run as one program.", "",
+           "| p | Decoder | Test pairs | Failed pairs | LER per cycle | 95% interval | Mean ms | Median ms | p95 ms | p99 ms | Pairs/s | Mean ms, contended | Tier 2 used |",
+           "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    for p, sweep in ev["sweep"].items():
+        timing = ev.get("timing", {}).get(p, {"decoders": {}})["decoders"]
+        for key, label in REQUIRED:
+            d, t = sweep["decoders"].get(key), timing.get(key)
+            if d is None:
+                continue
+            lat = f"{ms(t['ms_mean'])} | {ms(t['ms_median'])} | {ms(t['ms_p95'])} | {ms(t['ms_p99'])} | {t['pairs_per_second']:.1f}" if t \
+                else " | | | | "
+            esc = f"{100 * d['escalated_fraction']:.2f}%" if "escalated_fraction" in d else ""
+            out.append(f"| {p} | {label} | {d['pairs']:,} | {d['failures_pair']} | {d['ler']:.2e} | {d['ler_ci95'][0]:.2e} – {d['ler_ci95'][1]:.2e} | "
+                       f"{lat} | {ms(d['ms_mean'])} | {esc} |")
+    out += ["", "QEC-Aegis against each baseline on the same pairs (LER: test shots; speedup of the mean: single-worker timing shots):", "",
+            "| p | Baseline | LER ratio QEC-Aegis / baseline | 95% interval | Fail only QEC-Aegis / only baseline | McNemar p | Speedup | 95% interval |",
+            "|---|---|---|---|---|---|---|---|"]
+    for p, sweep in ev["sweep"].items():
+        for key, label in REQUIRED[:2]:
+            c = sweep["comparisons"].get(f"aegis (online) vs {key}")
+            t = ev.get("timing", {}).get(p, {"comparisons": {}})["comparisons"].get(f"aegis (online) vs {key}")
+            if c is None:
+                continue
+            speed = f"{t['speedup_mean']:.2f}× | {t['speedup_mean_ci95'][0]:.2f} – {t['speedup_mean_ci95'][1]:.2f}" if t else " | "
+            ratio = "n/a | n/a" if c["ler_ratio"] is None else f"{c['ler_ratio']:.2f} | {c['ler_ratio_ci95'][0]:.2f} – {c['ler_ratio_ci95'][1]:.2f}"
+            out.append(f"| {p} | {label} | {ratio} | "
+                       f"{c['only_a_fails']} / {c['only_b_fails']} | {c['mcnemar_p']:.3g} | {speed} |")
+    out.append("")
+    if res:
+        m = res["machine"]
+        out += ["### Decoder resource requirements (`python -m aegis.resources`)", "",
+                f"One decoder per fresh process, numerical libraries single-threaded, on {m.get('chip') or m['platform']} "
+                f"({m['cores']} cores{', %d GB' % m['memory_gb'] if m.get('memory_gb') else ''}, {m['platform']}). Figures are specific to this machine; "
+                "`RESOURCES=1 scripts/reproduce.sh` re-measures them. "
+                "Ranges are over p = 0.003–0.005 and X/Z memory. Peak memory is the whole Python process, including the circuit,",
+                "detector error model and check matrix (problem alone shown separately); *added* is what building the decoder and",
+                "decoding adds on top (for QEC-Aegis this includes the scikit-learn library). QEC-Aegis holds two relay-BP instances (tier 1 and tier 2), the order-0 BP-OSD second opinion",
+                "used by tier-1 features, and the risk model. Setup excludes the one-time scikit-learn import, shown separately.", "",
+                "| Decoder | Components | Check matrix (checks × mechanisms) | One-time import s | Setup s | Problem MB | Peak MB | Added MB | Model on disk | Model inference per shot |",
+                "|---|---|---|---|---|---|---|---|---|---|"]
+        for key, label in REQUIRED:
+            rows = [r for r in res["rows"] if r["decoder"] == key.split(" ")[0]]
+            if not rows:
+                continue
+            model = f"{rows[0]['model_kb']:.0f} kB" if rows[0]["model_kb"] else "none"
+            infer = span([r["inference_us"] for r in rows], "{:.0f} µs") if rows[0]["inference_us"] else "none"
+            out.append(f"| {label} | {rows[0]['parts']} | {span([r['checks'] for r in rows], '{:,}')} × {span([r['mechanisms'] for r in rows], '{:,}')} | "
+                       f"{span([r['import_s'] for r in rows], '{:.2f}') if rows[0].get('import_s') else 'none'} | "
+                       f"{span([r['decoder_setup_s'] for r in rows], '{:.2f}')} | {span([r['problem_peak_mb'] for r in rows], '{:.0f}')} | "
+                       f"{span([r['peak_mb'] for r in rows], '{:.0f}')} | {span([r['decoder_added_mb'] for r in rows], '{:.0f}')} | {model} | {infer} |")
+        out.append("")
+    return out
+
+
+V2_ROWS = [("bposd", "BP-OSD"), ("relay", "relay-BP"), ("aegis v1 (online)", "QEC-Aegis v1"),
+           ("aegis v2 speed (online)", "QEC-Aegis v2, speed"), ("aegis v2 accuracy (online)", "QEC-Aegis v2, accuracy")]
+
+
+def v2_section(v2):
+    """QEC-Aegis v2 (aegis.retune) on fresh shots (aegis.evaluate_v2)."""
+    out = ["## QEC-Aegis v2 on fresh shots (seed 7 test, seed 8 timing)", "",
+           "v2 was designed after the v1 results above were known: it keeps v1's fitted risk models and chooses, for each noise",
+           "setting separately and on validation shots only, the second tier (relay-BP or the larger `strong10` ensemble) and the",
+           "threshold (`python -m aegis.retune`; hashes frozen in `results/v2_frozen.json` before any fresh shot was",
+           "decoded). Because the seed-2 test shots informed that design, v2 is scored only on fresh shots, together with both",
+           "baselines and v1 run again on the same shots. The risk model is now evaluated by a compiled tree walk that returns",
+           "exactly scikit-learn's value; v1 on fresh shots uses it too, so its times here are lower than in the tables above.", "",
+           "Latency comes from the single-worker timing shots, all decoded on mains power with nothing else running (timing",
+           "entries first decoded on battery in Low Power Mode were discarded and decoded again). The contended 8-worker times",
+           "of the test shots at p = 0.005 and under erasure were taken on battery in Low Power Mode, and the X-basis p = 0.004",
+           "accuracy-mode run spans a hibernation; use those columns only for comparisons within one setting. Failure counts do",
+           "not depend on machine speed.", ""]
+    selection = v2.get("selection", {}).get("settings", {})
+    if selection:
+        out += ["### Operating points chosen on validation shots", "",
+                "| Setting | Mode | Tier 2 | Threshold | Validation failed pairs (relay-BP) | Validation mean ms (relay-BP) | Tier 2 used |",
+                "|---|---|---|---|---|---|---|"]
+        for setting, s in selection.items():
+            for mode, c in s["chosen"].items():
+                if c:
+                    out.append(f"| {setting} | {mode} | {c['tier2']} | {c['threshold']:.2e} | {c['failures_pair']} ({s['relay_failures']}) | "
+                               f"{c['ms_mean']:.1f} ({s['relay_ms']:.1f}) | {100 * c['escalated']:.2f}% |")
+                else:
+                    out.append(f"| {setting} | {mode} | none feasible | | | | |")
+        out.append("")
+    if v2.get("sweep"):
+        out += ["### Sweep over p: fresh test shots (LER) and fresh single-worker timing shots (latency)", "",
+                "| p | Decoder | Test pairs | Failed pairs | LER per cycle | 95% interval | Mean ms | Median ms | p95 ms | p99 ms | Pairs/s | Mean ms, contended | Tier 2 used |",
+                "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+        for p, sweep in v2["sweep"].items():
+            timing = v2.get("timing", {}).get(p, {"decoders": {}})["decoders"]
+            for key, label in V2_ROWS:
+                d, t = sweep["decoders"].get(key), timing.get(key)
+                if d is None:
+                    continue
+                lat = f"{ms(t['ms_mean'])} | {ms(t['ms_median'])} | {ms(t['ms_p95'])} | {ms(t['ms_p99'])} | {t['pairs_per_second']:.1f}" if t \
+                    else " | | | | "
+                esc = f"{100 * d['escalated_fraction']:.2f}%" if "escalated_fraction" in d else ""
+                out.append(f"| {p} | {label} | {d['pairs']:,} | {d['failures_pair']} | {d['ler']:.2e} | {d['ler_ci95'][0]:.2e} – {d['ler_ci95'][1]:.2e} | "
+                           f"{lat} | {ms(d['ms_mean'])} | {esc} |")
+        out += ["", "Paired comparisons (LER: fresh test shots; speedup of the mean: fresh single-worker timing shots):", "",
+                "| p | Comparison | LER ratio | 95% interval | Fail only first / only second | McNemar p | Speedup | 95% interval |",
+                "|---|---|---|---|---|---|---|---|"]
+        for p, sweep in v2["sweep"].items():
+            timing = v2.get("timing", {}).get(p, {"comparisons": {}})["comparisons"]
+            for name, c in sweep["comparisons"].items():
+                t = timing.get(name)
+                ratio = "n/a | n/a" if c["ler_ratio"] is None else f"{c['ler_ratio']:.2f} | {c['ler_ratio_ci95'][0]:.2f} – {c['ler_ratio_ci95'][1]:.2f}"
+                speed = f"{t['speedup_mean']:.2f}× | {t['speedup_mean_ci95'][0]:.2f} – {t['speedup_mean_ci95'][1]:.2f}" if t else " | "
+                out.append(f"| {p} | {name.replace(' (online)', '')} | {ratio} | {c['only_a_fails']} / {c['only_b_fails']} | {c['mcnemar_p']:.3g} | {speed} |")
+        out.append("")
+    if v2.get("loss"):
+        out += ["### Heralded erasure at p = 0.004 (fresh test shots, 8 workers)", "",
+                "| f | Decoder | Pairs | Failed pairs | LER per cycle | 95% interval | Mean ms, contended | p99 ms, contended | Tier 2 used |",
+                "|---|---|---|---|---|---|---|---|---|"]
+        for f, result in v2["loss"].items():
+            for key, label in [("bposd+flags", "BP-OSD with flags"), ("relay+flags", "relay-BP with flags")] + V2_ROWS[2:]:
+                d = result["decoders"].get(key)
+                if d is None:
+                    continue
+                esc = f"{100 * d['escalated_fraction']:.2f}%" if "escalated_fraction" in d else ""
+                out.append(f"| {f} | {label} | {d['pairs']:,} | {d['failures_pair']} | {d['ler']:.2e} | {d['ler_ci95'][0]:.2e} – {d['ler_ci95'][1]:.2e} | "
+                           f"{ms(d['ms_mean'])} | {ms(d['ms_p99'])} | {esc} |")
+        out += ["", "| f | Comparison | LER ratio | 95% interval | Fail only first / only second | McNemar p | Speedup (contended) |", "|---|---|---|---|---|---|---|"]
+        for f, result in v2["loss"].items():
+            for name, c in result["comparisons"].items():
+                ratio = "n/a | n/a" if c["ler_ratio"] is None else f"{c['ler_ratio']:.2f} | {c['ler_ratio_ci95'][0]:.2f} – {c['ler_ratio_ci95'][1]:.2f}"
+                out.append(f"| {f} | {name.replace(' (online)', '')} | {ratio} | {c['only_a_fails']} / {c['only_b_fails']} | {c['mcnemar_p']:.3g} | {c['speedup_mean']:.2f}× |")
+        out.append("")
+    return out
+
+
 def main():
     ev = load("evaluation.json")
     tr = load("training.json")
+    res = load("resources.json")
     out = ["# Results", "",
-           "Generated by `python -m aegis.report` from `experiments/reports/*.json`. Every number is a measurement from this",
-           "repository's runs on one machine (Apple M5, 10 cores, 16 GB). Run details are in `experiments/manifest.json`.", "",
+           "Generated by `python -m aegis.report` from `results/*.json`. Every number is a measurement from this",
+           "repository's runs on one machine (Apple M5, 10 cores, 16 GB). Run details are in `data/manifest.json`.", "",
            "Conventions, as in the starter kit's `analyze.py`: X and Z records that share a seed share Stim's random stream, so",
            "shot k of X memory is paired with shot `analyze.z_partner(n)[k]` of Z memory (a fixed random derangement), never with",
            "Z shot k. A pair fails when either shot fails, the logical error rate (LER) per cycle is 1 − (1 − P)^(1/12), and a pair's",
            "decode time is the X time plus its Z partner's time. Every decoder compared on one setting uses the same pairs.",
            "Intervals are 95%: exact Clopper–Pearson for failure rates, paired bootstrap for ratios and mean times.", ""]
+    if ev and ev.get("sweep"):
+        out += required_evaluation(ev, res)
+    v2 = load("v2_evaluation.json")
+    if v2 and (v2.get("sweep") or v2.get("loss")):
+        out += v2_section(v2)
     if tr:
         chosen = tr["chosen"]
         out += ["## Chosen system (fixed on validation shots, before the test shots were decoded)", "",
-                "Selection-time numbers from `experiments/reports/training.json`. That selection paired X shot k with Z shot k;",
-                "the models and thresholds are frozen (`experiments/reports/frozen_models.json`) and were not refit after the",
+                "Selection-time numbers from `results/training.json`. That selection paired X shot k with Z shot k;",
+                "the models and thresholds are frozen (`results/frozen_models.json`) and were not refit after the",
                 "pairing fix. Per-shot quantities (AUC, calibration) do not depend on pairing.", ""]
         for mode, c in chosen.items():
             out.append(f"- **{mode}**: `{c['tier1']}` → `{c['tier2']}`, risk model `{c['model']}`, threshold {c['threshold']:.2e} "

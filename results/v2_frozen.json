@@ -1,0 +1,19 @@
+{
+ "frozen_at": "2026-11-22T03:02:47-0600",
+ "commit_before_freeze": "505910f",
+ "note": "Written by aegis.retune before any test2 (seed 7) or timing2 (seed 8) shot was decoded. aegis.collect --model loads these files; their hashes must not change before the v2 report.",
+ "models": {
+  "models/v2/aegis_speed_p0.003.joblib": "e1eb45496ede565d705d907d01c5a08b039a4c56e11d3b51bbdc933ffdad19c4",
+  "models/v2/aegis_accuracy_p0.003.joblib": "ed244265631c45d6e81fbc9d839c6961621c18f1dd6152f9efb16ac332a1123b",
+  "models/v2/aegis_speed_p0.004.joblib": "2435828bfa89c552e10ac064906dadb78806fda12ff1414087e377d79fd8a845",
+  "models/v2/aegis_accuracy_p0.004.joblib": "7d6061a3052cedf52dbbf5e1472ab9fc9517a6b2f66741967221febda6de5820",
+  "models/v2/aegis_speed_p0.005.joblib": "6369779f2748bf5d042dee212408ae50239022c2f1200c3a2bcc2d35683da55a",
+  "models/v2/aegis_accuracy_p0.005.joblib": "e6028a6685c25ff35084887e6ace2688fd45be64a5485c6c9a673cc71000f605",
+  "models/v2/aegis_speed_p0.004_f0.25.joblib": "587287d275b02ab73d89d29736a87281c624e9bc962d471a6e735c10c972beda",
+  "models/v2/aegis_accuracy_p0.004_f0.25.joblib": "cd2533f4f7aa7f8f09c6f9310ab60d972e71ab790c30d53cf532f51abe32092c",
+  "models/v2/aegis_speed_p0.004_f0.5.joblib": "95ff107e8259710f3e777be30820bdac29d19d1566db1bda2b0c3e604f3badb5",
+  "models/v2/aegis_accuracy_p0.004_f0.5.joblib": "04025fa11cb3e545fcf6f244c9b92d77274252e40988020b6656bf6989ef55a2",
+  "models/v2/aegis_speed_p0.004_f0.75.joblib": "d2cb3357a4c2ef5815f3b52c20d72db497b5e56369563bd2508d24e4402902c2",
+  "models/v2/aegis_accuracy_p0.004_f0.75.joblib": "73b0f5a2b6ceef378e1d21a14f4f633b8df56a0aa44ca8e6d407f6efdd165136"
+ }
+}

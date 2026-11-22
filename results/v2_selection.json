@@ -1,0 +1,171 @@
+{
+ "rule": {
+  "speed": "fastest mean with failed pairs <= relay-BP at the setting",
+  "accuracy": "fewest failed pairs with mean <= relay-BP at the setting"
+ },
+ "split": "val (seed 3)",
+ "settings": {
+  "p0.003": {
+   "relay_failures": 3,
+   "relay_ms": 47.61003214345328,
+   "pairs": 4000,
+   "candidates": 126,
+   "inference_us": 60.73212499904912,
+   "chosen": {
+    "speed": {
+     "threshold": 0.1998721146617946,
+     "failures_pair": 3,
+     "ler": 6.252149467522727e-05,
+     "ms_mean": 19.59032509679946,
+     "escalated": 0.000125,
+     "tier2": "strong10",
+     "order": 55
+    },
+    "accuracy": {
+     "threshold": 0.1998721146617946,
+     "failures_pair": 3,
+     "ler": 6.252149467522727e-05,
+     "ms_mean": 19.59032509679946,
+     "escalated": 0.000125,
+     "tier2": "strong10",
+     "order": 55
+    }
+   }
+  },
+  "p0.004": {
+   "relay_failures": 21,
+   "relay_ms": 279.65307846205906,
+   "pairs": 3000,
+   "candidates": 126,
+   "inference_us": 60.725916002411395,
+   "chosen": {
+    "speed": {
+     "threshold": 0.16638288403323945,
+     "failures_pair": 20,
+     "ler": 0.0005572603519752306,
+     "ms_mean": 149.97453496675493,
+     "escalated": 0.008666666666666666,
+     "tier2": "relay",
+     "order": 54
+    },
+    "accuracy": {
+     "threshold": 0.07989772443875508,
+     "failures_pair": 17,
+     "ler": 0.0004734531469616776,
+     "ms_mean": 182.35911839775872,
+     "escalated": 0.019166666666666665,
+     "tier2": "relay",
+     "order": 50
+    }
+   }
+  },
+  "p0.005": {
+   "relay_failures": 172,
+   "relay_ms": 812.6025366905669,
+   "pairs": 2000,
+   "candidates": 126,
+   "inference_us": 58.4467910011881,
+   "chosen": {
+    "speed": {
+     "threshold": 0.28842926692105963,
+     "failures_pair": 169,
+     "ler": 0.007330079200565165,
+     "ms_mean": 533.5581478129607,
+     "escalated": 0.03325,
+     "tier2": "relay",
+     "order": 57
+    },
+    "accuracy": {
+     "threshold": 0.09597938653983788,
+     "failures_pair": 150,
+     "ler": 0.006475736578073321,
+     "ms_mean": 806.7450044804755,
+     "escalated": 0.11499999999999999,
+     "tier2": "relay",
+     "order": 51
+    }
+   }
+  },
+  "p0.004_f0.25": {
+   "relay_failures": 4,
+   "relay_ms": 110.12429226228414,
+   "pairs": 4000,
+   "candidates": 126,
+   "inference_us": 60.318374999042135,
+   "chosen": {
+    "speed": {
+     "threshold": 0.0006788938368924995,
+     "failures_pair": 4,
+     "ler": 8.337155219761971e-05,
+     "ms_mean": 69.59723270331233,
+     "escalated": 0.043375,
+     "tier2": "relay+flags",
+     "order": 24
+    },
+    "accuracy": {
+     "threshold": 0.0006788938368924995,
+     "failures_pair": 3,
+     "ler": 6.252149467522727e-05,
+     "ms_mean": 95.43039634979503,
+     "escalated": 0.043375,
+     "tier2": "strong10+flags",
+     "order": 24
+    }
+   }
+  },
+  "p0.004_f0.5": {
+   "relay_failures": 1,
+   "relay_ms": 56.29353378851374,
+   "pairs": 4000,
+   "candidates": 126,
+   "inference_us": 60.164791997522116,
+   "chosen": {
+    "speed": {
+     "threshold": 0.01533706915512147,
+     "failures_pair": 1,
+     "ler": 2.083572086741814e-05,
+     "ms_mean": 21.321163846496347,
+     "escalated": 0.000125,
+     "tier2": "relay+flags",
+     "order": 41
+    },
+    "accuracy": {
+     "threshold": 0.004248517975082626,
+     "failures_pair": 0,
+     "ler": 0.0,
+     "ms_mean": 22.84947927324356,
+     "escalated": 0.0005,
+     "tier2": "strong10+flags",
+     "order": 34
+    }
+   }
+  },
+  "p0.004_f0.75": {
+   "relay_failures": 4,
+   "relay_ms": 48.53208176480621,
+   "pairs": 4000,
+   "candidates": 126,
+   "inference_us": 59.60445799428271,
+   "chosen": {
+    "speed": {
+     "threshold": 0.00032600752786788873,
+     "failures_pair": 4,
+     "ler": 8.337155219761971e-05,
+     "ms_mean": 32.24347600980582,
+     "escalated": 0.00075,
+     "tier2": "relay+flags",
+     "order": 20
+    },
+    "accuracy": {
+     "threshold": 0.00032600752786788873,
+     "failures_pair": 3,
+     "ler": 6.252149467522727e-05,
+     "ms_mean": 39.21270581180216,
+     "escalated": 0.00075,
+     "tier2": "strong10+flags",
+     "order": 20
+    }
+   }
+  }
+ }
+}

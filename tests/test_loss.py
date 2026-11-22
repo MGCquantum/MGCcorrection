@@ -147,7 +147,7 @@ def test_shot_priors(gross):
 
 
 def test_erasure_keeps_the_fault_budget_at_fixed_p(gross):
-    """SPEC.md says the total error rate is held fixed. In fault events it is, exactly: a channel of
+    """The erasure model is meant to hold the total error rate fixed. In fault events it is, exactly: a channel of
     strength p becomes DEPOLARIZE((1-f)p) plus erasures of total strength f p, and preparation and
     measurement flips are unchanged.
 

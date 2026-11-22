@@ -9,5 +9,5 @@ Everything is a local simulation. Nothing here talks to quantum hardware or a cl
 from . import paths  # noqa: F401  (puts the starter kit on the import path)
 
 CYCLES = 12
-# Seeds. 1 and 2 follow TEAM_PLAN.md. The test seed is frozen: nothing is tuned on it.
+# Seeds. Train 1 and test 2 were fixed by the team before any decoding. The test seed is frozen: nothing is tuned on it.
 TRAIN_SEED, TEST_SEED, VAL_SEED, CALIB_SEED = 1, 2, 3, 4
