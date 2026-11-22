@@ -24,6 +24,12 @@ def validate_cache(d, path):
     n = int(d['shots'])
     if n < 1 or d['round_weights'].shape != (n, 13) or d['n_flags'].shape != (n,):
         raise ValueError(f'{path}: inconsistent shot/feature dimensions')
+    for key in ['round_weights', 'n_flags']:
+        value = d[key]
+        if not np.isfinite(value).all() or (value < 0).any() or not np.equal(value, np.floor(value)).all():
+            raise ValueError(f'{path}: invalid count features in {key}')
+    if (d['round_weights'] > 72).any():
+        raise ValueError(f'{path}: more alarms than checks in a round')
     for key, value in d.items():
         if key.startswith(('fail_', 'conv_', 'time_')):
             if value.shape != (n,):

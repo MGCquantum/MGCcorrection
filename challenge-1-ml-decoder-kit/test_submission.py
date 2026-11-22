@@ -37,6 +37,8 @@ def test_complete_rerun_replaces_all_features_and_decoders(tmp_path):
 def test_corrupt_cache_rejected():
     d=cache(); d['time_bp']=np.array([float('nan')]*3)
     with pytest.raises(ValueError, match='invalid decoder timings'): validate_cache(d,'broken')
+    d=cache(); d['round_weights'][0,0] = float('nan')
+    with pytest.raises(ValueError, match='invalid count features'): validate_cache(d,'broken')
     d=cache(); d['fail_relay']=np.array([False])
     with pytest.raises(ValueError, match='length'): validate_cache(d,'broken')
 

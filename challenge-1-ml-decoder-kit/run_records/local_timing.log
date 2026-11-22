@@ -1,0 +1,27 @@
+results_local_timing/test_X_p0.003.npz  [26 s]  bp: fails 9 mean 10 ms  relay: fails 0 mean 28 ms  bposd: fails 0 mean 43 ms
+results_local_timing/test_Z_p0.003.npz  [33 s]  bp: fails 27 mean 12 ms  relay: fails 0 mean 34 ms  bposd: fails 0 mean 54 ms
+results_local_timing/test_X_p0.004.npz  [75 s]  bp: fails 62 mean 21 ms  relay: fails 1 mean 101 ms  bposd: fails 5 mean 121 ms
+results_local_timing/test_Z_p0.004.npz  [93 s]  bp: fails 68 mean 22 ms  relay: fails 0 mean 117 ms  bposd: fails 7 mean 164 ms
+results_local_timing/test_X_p0.005.npz  [318 s]  bp: fails 139 mean 40 ms  relay: fails 17 mean 746 ms  bposd: fails 46 mean 263 ms
+results_local_timing/test_Z_p0.005.npz  [239 s]  bp: fails 138 mean 33 ms  relay: fails 13 mean 513 ms  bposd: fails 39 mean 241 ms
+p=0.003 predicting BP convergence (X test shots): ML router 0.957, alarm-count threshold 0.957, always-guess-majority 0.957
+p=0.004 predicting BP convergence (X test shots): ML router 0.743, alarm-count threshold 0.763, always-guess-majority 0.757
+p=0.005 predicting BP convergence (X test shots): ML router 0.577, alarm-count threshold 0.610, always-guess-majority 0.510
+sweep    p=0.003 f=0  relay        rate < 1.0e-03 (0 of 300 pairs failed)  mean 62 ms  p99 324 ms
+sweep    p=0.003 f=0  bposd        rate < 1.0e-03 (0 of 300 pairs failed)  mean 97 ms  p99 570 ms
+sweep    p=0.003 f=0  bp           rate 9.97e-03 [95% CI 6.9e-03-1.4e-02, 34/300]  mean 22 ms  p99 78 ms
+sweep    p=0.003 f=0  hybrid_rule  rate < 1.0e-03 (0 of 300 pairs failed)  mean 41 ms  p99 369 ms  escalated 4%
+sweep    p=0.003 f=0  hybrid_ml    rate < 1.0e-03 (0 of 300 pairs failed)  mean 43 ms  p99 371 ms  escalated 4%
+sweep    p=0.004 f=0  relay        rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 217 ms  p99 2700 ms
+sweep    p=0.004 f=0  bposd        rate 3.40e-03 [95% CI 1.8e-03-5.9e-03, 12/300]  mean 285 ms  p99 832 ms
+sweep    p=0.004 f=0  bp           rate 3.78e-02 [95% CI 3.1e-02-4.5e-02, 111/300]  mean 43 ms  p99 96 ms
+sweep    p=0.004 f=0  hybrid_rule  rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 200 ms  p99 2793 ms  escalated 24%
+sweep    p=0.004 f=0  hybrid_ml    rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 203 ms  p99 2796 ms  escalated 27%
+sweep    p=0.005 f=0  relay        rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1259 ms  p99 8414 ms
+sweep    p=0.005 f=0  bposd        rate 2.37e-02 [95% CI 1.9e-02-3.0e-02, 75/300]  mean 503 ms  p99 991 ms
+sweep    p=0.005 f=0  bp           rate 8.98e-02 [95% CI 7.8e-02-1.0e-01, 203/300]  mean 73 ms  p99 117 ms
+sweep    p=0.005 f=0  hybrid_rule  rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1253 ms  p99 8523 ms  escalated 51%
+sweep    p=0.005 f=0  hybrid_ml    rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1255 ms  p99 8416 ms  escalated 74%
+/Users/agentq/Documents/Codex/2026-11-21/task-final-audit-of-our-hackathon/work/MGCcorrection/challenge-1-ml-decoder-kit/analyze.py:190: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  x.legend(fontsize=7)
+saved results_local_timing/results.csv and results_local_timing/results.png

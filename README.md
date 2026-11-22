@@ -7,30 +7,31 @@ Infleqtion Challenge 1 (ML-assisted QEC decoding), MidQWest 2026. See [AUDIT.md]
 ## Results
 
 ### 1. Using erasure flags (headline)
+These results include the corrected herald-conditioned prior calculation (see [AUDIT.md](AUDIT.md)); the erasure runs were regenerated locally after the fix.
 p = 0.004, 12 syndrome cycles, X and Z memory. The same simulated shots are decoded with flags hidden and with flags visible. Rates are logical errors per cycle with exact (Clopper-Pearson) 95% intervals.
 
 | Noise flagged as erasure | Flags hidden (BP-OSD) | Flags used (BP-OSD) | Gain | Pairs |
 |---|---|---|---|---|
 | 0% | 4.3e-3 [3.2–5.6e-3] | 4.3e-3 (identical, as expected) | — | 1,000 |
 | 25% | 1.4e-3 [0.8–2.3e-3] | 6.7e-4 [2.9–13e-4] | ~2× | 1,000 |
-| 50% | 9.2e-4 [5.8–14e-4] | 1.7e-4 [0.5–4.3e-4] | **~5.5×** | 2,000 |
+| 50% | 9.2e-4 [5.8–14e-4] | 1.3e-4 [0.3–3.7e-4] | **~7.3×** | 2,000 |
 | 75% | 4.2e-4 [2.0–7.7e-4] | < 1.5e-4 (0 failures seen) | no failures to count | 2,000 |
 
 **Paired test on identical shots** (pairs where only one of the two decoders failed; exact McNemar test):
 
 | Noise flagged | Failed only with flags hidden | Failed only with flags used | p-value |
 |---|---|---|---|
-| 25% | 14 | 5 | 0.06 (not significant) |
-| 50% | 18 | 0 | 8e-6 |
+| 25% | 15 | 6 | 0.078 (not significant) |
+| 50% | 19 | 0 | 3.8e-6 |
 | 75% | 10 | 0 | 0.002 |
 
-At 50%, 22 pairs failed with flags hidden versus 4 with flags used. Using the flags never caused a failure that the flag-blind decoder avoided. The "~5.5×" is the ratio of those counts, and its uncertainty is wide (the 95% intervals in the table above), so read it as "several times fewer".
+At 50%, 22 pairs failed with flags hidden versus 3 with flags used. Using the flags never caused a failure that the flag-blind decoder avoided. The "~7.3×" is the ratio of those counts, and its uncertainty is wide (the 95% intervals in the table above), so read it as "several times fewer".
 
 **Scope:** the flags were tested with BP-OSD, the decoder whose priors can be updated per shot. relay-BP is about 7× more accurate than BP-OSD at p = 0.004 without erasure, and it was not run with flags (its API has no per-shot prior update). The 0% row (4.3e-3 on 1,000 pairs) and the sweep's BP-OSD at p = 0.004 (4.1e-3 on 2,000 different pairs) agree within their intervals.
 
 ![erasure](challenge-1-ml-decoder-kit/figures/erasure.png)
 
-- **Cost:** flag-aware BP-OSD is about 6× slower per shot at 50% erasure, because the decoder considers each erasure component separately and its priors are updated every shot.
+- **Cost:** flag-aware BP-OSD is about 6.5× slower per shot at 50% erasure, because the decoder considers each erasure component separately and its priors are updated every shot.
 - **Why the flag-blind line also falls:** an erasure applies a random Pauli, and a quarter of those are the identity, so converting noise to erasure also lowers the effective error rate. The fair comparison is therefore flags hidden vs used **at the same erasure share, on the same shots**.
 
 ### 2. Required sweep: baselines and hybrid decoders
@@ -54,6 +55,17 @@ Both hybrids have the same observed failed-pair count as relay-BP at all three t
 
 ![speed](challenge-1-ml-decoder-kit/figures/speed.png)
 
+
+**Additional local comparison with both baselines:** Apple M5, 300 pairs per p, one worker/thread, under concurrent load. Entries are mean / p99 milliseconds per X+Z pair. Every decoder uses the same shots within this run. These are measured comparisons, not idle-machine latency guarantees.
+
+| p | BP-OSD | relay-BP | Hybrid rule | Hybrid ML |
+|---|---:|---:|---:|---:|
+| 0.003 | 97 / 570 | 62 / 324 | 41 / 369 | 43 / 370 |
+| 0.004 | 285 / 832 | 217 / 2700 | 200 / 2793 | 203 / 2795 |
+| 0.005 | 503 / 991 | 1259 / 8414 | 1253 / 8523 | 1254 / 8415 |
+
+![local speed comparison](challenge-1-ml-decoder-kit/figures/speed_local.png)
+
 ### 3. The ML router (an honest negative result)
 A gradient-boosted classifier reads the alarms per round and predicts whether fast BP will converge, so hard shots can skip it. (It also has a loss-flag-count input, but the sweep has no erasure, so that input is always 0.) Accuracy on held-out shots:
 
@@ -72,14 +84,14 @@ The router does not beat a single threshold. BP's own convergence check is alrea
 - **Falls short:**
   - The slowest 1% of shots do not get faster.
   - There is no speedup at p = 0.005.
-  - Flag-aware decoding costs about 6× more time.
+  - Flag-aware decoding costs about 6.5× more time at 50% erasure.
   - The ML router does not outperform the simple convergence rule.
   - Error bars at p = 0.003 are wide, with only 2–3 failures.
 - **Model limits:** erasures are *idealized*. Flags fire instantly at the gate with the exact location, and the qubit returns to the code space. Real atom loss is detected later and a lost atom keeps causing errors. Preparation and measurement errors are not converted. The DEM/decoder also approximates correlations between disjoint Pauli outcomes; corrected conditional marginals do not make it an exact joint decoder.
 
 ## Method
 - **Code and noise:** the kit's Gross-code memory circuits (Bravyi et al.; the relay-BP paper's error model). In `lossy.py`, each depolarizing channel of strength p becomes `DEPOLARIZE((1−f)p)` plus `HERALDED_ERASE`, with probability f·p per qubit for one-qubit channels and f·p/2 per qubit for two-qubit channels, so the expected number of fault events per gate stays about p. Each herald is recorded as a detector (coordinate 2).
-- **Flag-aware priors:** erasure components keep their own decoder columns. Per shot, a column whose herald fired gets prior (merged Pauli components) × 1/4, e.g. 0.5 when two components look identical to the checks. Unfired erasure columns get 1e-9. The prior update is counted as decode time.
+- **Flag-aware priors:** erasure components keep their own decoder columns. Pauli multiplicities are recovered from the DEM probability divided by the herald-event probability, including outcomes Stim has already merged. Mutually exclusive outcomes sharing a herald are summed. Per shot, a column whose herald fired gets prior (merged Pauli components) × 1/4, e.g. 0.5 when two components look identical to the checks. Unfired erasure columns get 1e-9. The prior update is counted as decode time.
 - **Hybrid:** min-sum BP (200 iterations). If it converges, its answer is accepted. Otherwise relay-BP runs, at the kit's settings.
 - **Router:** scikit-learn `HistGradientBoostingClassifier`, trained on seed-1 shots and tested on seed-2 shots.
 - **Scoring:** the kit's rule. An X/Z shot pair fails if either basis fails, and per-cycle rate = 1 − (1 − P)^(1/12).
@@ -89,7 +101,7 @@ From the audited local `python demo.py` runs on an Apple M5 (10 logical cores, n
 - Decoding problem: 936 checks × 8,784 error mechanisms.
 - Router model: 718 kB.
 - Peak memory: 191–196 MB for the whole demo process, including imports and router training.
-- Decoder setup: ~0.02 s. Both fresh X/Z seed-99 demos decoded correctly; a demo is a functional check, not an accuracy benchmark.
+- Decoder setup: ~0.02–0.03 s. Both fresh X/Z seed-99 demos decoded correctly; a demo is a functional check, not an accuracy benchmark.
 
 The flag-aware matrix is larger (936 × ~32,000 columns). Benchmarks used 7–8 worker processes per laptop on 8–12-core laptops. The historical timing table used 1 thread and lacks BP-OSD. The new local timing sweep includes BP-OSD, relay-BP and both hybrids on matching shots; it is explicitly labeled as a concurrent-load run.
 

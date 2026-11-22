@@ -1,48 +1,99 @@
 # Challenge 1 readiness audit
 
+**Status: required submission evidence is complete and locally verified.**
+This is our evidence audit, not an official judging certification or a claim that
+the decoder is optimal. All computation in this audit ran on the local Mac.
+
 Official source: [Infleqtion/MidQWest-2026](https://github.com/Infleqtion/MidQWest-2026),
-revision `31ceda8be4949a308d95ec9bc7c32029c80d90d2` (reviewed 2026-11-21).
-`CHALLENGE.md` matches that revision's README. The supplied baseline Python files
-and Gross-code circuits are unchanged from the sponsor kit.
+revision `31ceda8be4949a308d95ec9bc7c32029c80d90d2`, reviewed 2026-11-21.
+`CHALLENGE.md` matches that revision. The sponsor's baseline Python files and
+Gross-code circuits remain unchanged; our extensions sit alongside them.
 
-This is a requirements audit, not a claim that every research hypothesis succeeded.
-The second code, sliding windows, and distance scaling are optional stretch goals.
+## Required evidence
 
-| Required item | Evidence | Initial audit |
+| Official requirement | Verified evidence | Status |
 |---|---|---|
-| Gross-code noisy memory and both baseline decoders | Sponsor circuits, `decoders.py`, saved X/Z results | Present; local kit tests running |
-| ML-assisted decoder using syndrome information | `analyze.py` router and `demo.py` live pipeline | Present; unify and verify train/inference behavior |
-| Heralding information where applicable | `lossy.py`, paired flag-hidden/flag-used experiment | Present; idealized instant erasure, not persistent atom loss |
-| Same-data sweep at 0.003, 0.004, 0.005 against both baselines | `results/test_*.npz` plus compatible extras | Complete after BP-OSD p=0.005 run; automate verification |
-| Logical error rate and uncertainty | `results/results.csv`, exact binomial intervals | Present; README p=0.005 baseline stale |
-| Decoding latency | Accuracy-cache times and separate 300-pair timing cache | Present but timing cache lacks BP-OSD; provenance needs explicit caveats |
-| Resource requirements | `demo.py` reports model size, setup, matrix, RSS, CPU | Needs local run; enforce the reported thread limit |
-| Reproducible code and evaluation on GitHub | Kit, run_job, analyze, results | Repair incomplete run guide and dependencies; add a one-command audit |
-| Comparison plot | `results/results.png`, `figures/*.png` | Present |
-| Short presentation or demo | `PITCH.md`, `demo.py` | Present; verify demo locally and align claims |
-| Discuss successes and limitations | README and PITCH | Present; avoid claiming ML is better than the rule |
+| Set up Gross-code memory experiments and reproduce BP-OSD and relay-BP | Unchanged sponsor circuits/settings; both baselines in all three sweep points; kit references lie inside the cached 95% intervals | PASS |
+| Simulate noise and use heralding where available | `lossy.py`, corrected conditional priors, paired flag-hidden/flag-used runs at f=0, 0.25, 0.5, 0.75 | PASS |
+| Working ML-assisted decoder using syndrome information | Shared `hybrid.py` training/features/live inference; `demo.py` exercises fast and fallback paths | PASS |
+| Same-data baseline comparison at p=0.003, 0.004, 0.005 | Full accuracy sweep, both X/Z bases, BP-OSD, relay-BP, rule and ML hybrids; no test labels enter router training | PASS |
+| Report logical error rate | Exact Clopper-Pearson intervals and failed-pair counts in `results/results.csv` | PASS |
+| Report decoding latency | Mean/p99 in accuracy caches plus a complete same-shot 300-pair local comparison with both baselines in `results_local_timing` | PASS, concurrent-load caveat |
+| Report resource requirements | Local Apple M5 demos: 718 kB router; 191–196 MB peak process RSS including imports/training; 936 x 8784 matrix; roughly 0.02–0.03 s setup | PASS |
+| GitHub code for decoder, data generation and evaluation | `run_job.py`, `make_dataset.py`, `hybrid.py`, `analyze.py`; complete commands in `RUN.md`; dependencies and local lockfile | PASS |
+| Comparison plot | Updated `figures/erasure.png`, `figures/speed_local.png`, `results/results.png`; zero-failure bounds use separate triangles | PASS |
+| Short presentation or demo | Updated root `PITCH.md`; successful fresh X and Z live demos, seed 99 | PASS |
+| Explain strengths, weaknesses, and ML's role | README/PITCH explicitly separate the erasure gain from the router's negative result | PASS |
 
-All new computation is local. Progress is pushed on `codex/challenge1-readiness`.
-The prior BP-OSD-only prompt's no-source-edit constraint applied to that completed
-run; this broader readiness audit includes source fixes and regression tests.
+## Repeatable checks and evidence files
 
-## Issue discovered during regression testing
+From `challenge-1-ml-decoder-kit` after installing `requirements-dev.txt`:
 
-A one-qubit heralded-erasure test exposed an incorrect conditional prior in
-`lossy.aware_matrices`: Stim can merge two Pauli outcomes into one DEM instruction,
-but the original code counted instructions instead of the probability mass of the
-outcomes. A 1/2 conditional flip probability was therefore sometimes assigned 1/4.
-The correction recovers multiplicities from the herald probability and adds
-mutually exclusive outcomes instead of XOR-combining their probabilities.
-The no-erasure sweep is unaffected. Erasure headline numbers are under revalidation;
-the old results must not be presented as evidence for the corrected decoder yet.
+```bash
+bash scripts/verify_submission.sh
+```
 
-On the Gross code at p=0.004, f=0.5, the fix changes component multiplicities
-in 1,440 X-basis columns and 1,584 Z-basis columns (31,968 columns per basis).
-The one-qubit regression separately verifies the expected conditional flip
-probability of 1/2 by sampling the original circuit.
+- **32/32 tests pass:** 23 sponsor-kit tests plus 9 extension regressions, including
+  herald-conditioned priors, cache integrity, training/test separation, and parity
+  between live and cached routing.
+- **67/67 data/evaluation checks pass:** `run_records/challenge1_audit.json` includes
+  every check, hashes of 24 input files, exact paired-test statistics and caveats.
+- `run_records/verification.log` records the successful full verification run.
+- `run_records/demo_local_X.log` and `demo_local_Z.log` show correct fresh-shot
+  predictions and both execution paths.
+- `run_records/corrected_erasure.log` and `local_timing.log` record completed jobs;
+  `local_timing_analysis.log` is the final timing analysis.
+- `requirements-local-lock.txt` records the actual Python 3.13 environment.
 
-Stim documents that heralded-erasure outcomes become independent approximations
-in a DEM: [HERALDED_ERASE reference](https://github.com/quantumlib/Stim/blob/main/doc/gates.md#heralded_erase).
-We sample circuits, not DEMs. Corrected per-column marginals still do not make
-BP-OSD an exact joint decoder of mutually exclusive Pauli outcomes.
+Paths above are relative to the kit directory. Accuracy counts reproduce from the
+caches; newly measured router timings and memory usage naturally vary.
+
+## Scientific correction found and fixed
+
+The original `lossy.aware_matrices` counted detector-error-model instructions as
+Pauli components. Stim can already merge two Pauli outcomes into one instruction,
+so this sometimes assigned a conditional probability of 1/4 instead of 1/2.
+We now recover multiplicity from the probability mass divided by the herald-event
+probability and sum mutually exclusive outcomes sharing that herald.
+
+A one-qubit simulation regression verifies the expected conditional flip rate.
+On the Gross code at p=0.004, f=0.5, the correction changes multiplicities in
+1,440 X-basis and 1,584 Z-basis columns out of 31,968 per basis.
+All six nonzero-erasure X/Z runs were regenerated with both decoders together;
+training seeds, test seeds and shot counts were preserved. The no-erasure sweep
+is unaffected. Prior results remain available in Git history, not as current claims.
+
+Corrected paired results:
+
+| Erasure fraction | Pairs | Flags hidden failures | Flags used failures | Exact paired p-value |
+|---|---:|---:|---:|---:|
+| 0% | 1,000 | 50 | 50 | 1 |
+| 25% | 1,000 | 17 | 8 | 0.0784 |
+| 50% | 2,000 | 22 | 3 | 3.81e-6 |
+| 75% | 2,000 | 10 | 0 | 0.00195 |
+
+At 50%, the observed failure-count ratio is 7.3x, with about 6.5x more decode time.
+At 25%, improvement is not statistically established. Zero failures at 75% is an
+upper-bound result, not zero underlying error probability. See README for intervals.
+
+## Remaining limitations and optional work
+
+- The ML router does not beat the simple convergence rule. The erasure gain comes
+  from physically informed priors, not from learned loss correction. No broad claim
+  that learning cannot improve decoding is supported.
+- Erasures are instantaneous, located and reset to the code space, not persistent
+  atom loss or delayed detection. Preparation and measurement errors remain.
+- [Stim's heralded-erasure reference](https://github.com/quantumlib/Stim/blob/main/doc/gates.md#heralded_erase)
+  explains the independent-error DEM approximation. We sample circuits, not DEMs;
+  corrected marginal priors still do not make BP-OSD an exact joint decoder.
+- Legacy caches lack full sample hashes. Extra-cache compatibility uses seed,
+  conditions, round weights and flag counts. This is not a mathematical proof of
+  shot identity. New runs include full detector/observable SHA-256 fingerprints.
+- Local timing overlapped other computation and is labeled accordingly. Historical
+  idle-laptop timing is retained separately and lacks BP-OSD. Hybrid times compose
+  cached branch costs plus measured inference; they are not a service benchmark.
+- Samples are finite, particularly at p=0.003 and in the 300-pair timing sweep.
+  Same observed hybrid/relay failure counts do not prove equal underlying rates.
+- Optional stretch goals: the learned router is implemented and CPU resources are
+  measured. Second-code evaluation, sliding windows, distance scaling and GPU cost
+  estimates are not claimed. They are not required by the sponsor's deliverables.

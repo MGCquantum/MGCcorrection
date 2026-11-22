@@ -33,7 +33,7 @@ for name, label, color in [("bposd", "Decoder ignores loss flags", "#888780"),
     rs = [r for r in erase if r["decoder"] == name]
     pts = [point(r) for r in rs]
     x = [r["f"] * 100 for r in rs]
-    ax.errorbar(x, [p[0] for p in pts], [[p[1] for p in pts], [p[2] for p in pts]], marker="o", capsize=4,
+    ax.errorbar(x, [float("nan") if p[3] else p[0] for p in pts], [[p[1] for p in pts], [p[2] for p in pts]], marker="o", capsize=4,
                 lw=2, color=color, label=label)
     for xi, p in zip(x, pts):
         if p[3]:

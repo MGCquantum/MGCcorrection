@@ -143,7 +143,7 @@ def main():
         print("no result files found")
         return
     with open(f"{args.dir}/results.csv", "w", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=list(rows[0]))
+        w = csv.DictWriter(fh, fieldnames=list(rows[0]), lineterminator="\n")
         w.writeheader()
         w.writerows(rows)
     for r in rows:
@@ -160,7 +160,8 @@ def _ci_plot(ax, x, rs, name):
     y = [r["rate_per_cycle"] if r["failed_pairs"] else r["ci_high"] for r in rs]
     lo = [y[i] - r["ci_low"] if r["failed_pairs"] else 0 for i, r in enumerate(rs)]
     hi = [r["ci_high"] - y[i] if r["failed_pairs"] else 0 for i, r in enumerate(rs)]
-    line = ax.errorbar(x, y, [lo, hi], marker="o", label=name, capsize=3)
+    line_y = [value if rs[i]["failed_pairs"] else float("nan") for i, value in enumerate(y)]
+    line = ax.errorbar(x, line_y, [lo, hi], marker="o", label=name, capsize=3)
     zero = [i for i, r in enumerate(rs) if not r["failed_pairs"]]
     if zero:
         ax.scatter([x[i] for i in zero], [y[i] for i in zero], marker="v", s=80, color=line[0].get_color(), zorder=5)
@@ -170,7 +171,9 @@ def plot(rows, dirname):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    fig, ax = plt.subplots(1, 3, figsize=(15, 4))
+    has_erasure = any(r["experiment"] == "erasure" for r in rows)
+    count = 3 if has_erasure else 2
+    fig, ax = plt.subplots(1, count, figsize=(5 * count, 4))
     sweep = [r for r in rows if r["experiment"] == "sweep"]
     for name in sorted({r["decoder"] for r in sweep}):
         rs = sorted([r for r in sweep if r["decoder"] == name], key=lambda r: float(r["p"]))
@@ -184,10 +187,12 @@ def plot(rows, dirname):
     for name in sorted({r["decoder"] for r in erase}):
         rs = sorted([r for r in erase if r["decoder"] == name], key=lambda r: float(r["f"]))
         _ci_plot(ax[2], [float(r["f"]) for r in rs], rs, name)
-    ax[2].set(xlabel="fraction of noise converted to heralded erasure (triangle = upper bound, 0 failures)", ylabel="logical error rate per cycle",
-              yscale="log", title="Using erasure flags")
+    if erase:
+        ax[2].set(xlabel="fraction of noise converted to heralded erasure (triangle = upper bound, 0 failures)", ylabel="logical error rate per cycle",
+                  yscale="log", title="Using erasure flags")
     for x in ax:
-        x.legend(fontsize=7)
+        if x.get_legend_handles_labels()[0]:
+            x.legend(fontsize=7)
     fig.tight_layout()
     fig.savefig(f"{dirname}/results.png", dpi=150)
     print(f"saved {dirname}/results.csv and {dirname}/results.png")

@@ -1,11 +1,11 @@
 # Pitch notes (not part of the code spec)
 
 ## Pitch cheat sheet
-**Claim:** "Neutral atoms can convert some errors into flagged erasures. On the Gross code, decoding the same shots with the flags gave 4 failures instead of 22 (about 5× fewer, p < 0.0001) when half the noise was flagged. The cost is about 6× more decode time. We also asked where learning belongs in a hierarchical decoder: our learned convergence router did not beat the simple rule on these data. An oracle that knows BP convergence would save under 17% of the rule hybrid's mean time in the historical timing cache; this does not rule out other learned decoders."
+**Claim:** "Neutral atoms can convert some errors into flagged erasures. On the Gross code, decoding the same shots with the flags gave 3 failures instead of 22 (about 7× fewer, p < 0.0001) when half the noise was flagged. The cost is about 6.5× more decode time. We also asked where learning belongs in a hierarchical decoder: our learned convergence router did not beat the simple rule on these data. An oracle that knows BP convergence would save under 17% of the rule hybrid's mean time in the historical timing cache; this does not rule out other learned decoders."
 
 **Order:** (1) problem: atoms flag some failures; (2) erasure result: the headline; (3) speed and the router finding; (4) limits and next steps.
 
-**Status:** erasure counts are being rerun after the conditional-prior correction described in [AUDIT.md](AUDIT.md). Do not present the old headline as the corrected decoder result until this note is replaced.
+**Evidence:** corrected erasure priors, all three required noise levels, both baselines, 32 local tests and the automated data audit. See [AUDIT.md](AUDIT.md) and [the evaluation table](challenge-1-ml-decoder-kit/results/results.csv).
 
 **Answers to have ready:**
 - "Why BP-OSD, not relay-BP?" relay-BP can't take new priors per shot. Flags in relay-BP is the next step.
@@ -20,7 +20,7 @@
 | Decoder | The software that guesses which errors caused the alarms |
 | BP converged | The fast decoder found an explanation that fits every alarm |
 | Escalated | Sent to the slow, stronger decoder |
-| Erasure / loss flag | The hardware saying "this atom is gone, the error is here" |
+| Erasure / loss flag | A flag identifying where an erasure event occurred (idealized here) |
 | Prior | How likely the decoder thinks each error is before it looks at the alarms |
 | p99 latency | How long the slowest 1% of shots take |
 
@@ -28,10 +28,12 @@
 - "Isn't it obvious that flags help?" Yes, that part is expected. The point is *how much*, measured on the Gross code as a function of erasure fraction, which is the number a hardware team needs.
 - "Can fast BP converge and still be wrong?" Rarely: 2 of 14,166 converged test shots, both at p = 0.005.
 
-## Schedule
-- Loss go/no-go at 8 pm. If loss isn't working, ship the hybrid and router only.
-- Final sweeps start by 11 pm and run overnight.
-- Numbers locked at 10 am; slides and README until 1:30 pm; push by 1:45 pm. Code freeze is 2:00 pm.
+## Live demonstration
+
+From `challenge-1-ml-decoder-kit`, run `.venv/bin/python demo.py --p 0.004 --basis X`,
+then repeat with `--basis Z`. The recorded seed-99 local examples exercise both
+fast-BP acceptance and escalation to relay-BP, with correct logical predictions.
+The demo prints the CPU, matrix, model size, setup cost and peak process memory.
 
 ## Pitch (3 minutes)
 1. Decoding is a classical computing bottleneck, and neutral atoms tell you where they failed.

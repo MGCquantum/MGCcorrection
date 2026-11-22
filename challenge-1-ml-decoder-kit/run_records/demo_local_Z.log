@@ -1,7 +1,7 @@
 New shot (p=0.004, Z memory, seed 99): 90 alarms over 13 rounds
   alarms per round: [9, 6, 4, 14, 5, 5, 4, 0, 8, 6, 10, 16, 3]
-Router (1.0 ms): easy -> fast BP first
-Fast BP: 45.1 ms; relay-BP: 60.7 ms; escalated: True
+Router (1.1 ms): easy -> fast BP first
+Fast BP: 45.4 ms; relay-BP: 63.5 ms; escalated: True
 Predicted logical flips: 001110001000
 True logical flips:      001110001000 -> CORRECT
 

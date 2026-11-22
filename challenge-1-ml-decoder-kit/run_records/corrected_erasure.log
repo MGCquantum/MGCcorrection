@@ -1,0 +1,9 @@
+results_corrected_erasure/erase_X_p0.004_f0.25.npz  [422 s]  bposd: fails 6 mean 113 ms  bposd_flags: fails 2 mean 1065 ms
+results_corrected_erasure/erase_Z_p0.004_f0.25.npz  [422 s]  bposd: fails 11 mean 117 ms  bposd_flags: fails 6 mean 1082 ms
+Completed f=0.25; results saved separately for validation.
+results_corrected_erasure/erase_Z_p0.004_f0.5.npz  [400 s]  bposd: fails 13 mean 76 ms  bposd_flags: fails 2 mean 492 ms
+results_corrected_erasure/erase_X_p0.004_f0.5.npz  [414 s]  bposd: fails 10 mean 75 ms  bposd_flags: fails 1 mean 484 ms
+Completed f=0.5; results saved separately for validation.
+results_corrected_erasure/erase_Z_p0.004_f0.75.npz  [394 s]  bposd: fails 6 mean 59 ms  bposd_flags: fails 0 mean 478 ms
+results_corrected_erasure/erase_X_p0.004_f0.75.npz  [436 s]  bposd: fails 4 mean 55 ms  bposd_flags: fails 0 mean 545 ms
+Completed f=0.75; results saved separately for validation.

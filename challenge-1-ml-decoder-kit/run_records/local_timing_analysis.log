@@ -1,0 +1,19 @@
+p=0.003 predicting BP convergence (X test shots): ML router 0.957, alarm-count threshold 0.957, always-guess-majority 0.957
+p=0.004 predicting BP convergence (X test shots): ML router 0.743, alarm-count threshold 0.763, always-guess-majority 0.757
+p=0.005 predicting BP convergence (X test shots): ML router 0.577, alarm-count threshold 0.610, always-guess-majority 0.510
+sweep    p=0.003 f=0  relay        rate < 1.0e-03 (0 of 300 pairs failed)  mean 62 ms  p99 324 ms
+sweep    p=0.003 f=0  bposd        rate < 1.0e-03 (0 of 300 pairs failed)  mean 97 ms  p99 570 ms
+sweep    p=0.003 f=0  bp           rate 9.97e-03 [95% CI 6.9e-03-1.4e-02, 34/300]  mean 22 ms  p99 78 ms
+sweep    p=0.003 f=0  hybrid_rule  rate < 1.0e-03 (0 of 300 pairs failed)  mean 41 ms  p99 369 ms  escalated 4%
+sweep    p=0.003 f=0  hybrid_ml    rate < 1.0e-03 (0 of 300 pairs failed)  mean 43 ms  p99 370 ms  escalated 4%
+sweep    p=0.004 f=0  relay        rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 217 ms  p99 2700 ms
+sweep    p=0.004 f=0  bposd        rate 3.40e-03 [95% CI 1.8e-03-5.9e-03, 12/300]  mean 285 ms  p99 832 ms
+sweep    p=0.004 f=0  bp           rate 3.78e-02 [95% CI 3.1e-02-4.5e-02, 111/300]  mean 43 ms  p99 96 ms
+sweep    p=0.004 f=0  hybrid_rule  rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 200 ms  p99 2793 ms  escalated 24%
+sweep    p=0.004 f=0  hybrid_ml    rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 203 ms  p99 2795 ms  escalated 27%
+sweep    p=0.005 f=0  relay        rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1259 ms  p99 8414 ms
+sweep    p=0.005 f=0  bposd        rate 2.37e-02 [95% CI 1.9e-02-3.0e-02, 75/300]  mean 503 ms  p99 991 ms
+sweep    p=0.005 f=0  bp           rate 8.98e-02 [95% CI 7.8e-02-1.0e-01, 203/300]  mean 73 ms  p99 117 ms
+sweep    p=0.005 f=0  hybrid_rule  rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1253 ms  p99 8523 ms  escalated 51%
+sweep    p=0.005 f=0  hybrid_ml    rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1254 ms  p99 8415 ms  escalated 74%
+saved results_local_timing/results.csv and results_local_timing/results.png
