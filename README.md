@@ -1,6 +1,6 @@
 # QEC-Aegis: learned risk routing for fast, accurate Gross-code decoding
 
-**Infleqtion Challenge 1: ML-assisted QEC decoding** · MidQWest 2026 · [Challenge brief](CHALLENGE.md)
+**Infleqtion Challenge 1: ML-assisted QEC decoding** · MidQWest 2026 · [Challenge brief](CHALLENGE.md) · [One-page summary](docs/one-page-summary.pdf)
 
 QEC-Aegis decodes the [[144,12,12]] Gross code with a fast decoder on every shot and a machine-learned risk model that sends only doubtful shots to the slow, accurate decoder. On fresh test data it is **1.5–4.5× faster than relay-BP on average with no significant loss of accuracy**, and at p = 0.005 it is **significantly more accurate** than relay-BP.
 
