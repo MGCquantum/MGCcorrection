@@ -37,7 +37,9 @@ from .paths import DATA, ROOT
 from . import CALIB_SEED, TEST_SEED, TRAIN_SEED, VAL_SEED, features
 from .problem import Problem
 
-SEEDS = {"train": TRAIN_SEED, "test": TEST_SEED, "val": VAL_SEED, "calib": CALIB_SEED, "timing": 5}
+# test2 and timing2 are fresh shots for QEC-Aegis v2 (aegis.retune), whose design was informed by the
+# seed-2 test results; seed 6 is used by aegis.resources.
+SEEDS = {"train": TRAIN_SEED, "test": TEST_SEED, "val": VAL_SEED, "calib": CALIB_SEED, "timing": 5, "test2": 7, "timing2": 8}
 RECORDS = ROOT / "experiments" / "records"       # committed: test and validation records
 TRAIN_RECORDS = DATA / "records"                 # not committed: regenerate with `make data`
 MANIFEST = ROOT / "experiments" / "manifest.json"

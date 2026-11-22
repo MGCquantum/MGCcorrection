@@ -337,3 +337,18 @@ def test_relay_bp_depends_on_history_and_reset_removes_it():
     tier.reset()
     third = [tier.decode_shot(s).iterations for s in syndromes]
     assert first != second and first == third
+
+
+def test_compiled_risk_equals_scikit_learn_exactly():
+    """RiskModel.risk walks the trees itself (CompiledTrees); it must return the same float as the
+    scikit-learn decision function plus Platt scaling, on real tier-1 feature vectors."""
+    import joblib
+    from aegis.collect import RECORDS, load
+    from aegis.paths import MODELS
+    model = joblib.load(MODELS / "aegis_router.joblib")
+    F = load(RECORDS / "val_X_p0.005.npz")[model.meta["tier1"]]["features"]
+    slow = model.risks(F)
+    assert all(model.risk(F[k]) == slow[k] for k in range(len(F)))
+    nan = F[0].copy()
+    nan[model.columns[0]] = np.nan                      # missing values follow scikit-learn's learned direction
+    assert model.risk(nan) == float(model.risks(nan[None, :])[0])

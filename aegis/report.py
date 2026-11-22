@@ -132,6 +132,79 @@ def required_evaluation(ev, res):
     return out
 
 
+V2_ROWS = [("bposd", "BP-OSD"), ("relay", "relay-BP"), ("aegis v1 (online)", "QEC-Aegis v1"),
+           ("aegis v2 speed (online)", "QEC-Aegis v2, speed"), ("aegis v2 accuracy (online)", "QEC-Aegis v2, accuracy")]
+
+
+def v2_section(v2):
+    """QEC-Aegis v2 (aegis.retune) on fresh shots (aegis.evaluate_v2)."""
+    out = ["## QEC-Aegis v2 on fresh shots (seed 7 test, seed 8 timing)", "",
+           "v2 was designed after the v1 results above were known: it keeps v1's fitted risk models and chooses, for each noise",
+           "setting separately and on validation shots only, the second tier (relay-BP or the larger `strong10` ensemble) and the",
+           "threshold (`python -m aegis.retune`; hashes frozen in `experiments/reports/v2_frozen.json` before any fresh shot was",
+           "decoded). Because the seed-2 test shots informed that design, v2 is scored only on fresh shots, together with both",
+           "baselines and v1 run again on the same shots. The risk model is now evaluated by a compiled tree walk that returns",
+           "exactly scikit-learn's value; v1 on fresh shots uses it too, so its times here are lower than in the tables above.", ""]
+    selection = v2.get("selection", {}).get("settings", {})
+    if selection:
+        out += ["### Operating points chosen on validation shots", "",
+                "| Setting | Mode | Tier 2 | Threshold | Validation failed pairs (relay-BP) | Validation mean ms (relay-BP) | Tier 2 used |",
+                "|---|---|---|---|---|---|---|"]
+        for setting, s in selection.items():
+            for mode, c in s["chosen"].items():
+                if c:
+                    out.append(f"| {setting} | {mode} | {c['tier2']} | {c['threshold']:.2e} | {c['failures_pair']} ({s['relay_failures']}) | "
+                               f"{c['ms_mean']:.1f} ({s['relay_ms']:.1f}) | {100 * c['escalated']:.2f}% |")
+                else:
+                    out.append(f"| {setting} | {mode} | none feasible | | | | |")
+        out.append("")
+    if v2.get("sweep"):
+        out += ["### Sweep over p: fresh test shots (LER) and fresh single-worker timing shots (latency)", "",
+                "| p | Decoder | Test pairs | Failed pairs | LER per cycle | 95% interval | Mean ms | Median ms | p95 ms | p99 ms | Pairs/s | Mean ms, contended | Tier 2 used |",
+                "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+        for p, sweep in v2["sweep"].items():
+            timing = v2.get("timing", {}).get(p, {"decoders": {}})["decoders"]
+            for key, label in V2_ROWS:
+                d, t = sweep["decoders"].get(key), timing.get(key)
+                if d is None:
+                    continue
+                lat = f"{ms(t['ms_mean'])} | {ms(t['ms_median'])} | {ms(t['ms_p95'])} | {ms(t['ms_p99'])} | {t['pairs_per_second']:.1f}" if t \
+                    else " | | | | "
+                esc = f"{100 * d['escalated_fraction']:.2f}%" if "escalated_fraction" in d else ""
+                out.append(f"| {p} | {label} | {d['pairs']:,} | {d['failures_pair']} | {d['ler']:.2e} | {d['ler_ci95'][0]:.2e} – {d['ler_ci95'][1]:.2e} | "
+                           f"{lat} | {ms(d['ms_mean'])} | {esc} |")
+        out += ["", "Paired comparisons (LER: fresh test shots; speedup of the mean: fresh single-worker timing shots):", "",
+                "| p | Comparison | LER ratio | 95% interval | Fail only first / only second | McNemar p | Speedup | 95% interval |",
+                "|---|---|---|---|---|---|---|---|"]
+        for p, sweep in v2["sweep"].items():
+            timing = v2.get("timing", {}).get(p, {"comparisons": {}})["comparisons"]
+            for name, c in sweep["comparisons"].items():
+                t = timing.get(name)
+                ratio = "n/a | n/a" if c["ler_ratio"] is None else f"{c['ler_ratio']:.2f} | {c['ler_ratio_ci95'][0]:.2f} – {c['ler_ratio_ci95'][1]:.2f}"
+                speed = f"{t['speedup_mean']:.2f}× | {t['speedup_mean_ci95'][0]:.2f} – {t['speedup_mean_ci95'][1]:.2f}" if t else " | "
+                out.append(f"| {p} | {name.replace(' (online)', '')} | {ratio} | {c['only_a_fails']} / {c['only_b_fails']} | {c['mcnemar_p']:.3g} | {speed} |")
+        out.append("")
+    if v2.get("loss"):
+        out += ["### Heralded erasure at p = 0.004 (fresh test shots, 8 workers)", "",
+                "| f | Decoder | Pairs | Failed pairs | LER per cycle | 95% interval | Mean ms, contended | p99 ms, contended | Tier 2 used |",
+                "|---|---|---|---|---|---|---|---|---|"]
+        for f, result in v2["loss"].items():
+            for key, label in [("bposd+flags", "BP-OSD with flags"), ("relay+flags", "relay-BP with flags")] + V2_ROWS[2:]:
+                d = result["decoders"].get(key)
+                if d is None:
+                    continue
+                esc = f"{100 * d['escalated_fraction']:.2f}%" if "escalated_fraction" in d else ""
+                out.append(f"| {f} | {label} | {d['pairs']:,} | {d['failures_pair']} | {d['ler']:.2e} | {d['ler_ci95'][0]:.2e} – {d['ler_ci95'][1]:.2e} | "
+                           f"{ms(d['ms_mean'])} | {ms(d['ms_p99'])} | {esc} |")
+        out += ["", "| f | Comparison | LER ratio | 95% interval | Fail only first / only second | McNemar p | Speedup (contended) |", "|---|---|---|---|---|---|---|"]
+        for f, result in v2["loss"].items():
+            for name, c in result["comparisons"].items():
+                ratio = "n/a | n/a" if c["ler_ratio"] is None else f"{c['ler_ratio']:.2f} | {c['ler_ratio_ci95'][0]:.2f} – {c['ler_ratio_ci95'][1]:.2f}"
+                out.append(f"| {f} | {name.replace(' (online)', '')} | {ratio} | {c['only_a_fails']} / {c['only_b_fails']} | {c['mcnemar_p']:.3g} | {c['speedup_mean']:.2f}× |")
+        out.append("")
+    return out
+
+
 def main():
     ev = load("evaluation.json")
     tr = load("training.json")
@@ -146,6 +219,9 @@ def main():
            "Intervals are 95%: exact Clopper–Pearson for failure rates, paired bootstrap for ratios and mean times.", ""]
     if ev and ev.get("sweep"):
         out += required_evaluation(ev, res)
+    v2 = load("v2_evaluation.json")
+    if v2 and (v2.get("sweep") or v2.get("loss")):
+        out += v2_section(v2)
     if tr:
         chosen = tr["chosen"]
         out += ["## Chosen system (fixed on validation shots, before the test shots were decoded)", "",
