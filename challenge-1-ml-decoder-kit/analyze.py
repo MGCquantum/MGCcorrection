@@ -23,9 +23,19 @@ import time
 import numpy as np
 from sklearn.ensemble import HistGradientBoostingClassifier
 
-from decoders import per_cycle_rate
+from scipy.stats import beta
 
 CYCLES = 12
+
+
+def per_cycle_ci(failed, cycles=None):
+    """Per-cycle logical error rate with a 95% Clopper-Pearson interval (exact; valid for 0 or few failures)."""
+    cycles = cycles or CYCLES
+    k, n = int(failed.sum()), len(failed)
+    lo = beta.ppf(0.025, k, n - k + 1) if k > 0 else 0.0
+    hi = beta.ppf(0.975, k + 1, n - k) if k < n else 1.0
+    conv = lambda P: 1 - (1 - P) ** (1 / cycles)
+    return conv(k / n), conv(lo), conv(hi), k
 
 
 def load(path):
@@ -37,13 +47,18 @@ def features(d):
 
 
 def train_router(dirname, p):
+    """ML router and the simple baseline (one threshold on total alarm count), both fit on the train seed only."""
     files = [f"{dirname}/train_{b}_p{p}.npz" for b in "XZ"]
     if not all(os.path.exists(f) for f in files):
         return None
     data = [load(f) for f in files]
     X = np.vstack([features(d) for d in data])
-    y = np.concatenate([d["conv_bp"] for d in data])
-    return HistGradientBoostingClassifier(max_iter=200).fit(X, y)
+    y = np.concatenate([d["conv_bp"] for d in data]).astype(bool)
+    model = HistGradientBoostingClassifier(max_iter=200).fit(X, y)
+    w = X[:, -2]
+    thresholds = np.unique(w)
+    acc = [((w <= t) == y).mean() for t in thresholds]
+    return model, thresholds[int(np.argmax(acc))]
 
 
 def policies(d, router):
@@ -55,14 +70,19 @@ def policies(d, router):
         rule_time = d["time_bp"] + np.where(conv, 0, d["time_relay"])
         out["hybrid_rule"] = (rule_fail, rule_time)
         if router is not None:
+            model, w_threshold = router
             X = features(d)
+            easy = model.predict(X).astype(bool)
+            sample = X[:200]
             t = time.perf_counter()
-            easy = router.predict(X).astype(bool)
-            per_shot = (time.perf_counter() - t) / len(X)
+            for row in sample:                     # time one shot at a time, as a real decoder would run
+                model.predict(row[None, :])
+            per_shot = (time.perf_counter() - t) / len(sample)
             out["hybrid_ml"] = (np.where(easy, rule_fail, d["fail_relay"]),
                                 per_shot + np.where(easy, rule_time, d["time_relay"]))
             out["_router_acc"] = (easy == conv).mean()
             out["_baseline_acc"] = max(conv.mean(), 1 - conv.mean())
+            out["_weight_acc"] = ((X[:, -2] <= w_threshold) == conv).mean()
             out["_escalated_ml"] = (~easy | ~conv).mean()
         out["_escalated_rule"] = (~conv).mean()
     return out
@@ -71,9 +91,9 @@ def policies(d, router):
 def paired(px, pz, name):
     fx, tx = px[name]
     fz, tz = pz[name]
-    rate, err = per_cycle_rate(fx | fz, CYCLES)
+    rate, lo, hi, k = per_cycle_ci(fx | fz)
     ms = (tx + tz) * 1e3
-    return rate, err, ms.mean(), np.percentile(ms, 99)
+    return rate, lo, hi, k, len(fx), ms.mean(), np.percentile(ms, 99)
 
 
 def main():
@@ -90,12 +110,13 @@ def main():
         px = policies(load(f"{args.dir}/test_X_p{p}.npz"), router)
         pz = policies(load(f"{args.dir}/test_Z_p{p}.npz"), router)
         for name in [n for n in px if not n.startswith("_") and n in pz]:
-            rate, err, mean_ms, p99 = paired(px, pz, name)
+            rate, lo, hi, k, n, mean_ms, p99 = paired(px, pz, name)
             esc = {"hybrid_rule": px.get("_escalated_rule"), "hybrid_ml": px.get("_escalated_ml")}.get(name)
-            rows.append({"experiment": "sweep", "p": p, "f": 0, "decoder": name, "rate_per_cycle": rate,
-                         "err": err, "mean_ms": mean_ms, "p99_ms": p99, "escalated_X": esc})
+            rows.append({"experiment": "sweep", "p": p, "f": 0, "decoder": name, "rate_per_cycle": rate, "ci_low": lo,
+                         "ci_high": hi, "failed_pairs": k, "pairs": n, "mean_ms": mean_ms, "p99_ms": p99, "escalated_X": esc})
         if "_router_acc" in px:
-            print(f"p={p} router accuracy {px['_router_acc']:.3f} vs always-guess-majority {px['_baseline_acc']:.3f}")
+            print(f"p={p} predicting BP convergence (X test shots): ML router {px['_router_acc']:.3f}, "
+                  f"alarm-count threshold {px['_weight_acc']:.3f}, always-guess-majority {px['_baseline_acc']:.3f}")
     for fx in sorted(glob.glob(f"{args.dir}/erase_X_p*_f*.npz")):
         p, f = re.search(r"_p([\d.]+)_f([\d.]+)\.npz", fx).groups()
         fz = fx.replace("erase_X", "erase_Z")
@@ -103,9 +124,9 @@ def main():
             continue
         px, pz = policies(load(fx), None), policies(load(fz), None)
         for name in [n for n in px if not n.startswith("_") and n in pz]:
-            rate, err, mean_ms, p99 = paired(px, pz, name)
-            rows.append({"experiment": "erasure", "p": p, "f": f, "decoder": name, "rate_per_cycle": rate,
-                         "err": err, "mean_ms": mean_ms, "p99_ms": p99, "escalated_X": None})
+            rate, lo, hi, k, n, mean_ms, p99 = paired(px, pz, name)
+            rows.append({"experiment": "erasure", "p": p, "f": f, "decoder": name, "rate_per_cycle": rate, "ci_low": lo,
+                         "ci_high": hi, "failed_pairs": k, "pairs": n, "mean_ms": mean_ms, "p99_ms": p99, "escalated_X": None})
     if not rows:
         print("no result files found")
         return
@@ -115,9 +136,22 @@ def main():
         w.writerows(rows)
     for r in rows:
         esc = "" if r["escalated_X"] is None else f"  escalated {r['escalated_X']:.0%}"
-        print(f"{r['experiment']:8s} p={r['p']} f={r['f']}  {r['decoder']:12s} rate {r['rate_per_cycle']:.2e} "
-              f"+- {r['err']:.1e}  mean {r['mean_ms']:.0f} ms  p99 {r['p99_ms']:.0f} ms{esc}")
+        rate = (f"< {r['ci_high']:.1e} (0 of {r['pairs']} pairs failed)" if r["failed_pairs"] == 0 else
+                f"{r['rate_per_cycle']:.2e} [95% CI {r['ci_low']:.1e}-{r['ci_high']:.1e}, {r['failed_pairs']}/{r['pairs']}]")
+        print(f"{r['experiment']:8s} p={r['p']} f={r['f']}  {r['decoder']:12s} rate {rate}  "
+              f"mean {r['mean_ms']:.0f} ms  p99 {r['p99_ms']:.0f} ms{esc}")
     plot(rows, args.dir)
+
+
+def _ci_plot(ax, x, rs, name):
+    """Points with 95% CIs; a zero-failure point is drawn as a downward triangle at its upper bound."""
+    y = [r["rate_per_cycle"] if r["failed_pairs"] else r["ci_high"] for r in rs]
+    lo = [y[i] - r["ci_low"] if r["failed_pairs"] else 0 for i, r in enumerate(rs)]
+    hi = [r["ci_high"] - y[i] if r["failed_pairs"] else 0 for i, r in enumerate(rs)]
+    line = ax.errorbar(x, y, [lo, hi], marker="o", label=name, capsize=3)
+    zero = [i for i, r in enumerate(rs) if not r["failed_pairs"]]
+    if zero:
+        ax.scatter([x[i] for i in zero], [y[i] for i in zero], marker="v", s=80, color=line[0].get_color(), zorder=5)
 
 
 def plot(rows, dirname):
@@ -129,7 +163,7 @@ def plot(rows, dirname):
     for name in sorted({r["decoder"] for r in sweep}):
         rs = sorted([r for r in sweep if r["decoder"] == name], key=lambda r: float(r["p"]))
         x = [float(r["p"]) for r in rs]
-        ax[0].errorbar(x, [r["rate_per_cycle"] for r in rs], [r["err"] for r in rs], marker="o", label=name)
+        _ci_plot(ax[0], x, rs, name)
         ax[1].plot(x, [r["mean_ms"] for r in rs], marker="o", label=f"{name} mean")
         ax[1].plot(x, [r["p99_ms"] for r in rs], ls="--", marker="x", label=f"{name} p99")
     ax[0].set(xlabel="physical error rate p", ylabel="logical error rate per cycle", yscale="log", title="Accuracy")
@@ -137,9 +171,8 @@ def plot(rows, dirname):
     erase = [r for r in rows if r["experiment"] == "erasure"]
     for name in sorted({r["decoder"] for r in erase}):
         rs = sorted([r for r in erase if r["decoder"] == name], key=lambda r: float(r["f"]))
-        ax[2].errorbar([float(r["f"]) for r in rs], [r["rate_per_cycle"] for r in rs], [r["err"] for r in rs],
-                       marker="o", label=name)
-    ax[2].set(xlabel="fraction of noise converted to flagged erasure", ylabel="logical error rate per cycle",
+        _ci_plot(ax[2], [float(r["f"]) for r in rs], rs, name)
+    ax[2].set(xlabel="fraction of noise converted to heralded erasure (triangle = upper bound, 0 failures)", ylabel="logical error rate per cycle",
               yscale="log", title="Using erasure flags")
     for x in ax:
         x.legend(fontsize=7)

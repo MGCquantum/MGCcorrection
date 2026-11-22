@@ -57,10 +57,10 @@ def build(circuit, basis, names):
         elif n == "bposd":
             dec[n] = bposd_decoder(Hb, pb)
         elif n == "bp_flags":
-            H, L, p, hc = out["aware"]
+            H, L, p, hc, nc = out["aware"]
             dec[n] = BpDecoder(H, error_channel=list(p), **FAST_BP)
         elif n == "bposd_flags":
-            H, L, p, hc = out["aware"]
+            H, L, p, hc, nc = out["aware"]
             dec[n] = bposd_decoder(H, p)
         else:
             raise ValueError(f"unknown decoder {n}")
@@ -77,12 +77,12 @@ def work(job):
     res = {}
     for name, d in dec.items():
         flags = name.endswith("_flags")
-        H, L, p, hc = mats["aware"] if flags else (*mats["blind"], None)
+        H, L, p, hc, nc = mats["aware"] if flags else (*mats["blind"], None, None)
         fail, secs, conv = np.zeros(n, bool), np.zeros(n), np.zeros(n, bool)
         for k in range(n):
+            t = time.perf_counter()     # the per-shot prior update counts as decode time
             if flags:
-                d.update_channel_probs(shot_priors(p, hc, fired_lists[k]))
-            t = time.perf_counter()
+                d.update_channel_probs(shot_priors(p, hc, fired_lists[k], nc))
             e = np.asarray(d.decode(syn[k]), np.uint8)
             secs[k] = time.perf_counter() - t
             fail[k] = ((L @ e) % 2 != obs[k]).any()
