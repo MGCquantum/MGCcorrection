@@ -31,7 +31,7 @@ At 50%, 22 pairs failed with flags hidden versus 3 with flags used. Using the fl
 
 ![erasure](challenge-1-ml-decoder-kit/figures/erasure.png)
 
-- **Cost:** flag-aware BP-OSD is about 6.5× slower per shot at 50% erasure, because the decoder considers each erasure component separately and its priors are updated every shot.
+- **Cost:** flag-aware BP-OSD is about 6.5× slower per shot at 50% erasure (about 9–10× at 25% and 75%), because the decoder considers each erasure component separately and its priors are updated every shot.
 - **Why the flag-blind line also falls:** an erasure applies a random Pauli, and a quarter of those are the identity, so converting noise to erasure also lowers the effective error rate. The fair comparison is therefore flags hidden vs used **at the same erasure share, on the same shots**.
 
 ### 2. Required sweep: baselines and hybrid decoders
