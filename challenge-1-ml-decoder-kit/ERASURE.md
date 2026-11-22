@@ -42,6 +42,44 @@ At 50%, 23 pairs failed with flags hidden versus 3 with flags used. At 50% and 7
 - **Cost:** flag-aware BP-OSD is about 6.5× slower per shot at 50% erasure (about 9–10× at 25% and 75%), because the decoder considers each erasure component separately and its priors are updated every shot.
 - **Why the flag-blind line also falls:** an erasure applies a random Pauli, and a quarter of those are the identity, so converting noise to erasure also lowers the effective error rate. The fair comparison is therefore flags hidden vs used **at the same erasure share, on the same shots**.
 
+### 1b. Robustness: imperfect loss flags (relay-BP)
+
+Real hardware does not hand the decoder perfect flags. Infleqtion's answer to our question: the exact gate of a loss cannot be pinned down (loss is most likely after a CZ), but state-selective readout of the check (ancilla) qubits can report 0 / 1 / lost every syndrome round. So we degraded the flags and re-decoded **the same 10,000 shot pairs** (p = 0.004, 50% of noise flagged, seed 32; every file's sample hash matches the flag-blind run):
+
+| Flags given to relay-BP | Failed pairs | Failed only with flags ignored / only with these flags | Exact McNemar p |
+|---|---:|---:|---:|
+| Ignored (flag-blind relay-BP) | 18 | | |
+| Perfect | 1 | 18 / 1 | 8e-5 |
+| 10% of real flags missed | 2 | 17 / 1 | 1e-4 |
+| 30% of real flags missed | 4 | 16 / 2 | 0.001 |
+| ~30% extra false flags (each unflagged location fires with prob. 3.5e-4) | 2 | 18 / 2 | 4e-4 |
+| Right qubit, timing unknown within ~1 round (7 consecutive erasure opportunities) | 3 | 15 / 0 | 6e-5 |
+| Right qubit, timing unknown within ~3 rounds (21 opportunities) | 3 | 15 / 0 | 6e-5 |
+
+Knowing *which atom* carries most of the benefit; knowing exactly *when* adds little. With an uncertain window, the flagged probability is spread evenly over the window (`lossy.timing_window_flags`).
+
+**Loss sweep** (relay-BP, flags ignored vs used, same shots, p = 0.004, 10,000 pairs each, seed 32):
+
+| Loss share f | Failed pairs ignored → used | McNemar p | Slowest 1% per pair |
+|---|---|---:|---|
+| 25% | 41 → 18 | 3e-4 | 3.6 s → 1.2 s |
+| 50% | 18 → 1 | 8e-5 | 2.0 s → 0.34 s |
+| 75% | 11 → 8 | 0.65 (not significant) | 0.32 s → 0.05 s |
+
+At 75% too few failures remain to resolve an accuracy difference (part of each erasure is the identity, so total damage falls as f grows); the speed gain remains.
+
+**Not modeled:** a lost atom stays lost until it is replaced, so every later gate on it does nothing and errors spread over several rounds ("gate-removing" loss, as in Liu et al., *Achieving Optimal-Distance Atom-Loss Correction via Pauli Envelope*, arXiv:2603.04156). Our erasure is a single randomizing error at one location, so these results are an optimistic but robustness-checked first step.
+
+Reproduce (`challenge-1-ml-decoder-kit/`):
+```bash
+python run_job.py --basis X --p 0.004 --f 0.5 --shots 10000 --seed 32 --decoders relay relay_flags --out results/erase4_X_p0.004_f0.5_s32.npz
+python run_job.py --basis X --p 0.004 --f 0.5 --shots 10000 --seed 32 --decoders relay_flags --flag-miss 0.3 --out results/flagnoise_X_p0.004_f0.5_s32_miss0.3_false0.npz
+python run_job.py --basis X --p 0.004 --f 0.5 --shots 10000 --seed 32 --decoders relay_flags --flag-false 0.00035 --out results/flagnoise_X_p0.004_f0.5_s32_miss0_false0.00035.npz
+python run_job.py --basis X --p 0.004 --f 0.5 --shots 10000 --seed 32 --decoders relay_flags --flag-window 7 --out results/flagnoise_X_p0.004_f0.5_s32_window7.npz
+# same with --basis Z; f = 0.25 / 0.75 as erase4_*_f0.25/0.75_s32.npz. Pairing: analyze.pair_arrays (fixed random X/Z derangement).
+```
+Shots are only identical to the flag-blind run on the same Stim build; check `sample_sha256` before pairing records from different machines.
+
 ## 2. Required sweep: baselines and hybrid decoders
 Logical error rate per cycle (95% CI) and failed pairs, same test shots for every decoder:
 
