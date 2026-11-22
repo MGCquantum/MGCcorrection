@@ -24,7 +24,7 @@
 
 **Likely judge questions:**
 - "Isn't it obvious that flags help?" Yes, that part is expected. The point is *how much*, measured on the Gross code as a function of erasure fraction, which is the number a hardware team needs.
-- "Can fast BP converge and still be wrong?" In principle, yes. In our test it never happened (0 of 81), which is why the router predicts difficulty rather than wrongness.
+- "Can fast BP converge and still be wrong?" Rarely: 2 of 14,166 converged test shots, both at p = 0.005.
 
 ## Schedule
 - Loss go/no-go at 8 pm. If loss isn't working, ship the hybrid and router only.

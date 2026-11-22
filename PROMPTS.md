@@ -138,3 +138,13 @@ cd ~/MGCcorrection/challenge-1-ml-decoder-kit && git pull && source .venv/bin/ac
 python demo.py --p 0.004 --basis X        # one fresh shot through the router and decoder, plus resources
 python analyze.py --dir results_timing --train-dir results   # clean timing table incl. the ML hybrid
 ```
+
+## Optional, worth it if a laptop is free tonight: flags (BP-OSD) vs relay-BP at 50% erasure
+Answers the judges' likely question: "Does the flag-aware decoder beat your best decoder?" It must run all three decoders together so the shots match. About 15–30 minutes on an 8-core laptop.
+```text
+cd ~/MGCcorrection/challenge-1-ml-decoder-kit && git pull && source .venv/bin/activate. Do not edit code.
+Two terminals at once (caffeinate -i on a Mac):
+Terminal 1: python run_job.py --basis X --p 0.004 --f 0.5 --shots 2000 --seed 2 --decoders bposd bposd_flags relay --out results/erase3_X_p0.004_f0.5.npz
+Terminal 2: python run_job.py --basis Z --p 0.004 --f 0.5 --shots 2000 --seed 2 --decoders bposd bposd_flags relay --out results/erase3_Z_p0.004_f0.5.npz
+Show me each summary line. Then: git pull && git add -f results/erase3_*.npz && git commit -m "results: flags vs relay at f=0.5" && git push
+```
