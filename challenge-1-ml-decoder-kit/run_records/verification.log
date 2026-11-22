@@ -1,5 +1,5 @@
-................................                                         [100%]
-32 passed in 23.78s
+.............................................                            [100%]
+45 passed in 49.72s
 PASS: p=0.003: seed-1 trained router exists
 PASS: p=0.003 X: held-out seed-2 f=0 conditions
 PASS: p=0.003 X: bp cached
@@ -16,8 +16,8 @@ PASS: p=0.003: relay finite latency and valid CI
 PASS: p=0.003: relay kit reference within 95% interval
 PASS: p=0.003: hybrid_rule finite latency and valid CI
 PASS: p=0.003: hybrid_ml finite latency and valid CI
-PASS: p=0.003: hybrid_rule observed failed-pair count equals relay
-PASS: p=0.003: hybrid_ml observed failed-pair count equals relay
+PASS: p=0.003: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.003: hybrid_ml not significantly worse than relay (one-sided p=1)
 PASS: p=0.004: seed-1 trained router exists
 PASS: p=0.004 X: held-out seed-2 f=0 conditions
 PASS: p=0.004 X: bp cached
@@ -34,8 +34,8 @@ PASS: p=0.004: relay finite latency and valid CI
 PASS: p=0.004: relay kit reference within 95% interval
 PASS: p=0.004: hybrid_rule finite latency and valid CI
 PASS: p=0.004: hybrid_ml finite latency and valid CI
-PASS: p=0.004: hybrid_rule observed failed-pair count equals relay
-PASS: p=0.004: hybrid_ml observed failed-pair count equals relay
+PASS: p=0.004: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.004: hybrid_ml not significantly worse than relay (one-sided p=1)
 PASS: p=0.005: seed-1 trained router exists
 PASS: p=0.005 X: held-out seed-2 f=0 conditions
 PASS: p=0.005 X: bp cached
@@ -52,8 +52,8 @@ PASS: p=0.005: relay finite latency and valid CI
 PASS: p=0.005: relay kit reference within 95% interval
 PASS: p=0.005: hybrid_rule finite latency and valid CI
 PASS: p=0.005: hybrid_ml finite latency and valid CI
-PASS: p=0.005: hybrid_rule observed failed-pair count equals relay
-PASS: p=0.005: hybrid_ml observed failed-pair count equals relay
+PASS: p=0.005: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.005: hybrid_ml not significantly worse than relay (one-sided p=1)
 PASS: f=0.0 X: erasure metadata
 PASS: f=0.0 Z: erasure metadata
 PASS: f=0.0: flags help or tie on saved pairs
@@ -67,62 +67,148 @@ PASS: f=0.5: flags help or tie on saved pairs
 PASS: f=0.75 X: erasure metadata
 PASS: f=0.75 Z: erasure metadata
 PASS: f=0.75: flags help or tie on saved pairs
+PASS: relay flags: every erase4 seed has both X and Z files
+PASS: relay flags: (p, f) groups match the expected manifest
+PASS: relay flags p=0.004 f=0.5: seeds [32, 33] all present
+PASS: relay flags p=0.005 f=0.5: seeds [31] all present
+PASS: relay flags p=0.004 f=0.5: complete X/Z records for every expected seed
+PASS: relay flags p=0.005 f=0.5: complete X/Z records for every expected seed
+73/73 checks passed; run_records/challenge1_audit.json
+PASS: p=0.003: seed-1 trained router exists
+PASS: p=0.003 X: held-out seed-2 f=0 conditions
+PASS: p=0.003 X: bp cached
+PASS: p=0.003 X: bposd cached
+PASS: p=0.003 X: relay cached
+PASS: p=0.003 Z: held-out seed-2 f=0 conditions
+PASS: p=0.003 Z: bp cached
+PASS: p=0.003 Z: bposd cached
+PASS: p=0.003 Z: relay cached
+PASS: p=0.003: bp finite latency and valid CI
+PASS: p=0.003: bposd finite latency and valid CI
+PASS: p=0.003: bposd kit reference within 95% interval
+PASS: p=0.003: relay finite latency and valid CI
+PASS: p=0.003: relay kit reference within 95% interval
+PASS: p=0.003: hybrid_rule finite latency and valid CI
+PASS: p=0.003: hybrid_ml finite latency and valid CI
+PASS: p=0.003: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.003: hybrid_ml not significantly worse than relay (one-sided p=1)
+PASS: p=0.004: seed-1 trained router exists
+PASS: p=0.004 X: held-out seed-2 f=0 conditions
+PASS: p=0.004 X: bp cached
+PASS: p=0.004 X: bposd cached
+PASS: p=0.004 X: relay cached
+PASS: p=0.004 Z: held-out seed-2 f=0 conditions
+PASS: p=0.004 Z: bp cached
+PASS: p=0.004 Z: bposd cached
+PASS: p=0.004 Z: relay cached
+PASS: p=0.004: bp finite latency and valid CI
+PASS: p=0.004: bposd finite latency and valid CI
+PASS: p=0.004: bposd kit reference within 95% interval
+PASS: p=0.004: relay finite latency and valid CI
+PASS: p=0.004: relay kit reference within 95% interval
+PASS: p=0.004: hybrid_rule finite latency and valid CI
+PASS: p=0.004: hybrid_ml finite latency and valid CI
+PASS: p=0.004: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.004: hybrid_ml not significantly worse than relay (one-sided p=1)
+PASS: p=0.005: seed-1 trained router exists
+PASS: p=0.005 X: held-out seed-2 f=0 conditions
+PASS: p=0.005 X: bp cached
+PASS: p=0.005 X: bposd cached
+PASS: p=0.005 X: relay cached
+PASS: p=0.005 Z: held-out seed-2 f=0 conditions
+PASS: p=0.005 Z: bp cached
+PASS: p=0.005 Z: bposd cached
+PASS: p=0.005 Z: relay cached
+PASS: p=0.005: bp finite latency and valid CI
+PASS: p=0.005: bposd finite latency and valid CI
+PASS: p=0.005: bposd kit reference within 95% interval
+PASS: p=0.005: relay finite latency and valid CI
+PASS: p=0.005: relay kit reference within 95% interval
+PASS: p=0.005: hybrid_rule finite latency and valid CI
+PASS: p=0.005: hybrid_ml finite latency and valid CI
+PASS: p=0.005: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.005: hybrid_ml not significantly worse than relay (one-sided p=1)
+PASS: f=0.0 X: erasure metadata
+PASS: f=0.0 Z: erasure metadata
+PASS: f=0.0: flags help or tie on saved pairs
+PASS: f=0: flag-hidden and flag-used answers have identical failures
+PASS: f=0.25 X: erasure metadata
+PASS: f=0.25 Z: erasure metadata
+PASS: f=0.25: flags help or tie on saved pairs
+PASS: f=0.5 X: erasure metadata
+PASS: f=0.5 Z: erasure metadata
+PASS: f=0.5: flags help or tie on saved pairs
+PASS: f=0.75 X: erasure metadata
+PASS: f=0.75 Z: erasure metadata
+PASS: f=0.75: flags help or tie on saved pairs
+PASS: relay flags: every erase4 seed has both X and Z files
+PASS: relay flags: (p, f) groups match the expected manifest
+PASS: relay flags p=0.004 f=0.5: seeds [32, 33] all present
+PASS: relay flags p=0.005 f=0.5: seeds [31] all present
+PASS: relay flags p=0.004 f=0.5: complete X/Z records for every expected seed
+PASS: relay flags p=0.005 f=0.5: complete X/Z records for every expected seed
 LIMITATION: results/test_X_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_Z_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_X_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_Z_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_X_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_Z_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
-67/67 checks passed; run_records/challenge1_audit.json
-p=0.003 predicting BP convergence (X test shots): ML router 0.929, alarm-count threshold 0.929, always-guess-majority 0.929
-p=0.004 predicting BP convergence (X test shots): ML router 0.757, alarm-count threshold 0.773, always-guess-majority 0.775
-p=0.005 predicting BP convergence (X test shots): ML router 0.597, alarm-count threshold 0.614, always-guess-majority 0.530
-sweep    p=0.003 f=0  relay        rate 3.33e-05 [95% CI 4.0e-06-1.2e-04, 2/5000]  mean 74 ms  p99 493 ms
-sweep    p=0.003 f=0  bposd        rate 3.34e-04 [95% CI 2.0e-04-5.2e-04, 20/5000]  mean 104 ms  p99 680 ms
-sweep    p=0.003 f=0  bp           rate 9.42e-03 [95% CI 8.6e-03-1.0e-02, 537/5000]  mean 27 ms  p99 106 ms
-sweep    p=0.003 f=0  hybrid_rule  rate 3.33e-05 [95% CI 4.0e-06-1.2e-04, 2/5000]  mean 54 ms  p99 529 ms  escalated 7%
-sweep    p=0.003 f=0  hybrid_ml    rate 3.33e-05 [95% CI 4.0e-06-1.2e-04, 2/5000]  mean 56 ms  p99 529 ms  escalated 7%
-sweep    p=0.004 f=0  relay        rate 6.27e-04 [95% CI 3.5e-04-1.0e-03, 15/2000]  mean 2159 ms  p99 34312 ms
-sweep    p=0.004 f=0  bposd        rate 4.13e-03 [95% CI 3.4e-03-5.0e-03, 97/2000]  mean 1639 ms  p99 5477 ms
-sweep    p=0.004 f=0  bp           rate 3.43e-02 [95% CI 3.2e-02-3.7e-02, 685/2000]  mean 522 ms  p99 1572 ms
-sweep    p=0.004 f=0  hybrid_rule  rate 6.27e-04 [95% CI 3.5e-04-1.0e-03, 15/2000]  mean 2190 ms  p99 34866 ms  escalated 22%
-sweep    p=0.004 f=0  hybrid_ml    rate 6.27e-04 [95% CI 3.5e-04-1.0e-03, 15/2000]  mean 2186 ms  p99 34515 ms  escalated 26%
-sweep    p=0.005 f=0  relay        rate 6.25e-03 [95% CI 5.3e-03-7.4e-03, 145/2000]  mean 1898 ms  p99 14715 ms
-sweep    p=0.005 f=0  bposd        rate 2.20e-02 [95% CI 2.0e-02-2.4e-02, 469/2000]  mean 1079 ms  p99 2160 ms
-sweep    p=0.005 f=0  bp           rate 1.01e-01 [95% CI 9.6e-02-1.1e-01, 1441/2000]  mean 153 ms  p99 299 ms
-sweep    p=0.005 f=0  hybrid_rule  rate 6.25e-03 [95% CI 5.3e-03-7.4e-03, 145/2000]  mean 1949 ms  p99 14913 ms  escalated 53%
-sweep    p=0.005 f=0  hybrid_ml    rate 6.25e-03 [95% CI 5.3e-03-7.4e-03, 145/2000]  mean 1915 ms  p99 14738 ms  escalated 74%
-erasure  p=0.004 f=0.25  bposd        rate 1.43e-03 [95% CI 8.3e-04-2.3e-03, 17/1000]  mean 230 ms  p99 850 ms
-erasure  p=0.004 f=0.25  bposd_flags  rate 6.69e-04 [95% CI 2.9e-04-1.3e-03, 8/1000]  mean 2147 ms  p99 11955 ms
-erasure  p=0.004 f=0.5  bposd        rate 9.21e-04 [95% CI 5.8e-04-1.4e-03, 22/2000]  mean 151 ms  p99 733 ms
-erasure  p=0.004 f=0.5  bposd_flags  rate 1.25e-04 [95% CI 2.6e-05-3.7e-04, 3/2000]  mean 975 ms  p99 9013 ms
-erasure  p=0.004 f=0.75  bposd        rate 4.18e-04 [95% CI 2.0e-04-7.7e-04, 10/2000]  mean 115 ms  p99 685 ms
-erasure  p=0.004 f=0.75  bposd_flags  rate < 1.5e-04 (0 of 2000 pairs failed)  mean 1023 ms  p99 9702 ms
-erasure  p=0.004 f=0  bposd        rate 4.27e-03 [95% CI 3.2e-03-5.6e-03, 50/1000]  mean 784 ms  p99 2441 ms
-erasure  p=0.004 f=0  bposd_flags  rate 4.27e-03 [95% CI 3.2e-03-5.6e-03, 50/1000]  mean 733 ms  p99 2420 ms
-saved results/results.csv and results/results.png
+73/73 checks passed; run_records/legacy_audit.json
+p=0.003 predicting BP convergence (X test shots): ML router 0.916, alarm-count threshold 0.917, always-guess-majority 0.917
+p=0.004 predicting BP convergence (X test shots): ML router 0.740, alarm-count threshold 0.751, always-guess-majority 0.749
+p=0.005 predicting BP convergence (X test shots): ML router 0.604, alarm-count threshold 0.618, always-guess-majority 0.515
+relay flags p=0.004 f=0.5: 20000 pairs, failed only with flags ignored 33, only with flags used 0, exact McNemar p = 2.3e-10
+relay flags p=0.005 f=0.5: 10000 pairs, failed only with flags ignored 134, only with flags used 3, exact McNemar p = 4.9e-36
+sweep    p=0.003 f=0  relay        rate 8.34e-05 [95% CI 2.7e-05-1.9e-04, 5/5000]  mean 58 ms  p99 406 ms
+sweep    p=0.003 f=0  bposd        rate 5.52e-04 [95% CI 3.8e-04-7.7e-04, 33/5000]  mean 90 ms  p99 548 ms
+sweep    p=0.003 f=0  bp           rate 1.11e-02 [95% CI 1.0e-02-1.2e-02, 629/5000]  mean 21 ms  p99 75 ms
+sweep    p=0.003 f=0  hybrid_rule  rate 8.34e-05 [95% CI 2.7e-05-1.9e-04, 5/5000]  mean 44 ms  p99 441 ms  escalated 8%
+sweep    p=0.003 f=0  hybrid_ml    rate 8.34e-05 [95% CI 2.7e-05-1.9e-04, 5/5000]  mean 45 ms  p99 443 ms  escalated 8%
+sweep    p=0.004 f=0  relay        rate 7.95e-04 [95% CI 4.8e-04-1.2e-03, 19/2000]  mean 202 ms  p99 3484 ms
+sweep    p=0.004 f=0  bposd        rate 4.09e-03 [95% CI 3.3e-03-5.0e-03, 96/2000]  mean 205 ms  p99 683 ms
+sweep    p=0.004 f=0  bp           rate 3.71e-02 [95% CI 3.5e-02-4.0e-02, 730/2000]  mean 38 ms  p99 101 ms
+sweep    p=0.004 f=0  hybrid_rule  rate 7.95e-04 [95% CI 4.8e-04-1.2e-03, 19/2000]  mean 193 ms  p99 3505 ms  escalated 25%
+sweep    p=0.004 f=0  hybrid_ml    rate 7.95e-04 [95% CI 4.8e-04-1.2e-03, 19/2000]  mean 194 ms  p99 3496 ms  escalated 28%
+sweep    p=0.005 f=0  relay        rate 7.24e-03 [95% CI 6.2e-03-8.4e-03, 167/2000]  mean 1607 ms  p99 13457 ms
+sweep    p=0.005 f=0  bposd        rate 2.22e-02 [95% CI 2.0e-02-2.4e-02, 473/2000]  mean 602 ms  p99 1576 ms
+sweep    p=0.005 f=0  bp           rate 1.06e-01 [95% CI 1.0e-01-1.1e-01, 1480/2000]  mean 61 ms  p99 113 ms
+sweep    p=0.005 f=0  hybrid_rule  rate 7.19e-03 [95% CI 6.1e-03-8.4e-03, 166/2000]  mean 1582 ms  p99 13526 ms  escalated 52%
+sweep    p=0.005 f=0  hybrid_ml    rate 7.19e-03 [95% CI 6.1e-03-8.4e-03, 166/2000]  mean 1591 ms  p99 13478 ms  escalated 73%
+erasure  p=0.004 f=0.25  bposd        rate 1.34e-03 [95% CI 7.7e-04-2.2e-03, 16/1000]  mean 354 ms  p99 1352 ms
+erasure  p=0.004 f=0.25  bposd_flags  rate 6.69e-04 [95% CI 2.9e-04-1.3e-03, 8/1000]  mean 2630 ms  p99 15384 ms
+erasure  p=0.004 f=0.5  bposd        rate 9.63e-04 [95% CI 6.1e-04-1.4e-03, 23/2000]  mean 242 ms  p99 1267 ms
+erasure  p=0.004 f=0.5  bposd_flags  rate 1.25e-04 [95% CI 2.6e-05-3.7e-04, 3/2000]  mean 1326 ms  p99 10014 ms
+erasure  p=0.004 f=0.75  bposd        rate 4.59e-04 [95% CI 2.3e-04-8.2e-04, 11/2000]  mean 172 ms  p99 1025 ms
+erasure  p=0.004 f=0.75  bposd_flags  rate < 1.5e-04 (0 of 2000 pairs failed)  mean 1261 ms  p99 11354 ms
+erasure  p=0.004 f=0  bposd        rate 4.44e-03 [95% CI 3.3e-03-5.8e-03, 52/1000]  mean 509 ms  p99 1631 ms
+erasure  p=0.004 f=0  bposd_flags  rate 4.44e-03 [95% CI 3.3e-03-5.8e-03, 52/1000]  mean 479 ms  p99 1560 ms
+erasure_relay p=0.004 f=0.5  relay        rate 1.50e-04 [95% CI 1.1e-04-2.1e-04, 36/20000]  mean 179 ms  p99 1726 ms
+erasure_relay p=0.004 f=0.5  relay_flags  rate 1.25e-05 [95% CI 2.6e-06-3.7e-05, 3/20000]  mean 78 ms  p99 265 ms
+erasure_relay p=0.005 f=0.5  relay        rate 1.17e-03 [95% CI 9.9e-04-1.4e-03, 140/10000]  mean 544 ms  p99 7521 ms
+erasure_relay p=0.005 f=0.5  relay_flags  rate 7.50e-05 [95% CI 3.4e-05-1.4e-04, 9/10000]  mean 109 ms  p99 650 ms
+saved results_v2/results.csv and results_v2/results.png
 saved erasure and available timing figures
 New shot (p=0.004, X memory, seed 99): 77 alarms over 13 rounds
   alarms per round: [4, 1, 8, 8, 1, 1, 1, 2, 14, 10, 16, 10, 1]
-Router (1.2 ms): easy -> fast BP first
-Fast BP: 3.3 ms; relay-BP: 0.0 ms; escalated: False
+Router (1.0 ms): easy -> fast BP first
+Fast BP: 2.7 ms; relay-BP: 0.0 ms; escalated: False
 Predicted logical flips: 011001110101
 True logical flips:      011001110101 -> CORRECT
 
 Resources
-  CPU: Apple M5, 10 logical cores; this demo uses 1 thread
+  CPU: Apple M4 Pro, 12 logical cores; this demo uses 1 thread
   Decoding matrix: 936 checks x 8784 error mechanisms, 30672 nonzeros
-  Decoder setup time: 0.03 s; router model size: 718 kB
-  Peak memory of this process: 191 MB
+  Decoder setup time: 0.02 s; router model size: 718 kB
+  Peak memory of this process: 240 MB
 New shot (p=0.004, Z memory, seed 99): 90 alarms over 13 rounds
   alarms per round: [9, 6, 4, 14, 5, 5, 4, 0, 8, 6, 10, 16, 3]
-Router (1.1 ms): easy -> fast BP first
-Fast BP: 45.4 ms; relay-BP: 63.5 ms; escalated: True
+Router (1.0 ms): easy -> fast BP first
+Fast BP: 40.3 ms; relay-BP: 54.4 ms; escalated: True
 Predicted logical flips: 001110001000
 True logical flips:      001110001000 -> CORRECT
 
 Resources
-  CPU: Apple M5, 10 logical cores; this demo uses 1 thread
+  CPU: Apple M4 Pro, 12 logical cores; this demo uses 1 thread
   Decoding matrix: 936 checks x 8784 error mechanisms, 30672 nonzeros
   Decoder setup time: 0.02 s; router model size: 718 kB
-  Peak memory of this process: 196 MB
+  Peak memory of this process: 237 MB

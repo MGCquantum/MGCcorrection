@@ -9,6 +9,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+from analyze import ci_point as point
+
 os.makedirs("figures", exist_ok=True)
 
 
@@ -18,14 +20,7 @@ def rows(path):
                 for r in csv.DictReader(fh)]
 
 
-def point(r):
-    """(y, lower error, upper error, is_upper_bound)."""
-    if r["failed_pairs"] == 0:
-        return r["ci_high"], 0, 0, True
-    return r["rate_per_cycle"], r["rate_per_cycle"] - r["ci_low"], r["ci_high"] - r["rate_per_cycle"], False
-
-
-main = rows("results/results.csv")
+main = rows("results_v2/results.csv")
 erase = sorted([r for r in main if r["experiment"] == "erasure"], key=lambda r: r["f"])
 fig, ax = plt.subplots(figsize=(6.5, 4.5))
 for name, label, color in [("bposd", "Decoder ignores loss flags", "#888780"),
@@ -49,6 +44,8 @@ fig.tight_layout()
 fig.savefig("figures/erasure.png", dpi=200)
 
 relay = [r for r in main if r["experiment"] == "erasure_relay"]
+if len({r["f"] for r in relay}) > 1:
+    raise ValueError("figures/relay_flags.png assumes one erasure fraction; group by f before adding more")
 if relay:
     ps = sorted({r["p"] for r in relay})
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(10, 4.2))
@@ -65,10 +62,10 @@ if relay:
                         textcoords="offset points", xytext=(0, 4), ha="center", fontsize=8)
         a2.bar(x, [r["mean_ms"] for r in rs], width, color=color, label=f"{label}: mean")
         a2.scatter(x, [r["p99_ms"] for r in rs], marker="_", s=400, color="black", zorder=5,
-                   label="slowest 1%" if i == 0 else None)
+                   label="p99 latency" if i == 0 else None)
     for a in (a1, a2):
         a.set_xticks(range(len(ps)), [f"p = {p:g}" for p in ps])
-    a1.set(yscale="log", ylabel="Logical error rate per cycle", title="Accuracy (same shots, 50% of noise flagged)")
+    a1.set(yscale="log", ylabel="Logical error rate per cycle", title=f"Accuracy (same shots, {relay[0]['f']:.0%} of noise flagged)")
     a2.set(yscale="log", ylabel="Decode time per X+Z pair (ms)", title="Speed")
     a1.legend(fontsize=8); a2.legend(fontsize=8)
     fig.tight_layout()
@@ -83,7 +80,7 @@ def plot_timing(dirname, filename, title):
         if rs:
             ax.plot([r["p"] for r in rs], [r["mean_ms"] for r in rs], marker="o", lw=2, color=color, label=f"{label}, mean")
             ax.plot([r["p"] for r in rs], [r["p99_ms"] for r in rs], marker="x", ls="--", color=color, alpha=0.6,
-                    label=f"{label}, slowest 1%")
+                    label=f"{label}, p99 latency")
     ax.set(yscale="log", xlabel="Physical error rate p", ylabel="Decode time per X+Z shot pair (ms)",
            title=title, xticks=[0.003, 0.004, 0.005])
     ax.legend(fontsize=7)

@@ -12,13 +12,20 @@ bash scripts/verify_submission.sh
 Python 3.13 macOS environment. Other platforms may need different wheels; relay-bp
 may require Rust. The verifier runs tests, checks every required sweep row, writes
 analysis/figures, and demonstrates fresh X and Z shots. It exits nonzero on failure.
-The audit reports legacy cache limitations rather than inventing full fingerprints.
+It audits the current evidence (`results_v2`) and, separately, the legacy caches in
+`results/`, whose limitations it reports rather than inventing full fingerprints.
 
 ## Regenerate training and accuracy data
 
-These commands create a separate directory, preserving the submitted caches.
-All baselines are decoded together on each sampled shot; train uses seed 1, test
-uses seed 2. Defaults below use four workers; choose fewer on a busy laptop.
+These commands create a separate directory, preserving the submitted caches. The
+submitted `results_v2` evidence was produced by these commands with `--workers 11` for
+every job (worker count splits decoding across processes; it does not change the sampled shots).
+All baselines are decoded together on each sampled shot; train uses root seed 1, test
+uses root seed 2. By default (`--seed-scheme ss-v1`) `run_job.py` derives the actual Stim
+seed from (root seed, split, basis, p, f) with numpy `SeedSequence`, so X and Z, and train
+and test, use separate random streams; `analyze.py` then pairs X row k with Z row k and
+uses every shot. Add `--seed-scheme legacy` only to replay the archived caches, which
+reused one stream for X and Z and are therefore analysed with disjoint-half pairing. Defaults below use four workers; choose fewer on a busy laptop.
 On macOS, prefix the long commands with `caffeinate -i` and connect power.
 
 ```bash
@@ -63,7 +70,7 @@ caffeinate -i bash scripts/run_local_timing.sh
 .venv/bin/python demo.py --p 0.004 --basis Z
 ```
 
-The timing script uses 300 pairs per p, one worker, one numerical thread, and all
+The timing script uses 300 shots per basis and p (150 independent pairs for the legacy caches), one worker, one numerical thread, and all
 three decoders on the same shots. It writes `results_local_timing`; an intentional
 rerun replaces that directory's outputs. Close competing workloads first for an
 idle-machine benchmark. The audit's run had a separate experiment active, so its
@@ -77,7 +84,8 @@ not an end-to-end service benchmark. Setup/training are excluded from decode tim
 (including training/imports). Accuracy counts reproduce; timings naturally vary.
 
 Stim seeds are not portable across versions/builds or sample sizes. New cache
-files include the full detector/observable SHA-256 and runtime provenance.
+files include the full detector/observable SHA-256, circuit SHA-256, split, seed scheme,
+derived sampler seed and runtime provenance.
 Old files retain only seeds, conditions, round weights and flag counts; those
 compatibility checks are useful but are not a mathematical proof of identical shots.
 Never append a partial decoder rerun to incompatible shots: rerun every decoder

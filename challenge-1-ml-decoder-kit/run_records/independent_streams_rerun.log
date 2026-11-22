@@ -1,0 +1,27 @@
+results_v2/train_X_p0.003.npz  [13 s]  bp: fails 287 mean 10 ms
+results_v2/test_X_p0.003.npz  [48 s]  bp: fails 307 mean 10 ms  relay: fails 2 mean 29 ms  bposd: fails 15 mean 45 ms
+results_v2/train_Z_p0.003.npz  [9 s]  bp: fails 300 mean 10 ms
+results_v2/test_Z_p0.003.npz  [48 s]  bp: fails 339 mean 10 ms  relay: fails 3 mean 29 ms  bposd: fails 18 mean 45 ms
+results_v2/train_X_p0.004.npz  [13 s]  bp: fails 1027 mean 18 ms
+results_v2/test_X_p0.004.npz  [52 s]  bp: fails 420 mean 18 ms  relay: fails 10 mean 108 ms  bposd: fails 55 mean 101 ms
+results_v2/train_Z_p0.004.npz  [13 s]  bp: fails 1067 mean 18 ms
+results_v2/test_Z_p0.004.npz  [54 s]  bp: fails 398 mean 19 ms  relay: fails 9 mean 94 ms  bposd: fails 42 mean 105 ms
+results_v2/train_X_p0.005.npz  [17 s]  bp: fails 2436 mean 29 ms
+results_v2/test_X_p0.005.npz  [138 s]  bp: fails 949 mean 30 ms  relay: fails 88 mean 443 ms  bposd: fails 254 mean 175 ms
+results_v2/train_Z_p0.005.npz  [17 s]  bp: fails 2511 mean 28 ms
+results_v2/test_Z_p0.005.npz  [325 s]  bp: fails 1004 mean 31 ms  relay: fails 81 mean 1164 ms  bposd: fails 252 mean 427 ms
+results_v2/erase_X_p0.004_f0.npz  [63 s]  bposd: fails 31 mean 268 ms  bposd_flags: fails 31 mean 228 ms
+results_v2/erase_Z_p0.004_f0.npz  [60 s]  bposd: fails 24 mean 241 ms  bposd_flags: fails 24 mean 251 ms
+results_v2/erase_X_p0.004_f0.25.npz  [200 s]  bposd: fails 7 mean 178 ms  bposd_flags: fails 3 mean 1314 ms
+results_v2/erase_Z_p0.004_f0.25.npz  [194 s]  bposd: fails 9 mean 176 ms  bposd_flags: fails 5 mean 1316 ms
+results_v2/erase_X_p0.004_f0.5.npz  [190 s]  bposd: fails 11 mean 117 ms  bposd_flags: fails 2 mean 689 ms
+results_v2/erase_Z_p0.004_f0.5.npz  [194 s]  bposd: fails 12 mean 125 ms  bposd_flags: fails 1 mean 637 ms
+results_v2/erase_X_p0.004_f0.75.npz  [175 s]  bposd: fails 6 mean 86 ms  bposd_flags: fails 0 mean 709 ms
+results_v2/erase_Z_p0.004_f0.75.npz  [181 s]  bposd: fails 5 mean 87 ms  bposd_flags: fails 0 mean 552 ms
+results_v2/erase4_X_p0.004_f0.5_s32.npz  [138 s]  relay: fails 14 mean 86 ms  relay_flags: fails 1 mean 40 ms
+results_v2/erase4_Z_p0.004_f0.5_s32.npz  [146 s]  relay: fails 9 mean 90 ms  relay_flags: fails 1 mean 38 ms
+results_v2/erase4_X_p0.004_f0.5_s33.npz  [145 s]  relay: fails 6 mean 95 ms  relay_flags: fails 0 mean 38 ms
+results_v2/erase4_Z_p0.004_f0.5_s33.npz  [139 s]  relay: fails 7 mean 87 ms  relay_flags: fails 1 mean 41 ms
+results_v2/erase4_X_p0.005_f0.5_s31.npz  [326 s]  relay: fails 72 mean 264 ms  relay_flags: fails 5 mean 47 ms
+results_v2/erase4_Z_p0.005_f0.5_s31.npz  [341 s]  relay: fails 68 mean 280 ms  relay_flags: fails 4 mean 61 ms
+ALL_DONE

@@ -28,7 +28,7 @@ def train_router(dirname, p):
     for basis, path in zip('XZ', files):
         with np.load(path, allow_pickle=False) as source:
             d = dict(source)
-        if (int(d['seed']) != 1 or str(d['basis']) != basis or
+        if (int(d['seed']) != 1 or str(d.get('split', 'train')) != 'train' or str(d['basis']) != basis or
                 float(d['p']) != float(p) or float(d['f']) != 0):
             raise ValueError(f'{path}: expected seed-1, f=0 training data for {basis}, p={p}')
         if d['round_weights'].shape != (int(d['shots']), 13):

@@ -1,0 +1,584 @@
+{
+  "official_revision": "31ceda8be4949a308d95ec9bc7c32029c80d90d2",
+  "checks": [
+    {
+      "check": "p=0.003: seed-1 trained router exists",
+      "pass": true
+    },
+    {
+      "check": "p=0.003 X: held-out seed-2 f=0 conditions",
+      "pass": true
+    },
+    {
+      "check": "p=0.003 X: bp cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.003 X: bposd cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.003 X: relay cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.003 Z: held-out seed-2 f=0 conditions",
+      "pass": true
+    },
+    {
+      "check": "p=0.003 Z: bp cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.003 Z: bposd cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.003 Z: relay cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: bp finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: bposd finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: bposd kit reference within 95% interval",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: relay finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: relay kit reference within 95% interval",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: hybrid_rule finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: hybrid_ml finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: hybrid_rule not significantly worse than relay (one-sided p=1)",
+      "pass": true
+    },
+    {
+      "check": "p=0.003: hybrid_ml not significantly worse than relay (one-sided p=1)",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: seed-1 trained router exists",
+      "pass": true
+    },
+    {
+      "check": "p=0.004 X: held-out seed-2 f=0 conditions",
+      "pass": true
+    },
+    {
+      "check": "p=0.004 X: bp cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.004 X: bposd cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.004 X: relay cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.004 Z: held-out seed-2 f=0 conditions",
+      "pass": true
+    },
+    {
+      "check": "p=0.004 Z: bp cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.004 Z: bposd cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.004 Z: relay cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: bp finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: bposd finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: bposd kit reference within 95% interval",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: relay finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: relay kit reference within 95% interval",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: hybrid_rule finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: hybrid_ml finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: hybrid_rule not significantly worse than relay (one-sided p=1)",
+      "pass": true
+    },
+    {
+      "check": "p=0.004: hybrid_ml not significantly worse than relay (one-sided p=1)",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: seed-1 trained router exists",
+      "pass": true
+    },
+    {
+      "check": "p=0.005 X: held-out seed-2 f=0 conditions",
+      "pass": true
+    },
+    {
+      "check": "p=0.005 X: bp cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.005 X: bposd cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.005 X: relay cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.005 Z: held-out seed-2 f=0 conditions",
+      "pass": true
+    },
+    {
+      "check": "p=0.005 Z: bp cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.005 Z: bposd cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.005 Z: relay cached",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: bp finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: bposd finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: bposd kit reference within 95% interval",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: relay finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: relay kit reference within 95% interval",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: hybrid_rule finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: hybrid_ml finite latency and valid CI",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: hybrid_rule not significantly worse than relay (one-sided p=1)",
+      "pass": true
+    },
+    {
+      "check": "p=0.005: hybrid_ml not significantly worse than relay (one-sided p=1)",
+      "pass": true
+    },
+    {
+      "check": "f=0.0 X: erasure metadata",
+      "pass": true
+    },
+    {
+      "check": "f=0.0 Z: erasure metadata",
+      "pass": true
+    },
+    {
+      "check": "f=0.0: flags help or tie on saved pairs",
+      "pass": true
+    },
+    {
+      "check": "f=0: flag-hidden and flag-used answers have identical failures",
+      "pass": true
+    },
+    {
+      "check": "f=0.25 X: erasure metadata",
+      "pass": true
+    },
+    {
+      "check": "f=0.25 Z: erasure metadata",
+      "pass": true
+    },
+    {
+      "check": "f=0.25: flags help or tie on saved pairs",
+      "pass": true
+    },
+    {
+      "check": "f=0.5 X: erasure metadata",
+      "pass": true
+    },
+    {
+      "check": "f=0.5 Z: erasure metadata",
+      "pass": true
+    },
+    {
+      "check": "f=0.5: flags help or tie on saved pairs",
+      "pass": true
+    },
+    {
+      "check": "f=0.75 X: erasure metadata",
+      "pass": true
+    },
+    {
+      "check": "f=0.75 Z: erasure metadata",
+      "pass": true
+    },
+    {
+      "check": "f=0.75: flags help or tie on saved pairs",
+      "pass": true
+    },
+    {
+      "check": "relay flags: every erase4 seed has both X and Z files",
+      "pass": true
+    },
+    {
+      "check": "relay flags: (p, f) groups match the expected manifest",
+      "pass": true
+    },
+    {
+      "check": "relay flags p=0.004 f=0.5: seeds [32, 33] all present",
+      "pass": true
+    },
+    {
+      "check": "relay flags p=0.005 f=0.5: seeds [31] all present",
+      "pass": true
+    },
+    {
+      "check": "relay flags p=0.004 f=0.5: complete X/Z records for every expected seed",
+      "pass": true
+    },
+    {
+      "check": "relay flags p=0.005 f=0.5: complete X/Z records for every expected seed",
+      "pass": true
+    }
+  ],
+  "warnings": [
+    "results/test_X_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
+    "results/test_Z_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
+    "results/test_X_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
+    "results/test_Z_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
+    "results/test_X_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
+    "results/test_Z_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash"
+  ],
+  "sweep": [
+    {
+      "p": 0.003,
+      "decoder": "bp",
+      "failed_pairs": 284,
+      "pairs": 2500,
+      "rate_per_cycle": 0.009998591950634461,
+      "ci_low": 0.008871955020988698,
+      "ci_high": 0.011225620347648846,
+      "mean_ms": 27.309703356190585,
+      "p99_ms": 98.03961908561142
+    },
+    {
+      "p": 0.003,
+      "decoder": "bposd",
+      "failed_pairs": 7,
+      "pairs": 2500,
+      "rate_per_cycle": 0.00023363331454673286,
+      "ci_low": 9.392044141753875e-05,
+      "ci_high": 0.0004813145058765178,
+      "mean_ms": 107.8359267026186,
+      "p99_ms": 690.4452362662402
+    },
+    {
+      "p": 0.003,
+      "decoder": "relay",
+      "failed_pairs": 1,
+      "pairs": 2500,
+      "rate_per_cycle": 3.3339446006586115e-05,
+      "ci_low": 8.439265767323789e-07,
+      "ci_high": 0.00018574135664140012,
+      "mean_ms": 74.0808784416411,
+      "p99_ms": 496.4330260734957
+    },
+    {
+      "p": 0.003,
+      "decoder": "hybrid_rule",
+      "failed_pairs": 1,
+      "pairs": 2500,
+      "rate_per_cycle": 3.3339446006586115e-05,
+      "ci_low": 8.439265767323789e-07,
+      "ci_high": 0.00018574135664140012,
+      "mean_ms": 55.49819726936985,
+      "p99_ms": 532.4728982581189
+    },
+    {
+      "p": 0.003,
+      "decoder": "hybrid_ml",
+      "failed_pairs": 1,
+      "pairs": 2500,
+      "rate_per_cycle": 3.3339446006586115e-05,
+      "ci_low": 8.439265767323789e-07,
+      "ci_high": 0.00018574135664140012,
+      "mean_ms": 57.08244287400739,
+      "p99_ms": 530.9152808549691
+    },
+    {
+      "p": 0.004,
+      "decoder": "bp",
+      "failed_pairs": 352,
+      "pairs": 1000,
+      "rate_per_cycle": 0.03550958250051006,
+      "ci_low": 0.03190948210925937,
+      "ci_high": 0.03937715181898771,
+      "mean_ms": 523.8109881144483,
+      "p99_ms": 1439.440348308999
+    },
+    {
+      "p": 0.004,
+      "decoder": "bposd",
+      "failed_pairs": 48,
+      "pairs": 1000,
+      "rate_per_cycle": 0.004090796817048492,
+      "ci_low": 0.003016226007181988,
+      "ci_high": 0.00542038508685716,
+      "mean_ms": 1659.6965915900655,
+      "p99_ms": 5096.582940297667
+    },
+    {
+      "p": 0.004,
+      "decoder": "relay",
+      "failed_pairs": 7,
+      "pairs": 1000,
+      "rate_per_cycle": 0.0005852132739561089,
+      "ci_low": 0.00023520893603812265,
+      "ci_high": 0.001205392230196889,
+      "mean_ms": 2167.461208683555,
+      "p99_ms": 33159.92014129413
+    },
+    {
+      "p": 0.004,
+      "decoder": "hybrid_rule",
+      "failed_pairs": 7,
+      "pairs": 1000,
+      "rate_per_cycle": 0.0005852132739561089,
+      "ci_low": 0.00023520893603812265,
+      "ci_high": 0.001205392230196889,
+      "mean_ms": 2211.943438828108,
+      "p99_ms": 34224.85096289893
+    },
+    {
+      "p": 0.004,
+      "decoder": "hybrid_ml",
+      "failed_pairs": 7,
+      "pairs": 1000,
+      "rate_per_cycle": 0.0005852132739561089,
+      "ci_low": 0.00023520893603812265,
+      "ci_high": 0.001205392230196889,
+      "mean_ms": 2204.327061548014,
+      "p99_ms": 34043.88990905543
+    },
+    {
+      "p": 0.005,
+      "decoder": "bp",
+      "failed_pairs": 744,
+      "pairs": 1000,
+      "rate_per_cycle": 0.10733878882764847,
+      "ci_low": 0.0995198856866586,
+      "ci_high": 0.11552648415647926,
+      "mean_ms": 155.01450777688297,
+      "p99_ms": 298.8294022473564
+    },
+    {
+      "p": 0.005,
+      "decoder": "bposd",
+      "failed_pairs": 261,
+      "pairs": 1000,
+      "rate_per_cycle": 0.024889791327350808,
+      "ci_low": 0.02197124702134412,
+      "ci_high": 0.028068820188368093,
+      "mean_ms": 1076.9052678139415,
+      "p99_ms": 2116.4244817438157
+    },
+    {
+      "p": 0.005,
+      "decoder": "relay",
+      "failed_pairs": 80,
+      "pairs": 1000,
+      "rate_per_cycle": 0.006924382628299419,
+      "ci_low": 0.005491352124386006,
+      "ci_high": 0.008611352737311173,
+      "mean_ms": 1948.210709021194,
+      "p99_ms": 10467.270581337503
+    },
+    {
+      "p": 0.005,
+      "decoder": "hybrid_rule",
+      "failed_pairs": 80,
+      "pairs": 1000,
+      "rate_per_cycle": 0.006924382628299419,
+      "ci_low": 0.005491352124386006,
+      "ci_high": 0.008611352737311173,
+      "mean_ms": 2002.1952378491549,
+      "p99_ms": 10731.562954352845
+    },
+    {
+      "p": 0.005,
+      "decoder": "hybrid_ml",
+      "failed_pairs": 80,
+      "pairs": 1000,
+      "rate_per_cycle": 0.006924382628299419,
+      "ci_low": 0.005491352124386006,
+      "ci_high": 0.008611352737311173,
+      "mean_ms": 1965.1854473548592,
+      "p99_ms": 10468.716202382344
+    }
+  ],
+  "erasure": [
+    {
+      "f": 0.0,
+      "pairs": 500,
+      "failed_blind": 27,
+      "failed_aware": 27,
+      "only_blind": 0,
+      "only_aware": 0,
+      "mcnemar_p": 1.0,
+      "blind_mean_ms": 768.2024382317904,
+      "aware_mean_ms": 722.334477561526
+    },
+    {
+      "f": 0.25,
+      "pairs": 500,
+      "failed_blind": 8,
+      "failed_aware": 4,
+      "only_blind": 6,
+      "only_aware": 2,
+      "mcnemar_p": 0.2890625,
+      "blind_mean_ms": 231.94647395182983,
+      "aware_mean_ms": 2139.2295253722114
+    },
+    {
+      "f": 0.5,
+      "pairs": 1000,
+      "failed_blind": 8,
+      "failed_aware": 2,
+      "only_blind": 6,
+      "only_aware": 0,
+      "mcnemar_p": 0.03125,
+      "blind_mean_ms": 147.4299490090707,
+      "aware_mean_ms": 985.5385811260857
+    },
+    {
+      "f": 0.75,
+      "pairs": 1000,
+      "failed_blind": 4,
+      "failed_aware": 0,
+      "only_blind": 4,
+      "only_aware": 0,
+      "mcnemar_p": 0.125,
+      "blind_mean_ms": 113.7988484018424,
+      "aware_mean_ms": 935.9564375311239
+    }
+  ],
+  "input_sha256": {
+    "results/erase4_X_p0.004_f0.5_s32.npz": "fa087c179bdf1a8f0f37470f291e0794f6383180ef1e50e75d36711693f610e0",
+    "results/erase4_X_p0.004_f0.5_s33.npz": "55062f73606ee75e18be283d227b56700ebefe7707f370eff30e6eacb975c0fd",
+    "results/erase4_X_p0.005_f0.5_s31.npz": "8f48c9a45966109f5d251c0d05fb68126b17a4a54f126fc868ba86a5f46cbea6",
+    "results/erase4_Z_p0.004_f0.5_s32.npz": "95dd2ac40d57f05b1793edd7d8c810b28f728cd5de093156f02942ab27b937fe",
+    "results/erase4_Z_p0.004_f0.5_s33.npz": "2ab52a538a846025624e2b796010ecacc3a3703cc3cd9e79754ab46c0ead6def",
+    "results/erase4_Z_p0.005_f0.5_s31.npz": "ff749588e6b9da966e9df0a86c0b3dd7467273dd942c6d1adbc0f91d28ce1f59",
+    "results/erase_X_p0.004_f0.25.npz": "3020d9011ae7c3a07fd16941491e3dc6a9aadc2cd3c2fb0aed893ee6ba0a350f",
+    "results/erase_X_p0.004_f0.5.npz": "cf1820b7622cd8b0ef25bd3ec0bc246446688ebd9926af64751a1ec22ff8ad7a",
+    "results/erase_X_p0.004_f0.75.npz": "17015c6d9f1572af6c1ad995bad7c149a80347cf9ded4a5a84be2e3acc3982e1",
+    "results/erase_X_p0.004_f0.npz": "14bdef22db4443437ed8a391ecac2a6be2b9f7cbec3227a822a4c58a7a685962",
+    "results/erase_Z_p0.004_f0.25.npz": "aac1cb7ecf1ca059a32e9eec25222dd9322e8e88330b91776ed55faeedb5cd34",
+    "results/erase_Z_p0.004_f0.5.npz": "216310e7f2b0e14f9385541e734f81d3070385615f8784fd5096b588a59509d7",
+    "results/erase_Z_p0.004_f0.75.npz": "e0740af760903dcb35f0ef355a7a2222d535a35f6c09fcbafd1469e859f06a23",
+    "results/erase_Z_p0.004_f0.npz": "491706bc74141564fad147642a23d694670cde54cd6da7821b5d922e2546d819",
+    "results/extra_X_p0.003.npz": "8a519bb4cd8ecf7882694fdf588561dd32fdbdfc0ae903fb627efdd6d288a840",
+    "results/extra_X_p0.005.npz": "5c53fe968c82990d4188afe1f9c6c8eda8db989aac603ccbebaee10fe128fcea",
+    "results/extra_Z_p0.003.npz": "3f0a3e9159aa073fe03d5c684e1feadcf40fd95bf92d652a048a267d7b1819d2",
+    "results/extra_Z_p0.005.npz": "e7da8fe95ab00ce6430f27050cb129016850e5a6fc0a46aeffe559e1543af9df",
+    "results/test_X_p0.003.npz": "7c5ed2ffb66ef38e391df3fe154c79e65a546daff523470c3fd9754c2c14fc71",
+    "results/test_X_p0.004.npz": "0d93ff387c8f22ee3447335328cc947b10078df4c3eb43575e1f611504458947",
+    "results/test_X_p0.005.npz": "a34ac8d8d95488f990f060a8a1e0a42b81dceb0927da4de484281a646f43db21",
+    "results/test_Z_p0.003.npz": "0ed39d5ffbc29c13a3af54860a1e61a60968285df707c4993372f2ef9bc27a14",
+    "results/test_Z_p0.004.npz": "a1628ba565124e2c572cba549f272567c4c4a87da4ef6b56544db3fea6e1a50e",
+    "results/test_Z_p0.005.npz": "9f56868310f4c26f1072c8beb95bab25de3d877e77fe0078d850975a3af8a39a",
+    "results/train_X_p0.003.npz": "e1623702b766a91e4b717e4416c506f771208fbcea196258e3b1336524fce9f3",
+    "results/train_X_p0.004.npz": "1cf7607c8c5e61b9c4ce4c5f3467280e94c4d923d5cc64b1f43545c4845397d7",
+    "results/train_X_p0.005.npz": "15752ecf497602291a814c18b2517fd2aaa8d31dd60e6a5cb61bcbd1173698af",
+    "results/train_Z_p0.003.npz": "164b1bcfdd26c98da2fa9d88b538066cb8f9654609b5eb9860b8a81083fc2834",
+    "results/train_Z_p0.004.npz": "bdc25fc8717f1406659d72b4627df67865288a26fdacfd40ffa98ffded691ffc",
+    "results/train_Z_p0.005.npz": "c44020a0032bf116f7e33e7e27f0878df8c2bd0d31d91cacb944c84a5a52c7ef"
+  },
+  "relay_flags": [
+    {
+      "p": 0.004,
+      "f": 0.5,
+      "seeds": [
+        32,
+        33
+      ],
+      "pairs": 10000,
+      "failed_blind": 19,
+      "failed_aware": 1,
+      "only_blind": 19,
+      "only_aware": 1,
+      "mcnemar_p": 4.00543212890625e-05,
+      "blind_mean_ms": 177.417928344995,
+      "aware_mean_ms": 82.59927252524066
+    },
+    {
+      "p": 0.005,
+      "f": 0.5,
+      "seeds": [
+        31
+      ],
+      "pairs": 5000,
+      "failed_blind": 70,
+      "failed_aware": 3,
+      "only_blind": 68,
+      "only_aware": 1,
+      "mcnemar_p": 2.371692252312041e-19,
+      "blind_mean_ms": 571.4272956375964,
+      "aware_mean_ms": 122.07852224853123
+    }
+  ],
+  "passed": true
+}
