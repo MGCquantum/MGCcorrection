@@ -17,12 +17,10 @@ import subprocess
 import time
 
 import numpy as np
-from ldpc import BpDecoder
-from sklearn.ensemble import HistGradientBoostingClassifier
+from hybrid import HybridDecoder, train_router
+from threadpoolctl import threadpool_limits
 
 from circuit import GROSS_CIRCUITS, dem_matrices, detector_ids, load_circuit, sample
-from decoders import relay_decoder
-from run_job import FAST_BP
 
 
 def cpu_name():
@@ -50,30 +48,24 @@ def main():
     a.add_argument("--train-dir", default="results")
     args = a.parse_args()
 
-    train = [dict(np.load(f"{args.train_dir}/train_{b}_p{args.p}.npz")) for b in "XZ"]
-    feats = lambda d: np.column_stack([d["round_weights"], d["round_weights"].sum(1), d["n_flags"]])
-    router = HistGradientBoostingClassifier(max_iter=200).fit(np.vstack([feats(d) for d in train]),
-                                                              np.concatenate([d["conv_bp"] for d in train]))
+    trained = train_router(args.train_dir, args.p)
+    if trained is None:
+        raise ValueError("Missing seed-1 training cache; see RUN.md")
+    router, _ = trained
     circuit = load_circuit(GROSS_CIRCUITS[args.basis], args.p)
     H, L, priors = dem_matrices(circuit, args.basis)
     t = time.perf_counter()
-    bp, relay = BpDecoder(H, error_channel=list(priors), **FAST_BP), relay_decoder(H, priors)
+    decoder = HybridDecoder(H, priors, router)
     setup_s = time.perf_counter() - t
 
     det, obs = sample(circuit, 1, args.seed)
     syn = det[0, detector_ids(circuit, args.basis)]
-    x = np.concatenate([syn.reshape(-1, 72).sum(1), [syn.sum(), 0]])[None, :]
     print(f"New shot (p={args.p}, {args.basis} memory, seed {args.seed}): {int(syn.sum())} alarms over 13 rounds")
     print("  alarms per round:", syn.reshape(-1, 72).sum(1).tolist())
-
-    t = time.perf_counter(); easy = bool(router.predict(x)[0]); t_router = time.perf_counter() - t
-    print(f"Router ({t_router * 1e3:.1f} ms): {'easy -> fast BP first' if easy else 'hard -> straight to relay-BP'}")
-    if easy:
-        t = time.perf_counter(); e = bp.decode(syn); t_bp = time.perf_counter() - t
-        print(f"Fast BP ({t_bp * 1e3:.1f} ms): {'converged, answer accepted' if bp.converge else 'did not converge -> relay-BP'}")
-    if not easy or not bp.converge:
-        t = time.perf_counter(); e = np.asarray(relay.decode(syn), np.uint8); t_relay = time.perf_counter() - t
-        print(f"Relay-BP ({t_relay * 1e3:.1f} ms)")
+    e = decoder.decode(syn)
+    timing = decoder.last
+    print(f"Router ({timing['router_s'] * 1e3:.1f} ms): {'easy -> fast BP first' if timing['easy'] else 'hard -> straight to relay-BP'}")
+    print(f"Fast BP: {timing['bp_s'] * 1e3:.1f} ms; relay-BP: {timing['relay_s'] * 1e3:.1f} ms; escalated: {timing['escalated']}")
     pred = (L @ np.asarray(e, np.uint8)) % 2
     print("Predicted logical flips:", "".join(map(str, pred)))
     print("True logical flips:     ", "".join(map(str, obs[0])), "->", "CORRECT" if (pred == obs[0]).all() else "WRONG")
@@ -86,4 +78,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    with threadpool_limits(limits=1):
+        main()

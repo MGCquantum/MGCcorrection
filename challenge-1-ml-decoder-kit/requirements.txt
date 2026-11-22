@@ -3,3 +3,6 @@ ldpc>=2.4
 numpy
 scipy
 relay-bp==0.2.2   # source build on most platforms: needs a Rust toolchain
+scikit-learn
+matplotlib
+threadpoolctl

@@ -14,6 +14,10 @@ Saved per shot: fail_<dec>, time_<dec> (seconds, decode call only), conv_<dec> (
 round_weights (alarms per round, router features), n_flags.
 """
 import argparse
+import hashlib
+import json
+import platform
+from importlib.metadata import version
 import os
 import time
 from multiprocessing import Pool
@@ -23,9 +27,10 @@ from ldpc import BpDecoder
 
 from circuit import GROSS_CIRCUITS, detector_ids, load_circuit, sample
 from decoders import bposd_decoder, relay_decoder
+from hybrid import FAST_BP
+from threadpoolctl import threadpool_limits
 from lossy import aware_matrices, blind_matrices, herald_ids, lossy_circuit, shot_priors
 
-FAST_BP = {"max_iter": 200, "bp_method": "minimum_sum", "ms_scaling_factor": 1.0}
 
 
 def parse_args():
@@ -38,7 +43,10 @@ def parse_args():
     a.add_argument("--decoders", nargs="+", required=True)
     a.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     a.add_argument("--out", required=True)
-    return a.parse_args()
+    args = a.parse_args()
+    if args.shots < 1 or args.workers < 1 or not 0 < args.p < 1 or not 0 <= args.f <= 1:
+        a.error("shots/workers must be positive; 0 < p < 1 and 0 <= f <= 1")
+    return args
 
 
 def build(circuit, basis, names):
@@ -71,6 +79,7 @@ def work(job):
     """Decode one chunk of shots with every requested decoder."""
     circuit_text, basis, names, syn, obs, fired_lists = job
     import stim
+    threadpool_limits(limits=1)
     circuit = stim.Circuit(circuit_text)
     mats, dec = build(circuit, basis, names)
     n = len(syn)
@@ -106,7 +115,11 @@ def main():
         parts = pool.map(work, jobs)
     save = {"p": a.p, "f": a.f, "seed": a.seed, "basis": a.basis, "shots": a.shots,
             "round_weights": syn.reshape(a.shots, -1, 72).sum(axis=2),
-            "n_flags": np.array([len(x) for x in fired])}
+            "n_flags": np.array([len(x) for x in fired]),
+            "sample_sha256": hashlib.sha256(det.tobytes() + obs.tobytes()).hexdigest(),
+            "provenance_json": json.dumps({"python": platform.python_version(),
+                "platform": platform.platform(), "workers": a.workers, "threads_per_worker": 1,
+                "versions": {n: version(n) for n in ["stim", "numpy", "ldpc", "relay-bp"]}})}
     for name in a.decoders:
         for i, key in enumerate(["fail", "time", "conv"]):
             save[f"{key}_{name}"] = np.concatenate([part[name][i] for part in parts])

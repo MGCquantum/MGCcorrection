@@ -21,7 +21,8 @@ import re
 import time
 
 import numpy as np
-from sklearn.ensemble import HistGradientBoostingClassifier
+from hybrid import features, train_router as _train_router
+from threadpoolctl import threadpool_limits
 
 from scipy.stats import beta
 
@@ -45,17 +46,19 @@ def load(path):
     d = dict(np.load(path))
     base = os.path.basename(path)
     if base.startswith("test_"):
-        for extra in glob.glob(os.path.join(os.path.dirname(path), base.replace("test_", "extra_").replace(".npz", "*.npz"))):
+        for extra in sorted(glob.glob(os.path.join(os.path.dirname(path), base.replace("test_", "extra_").replace(".npz", "*.npz")))):
             e = dict(np.load(extra))
             if int(e["seed"]) != int(d["seed"]) or int(e["shots"]) != int(d["shots"]):
                 print(f"skipping {extra}: seed or shot count differs from {base}")
                 continue
             if any(not np.array_equal(d[k], e[k]) for k in ("p", "basis", "f")):
                 raise ValueError(f"{extra} uses different experimental conditions from {base}")
-            if any(not np.array_equal(d[k], e[k]) for k in ("round_weights", "n_flags")):
+            hashes_differ = ("sample_sha256" in d and "sample_sha256" in e and
+                             str(d["sample_sha256"]) != str(e["sample_sha256"]))
+            if hashes_differ or any(not np.array_equal(d[k], e[k]) for k in ("round_weights", "n_flags")):
                 # Different Stim builds can generate different shots for the same seed.
                 # Use the complete rerun, including its matching router inputs.
-                if not d.keys() <= e.keys():
+                if not {k for k in d if k.startswith(("fail_", "time_", "conv_"))} <= e.keys():
                     raise ValueError(f"{extra} has different shots and lacks some original decoder results")
                 d = e
                 continue
@@ -63,24 +66,8 @@ def load(path):
     return d
 
 
-def features(d):
-    return np.column_stack([d["round_weights"], d["round_weights"].sum(1), d["n_flags"]])
-
-
 def train_router(dirname, p):
-    dirname = TRAIN_DIR or dirname
-    """ML router and the simple baseline (one threshold on total alarm count), both fit on the train seed only."""
-    files = [f"{dirname}/train_{b}_p{p}.npz" for b in "XZ"]
-    if not all(os.path.exists(f) for f in files):
-        return None
-    data = [load(f) for f in files]
-    X = np.vstack([features(d) for d in data])
-    y = np.concatenate([d["conv_bp"] for d in data]).astype(bool)
-    model = HistGradientBoostingClassifier(max_iter=200).fit(X, y)
-    w = X[:, -2]
-    thresholds = np.unique(w)
-    acc = [((w <= t) == y).mean() for t in thresholds]
-    return model, thresholds[int(np.argmax(acc))]
+    return _train_router(TRAIN_DIR or dirname, p)
 
 
 def policies(d, router):
@@ -207,4 +194,5 @@ def plot(rows, dirname):
 
 
 if __name__ == "__main__":
-    main()
+    with threadpool_limits(limits=1):
+        main()

@@ -72,6 +72,26 @@ def blind_matrices(circuit, basis):
             np.array(list(errors.values())))
 
 
+def _herald_probabilities(circuit):
+    """Map herald detector IDs to the probability of their HERALDED_ERASE event."""
+    records, probabilities = {}, {}
+    measurements = detector = 0
+    for ins in circuit.flattened():
+        if ins.name == "HERALDED_ERASE":
+            for offset in range(len(ins.targets_copy())):
+                records[measurements + offset] = ins.gate_args_copy()[0]
+        if ins.name == "DETECTOR":
+            if ins.gate_args_copy() == [HERALD_COORD]:
+                targets = ins.targets_copy()
+                if len(targets) != 1 or not targets[0].is_measurement_record_target:
+                    raise ValueError("Expected a single-record herald detector")
+                probabilities[detector] = records[measurements + targets[0].value]
+            detector += 1
+        if stim.gate_data(ins.name).produces_measurements:
+            measurements += stim.Circuit(str(ins)).num_measurements
+    return probabilities
+
+
 def aware_matrices(circuit, basis):
     """H, L, base priors, per column the herald detector that marks it (-1 for ordinary errors),
     and per column how many Pauli components were merged into it (e.g. Y and Z look identical to X checks).
@@ -80,7 +100,8 @@ def aware_matrices(circuit, basis):
     fired herald can raise exactly their prior.
     """
     det_rows = _row_numbers(detector_ids(circuit, basis))
-    heralds = set(herald_ids(circuit).tolist())
+    herald_probabilities = _herald_probabilities(circuit)
+    heralds = set(herald_probabilities)
     merged, count = {}, {}
     for e in dem(circuit):
         if e.type != "error":
@@ -94,8 +115,18 @@ def aware_matrices(circuit, basis):
         key = (d, o, h[0] if h else -1)
         q = e.args_copy()[0]
         old = merged.get(key, 0.0)
-        merged[key] = q * (1 - old) + old * (1 - q)
-        count[key] = count.get(key, 0) + 1
+        if h:
+            # Pauli outcomes of one heralded erasure are mutually exclusive.
+            # Stim may already merge equal outcomes (e.g. X and Y => q/2), so
+            # counting DEM instructions would incorrectly assign prior 1/4.
+            components = 4 * q / herald_probabilities[h[0]]
+            if not np.isclose(components, round(components)):
+                raise ValueError("Herald mechanism is not an integral Pauli component count")
+            merged[key] = old + q
+            count[key] = count.get(key, 0) + round(components)
+        else:
+            merged[key] = q * (1 - old) + old * (1 - q)
+            count[key] = count.get(key, 0) + 1
     keys = list(merged)
     H = _incidence_matrix([k[0] for k in keys], len(det_rows))
     L = _incidence_matrix([k[1] for k in keys], circuit.num_observables).tocsr()

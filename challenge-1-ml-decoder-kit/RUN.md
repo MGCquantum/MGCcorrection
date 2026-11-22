@@ -1,39 +1,77 @@
-# How to run (one job list per laptop)
+# Reproduce and verify Challenge 1
 
-Setup once, on every laptop:
-```bash
-cd challenge-1-ml-decoder-kit
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt scikit-learn matplotlib     # relay-bp needs Rust: https://rustup.rs
-```
-On a Mac, put `caffeinate -i` in front of each command so the laptop doesn't sleep. Results go in `results/`.
+Run from `challenge-1-ml-decoder-kit` using Python 3.12 or newer:
 
-## Laptop 1: p = 0.003 (longest)
 ```bash
-python run_job.py --basis X --p 0.003 --shots 5000 --seed 2 --decoders bp relay --out results/test_X_p0.003.npz
-python run_job.py --basis Z --p 0.003 --shots 5000 --seed 2 --decoders bp relay --out results/test_Z_p0.003.npz
-python run_job.py --basis X --p 0.003 --shots 5000 --seed 1 --decoders bp --out results/train_X_p0.003.npz
-python run_job.py --basis Z --p 0.003 --shots 5000 --seed 1 --decoders bp --out results/train_Z_p0.003.npz
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+bash scripts/verify_submission.sh
 ```
 
-## Laptop 2: p = 0.005
-Same four commands with `--p 0.005` and `p0.005` in the file names, and `--shots 2000` on the test jobs.
+`requirements-local-lock.txt` records the exact packages used on the audit's
+Python 3.13 macOS environment. Other platforms may need different wheels; relay-bp
+may require Rust. The verifier runs tests, checks every required sweep row, writes
+analysis/figures, and demonstrates fresh X and Z shots. It exits nonzero on failure.
+The audit reports legacy cache limitations rather than inventing full fingerprints.
 
-## Laptop 3: p = 0.004 (+ BP-OSD sanity check)
-Same four commands with `--p 0.004`, `--shots 2000` on the test jobs, and `--decoders bp relay bposd` on the test jobs.
+## Regenerate training and accuracy data
 
-## Laptop 4: erasure experiment (p = 0.004)
+These commands create a separate directory, preserving the submitted caches.
+All baselines are decoded together on each sampled shot; train uses seed 1, test
+uses seed 2. Defaults below use four workers; choose fewer on a busy laptop.
+On macOS, prefix the long commands with `caffeinate -i` and connect power.
+
 ```bash
-for f in 0.25 0.5 0.75; do for b in X Z; do
-  python run_job.py --basis $b --p 0.004 --f $f --shots 1000 --seed 2 --decoders bposd bposd_flags --out results/erase_${b}_p0.004_f${f}.npz
-done; done
+mkdir -p results_reproduced
+for p in 0.003 0.004 0.005; do
+  n=2000; [ "$p" = 0.003 ] && n=5000
+  for b in X Z; do
+    .venv/bin/python run_job.py --basis "$b" --p "$p" --shots 5000 --seed 1 \
+      --decoders bp --workers 4 --out "results_reproduced/train_${b}_p${p}.npz"
+    .venv/bin/python run_job.py --basis "$b" --p "$p" --shots "$n" --seed 2 \
+      --decoders bp relay bposd --workers 4 --out "results_reproduced/test_${b}_p${p}.npz"
+  done
+done
+for f in 0 0.25 0.5 0.75; do
+  n=2000; case "$f" in 0|0.25) n=1000;; esac
+  for b in X Z; do
+    .venv/bin/python run_job.py --basis "$b" --p 0.004 --f "$f" --shots "$n" --seed 2 \
+      --decoders bposd bposd_flags --workers 4 --out "results_reproduced/erase_${b}_p0.004_f${f}.npz"
+  done
+done
+.venv/bin/python analyze.py --dir results_reproduced
+.venv/bin/python audit_submission.py --dir results_reproduced --out results_reproduced/audit.json
 ```
 
-## Laptop 5: analysis (anyone, any time; takes seconds)
-Collect every `results/*.npz` file into one `results/` folder, then:
-```bash
-python analyze.py --dir results
-```
-This prints the table and writes `results/results.csv` and `results/results.png`.
+The archived sample's particular counts and broad sanity checks need not hold for
+new independent samples. Inspect any failed scientific check; do not tune test
+seeds or select a favorable rerun. Baseline reference values are statistical
+comparisons, not target numbers to force.
 
-Run a 50-shot version of any command first to check it works before starting the long one.
+## Latency and resources
+
+```bash
+caffeinate -i bash scripts/run_local_timing.sh
+.venv/bin/python demo.py --p 0.004 --basis X
+.venv/bin/python demo.py --p 0.004 --basis Z
+```
+
+The timing script uses 300 pairs per p, one worker, one numerical thread, and all
+three decoders on the same shots. It writes `results_local_timing`; an intentional
+rerun replaces that directory's outputs. Close competing workloads first for an
+idle-machine benchmark. The audit's run had a separate experiment active, so its
+latencies are labeled **under concurrent load**, not idle-laptop speedup evidence.
+`results_timing` is the unchanged historical idle-laptop cache; it lacks BP-OSD.
+
+Cached evaluation combines the measured decoder costs of the branches actually
+chosen and measures router inference now. It is an estimate of deployed latency,
+not an end-to-end service benchmark. Setup/training are excluded from decode time;
+`demo.py` separately reports decoder setup, model size and whole-process peak RSS
+(including training/imports). Accuracy counts reproduce; timings naturally vary.
+
+Stim seeds are not portable across versions/builds or sample sizes. New cache
+files include the full detector/observable SHA-256 and runtime provenance.
+Old files retain only seeds, conditions, round weights and flag counts; those
+compatibility checks are useful but are not a mathematical proof of identical shots.
+Never append a partial decoder rerun to incompatible shots: rerun every decoder
+for that basis together instead.

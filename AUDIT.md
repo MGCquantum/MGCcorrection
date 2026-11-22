@@ -25,3 +25,14 @@ The second code, sliding windows, and distance scaling are optional stretch goal
 All new computation is local. Progress is pushed on `codex/challenge1-readiness`.
 The prior BP-OSD-only prompt's no-source-edit constraint applied to that completed
 run; this broader readiness audit includes source fixes and regression tests.
+
+## Issue discovered during regression testing
+
+A one-qubit heralded-erasure test exposed an incorrect conditional prior in
+`lossy.aware_matrices`: Stim can merge two Pauli outcomes into one DEM instruction,
+but the original code counted instructions instead of the probability mass of the
+outcomes. A 1/2 conditional flip probability was therefore sometimes assigned 1/4.
+The correction recovers multiplicities from the herald probability and adds
+mutually exclusive outcomes instead of XOR-combining their probabilities.
+The no-erasure sweep is unaffected. Erasure headline numbers are under revalidation;
+the old results must not be presented as evidence for the corrected decoder yet.
