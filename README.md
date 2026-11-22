@@ -95,7 +95,7 @@ How the folders connect: code in `aegis/` turns shots into `data/`, `data/` into
 | Code that generates training and test data | [`aegis/collect.py`](aegis/collect.py); commands in [`docs/RESULTS.md`](docs/RESULTS.md#5-data-and-how-to-regenerate-it) |
 | A script that reproduces the evaluation | [`scripts/reproduce.sh`](scripts/reproduce.sh) |
 | Comparison with the baselines, with a plot | [Results](#results), [`docs/RESULTS.md`](docs/RESULTS.md), [`results/`](results/) |
-| A short presentation or demo | [`docs/PRESENTATION.md`](docs/PRESENTATION.md) and `python -m aegis.demo` |
+| A short presentation or demo | Slides: [`docs/QEC-Aegis_MidQWest_2026.pptx`](docs/QEC-Aegis_MidQWest_2026.pptx) · notes: [`docs/PRESENTATION.md`](docs/PRESENTATION.md) · live demo: `python -m aegis.demo` |
 
 ## How the numbers were obtained
 - **Separate shots for every step:** the model is trained on seed-1 shots, calibrated on seed-4 shots, and its thresholds are chosen on seed-3 validation shots.
