@@ -1,7 +1,15 @@
 # Pitch notes (not part of the code spec)
 
 ## Pitch cheat sheet
-**Claim:** "Neutral atoms can flag where some errors happened. On the Gross code, a decoder that uses those flags makes about 5.5× fewer logical errors than one that ignores them, when half the noise is flagged. The cost is about 6× more decode time. We also tested an ML router to save time; it ties a simple rule, and we show why."
+**Claim:** "Neutral atoms can convert some errors into flagged erasures. On the Gross code, decoding the same shots with the flags gave 4 failures instead of 22 (about 5× fewer, p < 0.0001) when half the noise was flagged. The cost is about 6× more decode time. We also asked where learning belongs in a hierarchical decoder: a learned router can't help, because BP's own convergence check already routes almost perfectly, and even a perfect router would save under 17%."
+
+**Order:** (1) problem: atoms flag some failures; (2) erasure result: the headline; (3) speed and the router finding; (4) limits and next steps.
+
+**Answers to have ready:**
+- "Why BP-OSD, not relay-BP?" relay-BP can't take new priors per shot. Flags in relay-BP is the next step.
+- "Isn't this just Bayes?" Yes: the right prior given a flag is known exactly, so no learning is needed there. That's why we put the ML where the brief suggested, in routing, and found the limit.
+- "Real loss is detected late." Agreed; our erasures are idealized. Realistic delayed loss is next.
+- "Isn't the hybrid just relay-BP with stop_nconv=1?" Essentially, yes. That's the point: the cheap check already does the routing.
 
 | Term | Say it as |
 |---|---|

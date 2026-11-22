@@ -2,7 +2,7 @@
 
 Infleqtion Challenge 1 (ML-assisted QEC decoding), MidQWest 2026. The challenge brief is in [CHALLENGE.md](CHALLENGE.md).
 
-**Question:** on neutral-atom hardware, some errors come with a flag saying where they happened (heralded erasure, e.g. detected atom loss). How much does a decoder gain on the [[144,12,12]] Gross code by using those flags, and can ML cut decoding time without losing accuracy?
+**Question:** on neutral-atom hardware, some errors can be converted into *erasures* that come with a flag saying where they happened (idealized heralded erasure conversion; real atom loss is detected later, see limits). How much does a decoder gain on the [[144,12,12]] Gross code by using those flags, and can ML cut decoding time without losing accuracy?
 
 ## Results
 
@@ -14,7 +14,19 @@ p = 0.004, 12 syndrome cycles, X and Z memory. The same simulated shots are deco
 | 0% | 4.3e-3 [3.2–5.6e-3] | 4.3e-3 (identical, as expected) | — | 1,000 |
 | 25% | 1.4e-3 [0.8–2.3e-3] | 6.7e-4 [2.9–13e-4] | ~2× | 1,000 |
 | 50% | 9.2e-4 [5.8–14e-4] | 1.7e-4 [0.5–4.3e-4] | **~5.5×** | 2,000 |
-| 75% | 4.2e-4 [2.0–7.7e-4] | < 1.5e-4 (0 failures) | ≥ ~3× | 2,000 |
+| 75% | 4.2e-4 [2.0–7.7e-4] | < 1.5e-4 (0 failures seen) | no failures to count | 2,000 |
+
+**Paired test on identical shots** (pairs where only one of the two decoders failed; exact McNemar test):
+
+| Noise flagged | Failed only with flags hidden | Failed only with flags used | p-value |
+|---|---|---|---|
+| 25% | 14 | 5 | 0.06 (not significant) |
+| 50% | 18 | 0 | 8e-6 |
+| 75% | 10 | 0 | 0.002 |
+
+At 50%, 22 pairs failed with flags hidden versus 4 with flags used. Using the flags never caused a failure that the flag-blind decoder avoided. The "~5.5×" is the ratio of those counts, and its uncertainty is wide (the 95% intervals in the table above), so read it as "several times fewer".
+
+**Scope:** the flags were tested with BP-OSD, the decoder whose priors can be updated per shot. relay-BP is about 7× more accurate than BP-OSD at p = 0.004 without erasure, and it was not run with flags (its API has no per-shot prior update). The 0% row (4.3e-3 on 1,000 pairs) and the sweep's BP-OSD at p = 0.004 (4.1e-3 on 2,000 different pairs) agree within their intervals.
 
 ![erasure](challenge-1-ml-decoder-kit/figures/erasure.png)
 
@@ -30,7 +42,7 @@ Logical error rate per cycle (95% CI) and failed pairs, same test shots for ever
 | 0.004 | 6.3e-4 (15/2,000) | 4.1e-3 (97/2,000) | 6.3e-4 (15/2,000) | 6.3e-4 (15/2,000) | 8.7e-4 / 4.4e-3 |
 | 0.005 | 6.3e-3 (145/2,000) | *pending* | 6.3e-3 (145/2,000) | 6.3e-3 (145/2,000) | 6.9e-3 / 2.3e-2 |
 
-Both hybrids lose no accuracy relative to relay-BP at any p.
+Both hybrids lose no accuracy relative to relay-BP at any p. The hybrid is close to relay-BP with an early exit: relay-BP's first leg is BP, and the kit runs it until 5 solutions agree (`stop_nconv=5`), while the hybrid accepts BP's first converged answer.
 
 **Decode time** (one idle laptop, 1 thread, 300 X+Z pairs per p):
 
@@ -43,7 +55,7 @@ Both hybrids lose no accuracy relative to relay-BP at any p.
 ![speed](challenge-1-ml-decoder-kit/figures/speed.png)
 
 ### 3. The ML router (an honest negative result)
-A gradient-boosted classifier reads the alarms per round (and the loss-flag count) and predicts whether fast BP will converge, so hard shots can skip it. Accuracy on held-out shots:
+A gradient-boosted classifier reads the alarms per round and predicts whether fast BP will converge, so hard shots can skip it. (It also has a loss-flag-count input, but the sweep has no erasure, so that input is always 0.) Accuracy on held-out shots:
 
 | p | ML router | One alarm-count threshold | Always guess the majority |
 |---|---|---|---|
@@ -51,10 +63,12 @@ A gradient-boosted classifier reads the alarms per round (and the loss-flag coun
 | 0.004 | 0.757 | 0.773 | 0.775 |
 | 0.005 | 0.597 | 0.614 | 0.530 |
 
-The router does not beat a single threshold. BP's own convergence check is already a good router, and fast BP was never wrong when it converged. Learned routing cannot save time here, because it can only skip about 30–100 ms of BP on shots that then need seconds of relay-BP.
+The router does not beat a single threshold. BP's own convergence check is already a good router: across all 14,166 test shots where fast BP converged, it was wrong on only 2 (both at p = 0.005).
+
+**Upper bound for any router** (from the clean timing cache): even a *perfect* router, which skips BP exactly on the shots where it won't converge, would cut the hybrid's mean time by only 16.5% at p = 0.003, 7.8% at p = 0.004 and 3.7% at p = 0.005. Routing on convergence has little to gain. Learning would be better spent elsewhere, for example on per-shot priors.
 
 ## Where it works and where it falls short
-- **Works:** erasure flags give large accuracy gains on the Gross code. The simple hybrid keeps relay-BP accuracy and is ~1.7× faster on average at low noise (p = 0.003).
+- **Works:** using erasure flags gives large, statistically significant accuracy gains on the Gross code (BP-OSD). The simple hybrid keeps relay-BP accuracy and is ~1.7× faster on average at low noise (p = 0.003).
 - **Falls short:**
   - The slowest 1% of shots do not get faster.
   - There is no speedup at p = 0.005.
