@@ -1,3 +1,5 @@
+> **Historical planning document.** Written before the experiments; some plans here were changed by the results. For how to reproduce the results, see `challenge-1-ml-decoder-kit/RUN.md` and `README.md`.
+
 # Copy-paste prompts, one per computer
 
 Each person pastes their block into Claude (Claude Code on their laptop, or any Claude that can run commands), or runs the commands themselves.

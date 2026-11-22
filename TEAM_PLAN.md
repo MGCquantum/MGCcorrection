@@ -1,3 +1,5 @@
+> **Historical planning document.** Written before the experiments; some plans here were changed by the results. For how to reproduce the results, see `challenge-1-ml-decoder-kit/RUN.md` and `README.md`.
+
 # Team plan: who does what, step by step
 
 Five computers, one job each. p = 0.003 is the slowest job (rare failures need many shots), so it gets two computers. Agastya runs the analysis on any computer; it takes seconds.

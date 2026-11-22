@@ -39,6 +39,13 @@ for f in 0 0.25 0.5 0.75; do
       --decoders bposd bposd_flags --workers 4 --out "results_reproduced/erase_${b}_p0.004_f${f}.npz"
   done
 done
+for job in "0.004 32" "0.004 33" "0.005 31"; do
+  set -- $job
+  for b in X Z; do
+    .venv/bin/python run_job.py --basis "$b" --p "$1" --f 0.5 --shots 10000 --seed "$2" \
+      --decoders relay relay_flags --out "results_reproduced/erase4_${b}_p$1_f0.5_s$2.npz"
+  done
+done
 .venv/bin/python analyze.py --dir results_reproduced
 .venv/bin/python audit_submission.py --dir results_reproduced --out results_reproduced/audit.json
 ```

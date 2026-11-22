@@ -1,6 +1,6 @@
 """Presentation figures from the saved results (seconds to run).
 
-  python make_figures.py      ->  figures/erasure.png, figures/speed.png
+  python make_figures.py      ->  figures/erasure.png, figures/relay_flags.png, figures/speed.png
 """
 import csv
 import os
@@ -47,6 +47,32 @@ ax.legend()
 ax.grid(alpha=0.3, which="both")
 fig.tight_layout()
 fig.savefig("figures/erasure.png", dpi=200)
+
+relay = [r for r in main if r["experiment"] == "erasure_relay"]
+if relay:
+    ps = sorted({r["p"] for r in relay})
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(10, 4.2))
+    width = 0.35
+    for i, (name, label, color) in enumerate([("relay", "relay-BP ignores loss flags", "#888780"),
+                                               ("relay_flags", "relay-BP uses loss flags", "#D85A30")]):
+        rs = [next(r for r in relay if r["p"] == p and r["decoder"] == name) for p in ps]
+        x = [j + (i - 0.5) * width for j in range(len(ps))]
+        pts = [point(r) for r in rs]
+        a1.bar(x, [p[0] for p in pts], width, yerr=[[p[1] for p in pts], [p[2] for p in pts]], capsize=4,
+               color=color, label=label, hatch=None)
+        for xi, r, p in zip(x, rs, pts):
+            a1.annotate(f"{int(r['failed_pairs'])}/{int(r['pairs'])}" + (" (bound)" if p[3] else ""), (xi, p[0] + p[2]),
+                        textcoords="offset points", xytext=(0, 4), ha="center", fontsize=8)
+        a2.bar(x, [r["mean_ms"] for r in rs], width, color=color, label=f"{label}: mean")
+        a2.scatter(x, [r["p99_ms"] for r in rs], marker="_", s=400, color="black", zorder=5,
+                   label="slowest 1%" if i == 0 else None)
+    for a in (a1, a2):
+        a.set_xticks(range(len(ps)), [f"p = {p:g}" for p in ps])
+    a1.set(yscale="log", ylabel="Logical error rate per cycle", title="Accuracy (same shots, 50% of noise flagged)")
+    a2.set(yscale="log", ylabel="Decode time per X+Z pair (ms)", title="Speed")
+    a1.legend(fontsize=8); a2.legend(fontsize=8)
+    fig.tight_layout()
+    fig.savefig("figures/relay_flags.png", dpi=200)
 
 def plot_timing(dirname, filename, title):
     timing = [r for r in rows(f"{dirname}/results.csv") if r["experiment"] == "sweep"]

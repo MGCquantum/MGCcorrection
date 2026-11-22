@@ -1,7 +1,7 @@
 # Pitch notes (not part of the code spec)
 
 ## Pitch cheat sheet
-**Claim:** "Neutral atoms can convert some errors into flagged erasures. On the Gross code, decoding the same shots with the flags gave 3 failures instead of 22 (about 7× fewer, p < 0.0001) when half the noise was flagged. The cost is about 6.5× more decode time. We also asked where learning belongs in a hierarchical decoder: our learned convergence router did not beat the simple rule on these data. An oracle that knows BP convergence would save under 17% of the rule hybrid's mean time in the historical timing cache; this does not rule out other learned decoders."
+**Claim:** "Infleqtion's atoms announce when they are lost. We feed those flags to relay-BP, the strongest decoder in the kit. With half the noise flagged, on the same simulated shots, failures drop from 41 to 2 (p = 0.004, 20,000 pairs) and from 138 to 6 (p = 0.005), and decoding gets 2–5× faster on average and 6–11× faster on the slowest 1%. Flags are idealized: instant and exact. Our learned convergence router did not beat a simple rule; we report that honestly."
 
 **Order:** (1) problem: atoms flag some failures; (2) erasure result: the headline; (3) speed and the router finding; (4) limits and next steps.
 

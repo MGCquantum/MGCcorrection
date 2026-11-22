@@ -63,18 +63,43 @@ All six nonzero-erasure X/Z runs were regenerated with both decoders together;
 training seeds, test seeds and shot counts were preserved. The no-erasure sweep
 is unaffected. Prior results remain available in Git history, not as current claims.
 
-Corrected paired results:
+Corrected paired results (BP-OSD; X shot k paired with a fixed random Z shot, see below):
 
 | Erasure fraction | Pairs | Flags hidden failures | Flags used failures | Exact paired p-value |
 |---|---:|---:|---:|---:|
 | 0% | 1,000 | 50 | 50 | 1 |
 | 25% | 1,000 | 17 | 8 | 0.0784 |
-| 50% | 2,000 | 22 | 3 | 3.81e-6 |
+| 50% | 2,000 | 23 | 3 | 1.9e-6 |
 | 75% | 2,000 | 10 | 0 | 0.00195 |
 
-At 50%, the observed failure-count ratio is 7.3x, with about 6.5x more decode time.
+At 50%, the observed failure-count ratio is about 7.7x, with about 6.5x more decode time.
 At 25%, improvement is not statistically established. Zero failures at 75% is an
 upper-bound result, not zero underlying error probability. See README for intervals.
+
+## Independent review fixes (2026-11-21)
+
+An outside review of revision ac4c133 found, and this revision fixes:
+
+- **Correlated X/Z pairs.** X and Z runs with one seed get the same Stim random stream
+  (syndrome-weight correlation about 0.5; at p=0.005, 15 shared relay failures where about
+  3 are expected). Each X shot is now paired with a fixed random derangement of the Z shots
+  (`analyze.z_partner`), making a pair's two halves independent as in the kit. All decoders
+  share the same pairs. Sweep counts moved toward the kit references (relay p=0.005:
+  145 -> 158 of 2,000, rate 6.8e-3 vs kit 6.9e-3).
+- **relay_flags prior folding** now combines identical effects by parity, (1 - prod(1-2q))/2,
+  keeping exact 0.5. All relay-flags results were regenerated after this fix.
+- **Analysis guards:** X/Z shapes must match (no broadcasting); stored basis/p/f/seed must match
+  file names; `bp_flags` and `relay_flags` are analyzed; `erase4_*` relay-flags files are
+  analyzed and audited.
+- Not changed: `demo.py` prints WRONG without failing, because a correct decoder can fail on
+  a noisy shot; pass/fail decoding checks live in the tests.
+
+## Relay-BP with loss flags
+
+| p | Pairs | Flags ignored failures | Flags used failures | Only ignored / only used | Exact paired p-value | Mean ms ignored -> used |
+|---|---:|---:|---:|---:|---:|---:|
+| 0.004 | 20,000 | 41 | 2 | 41 / 2 | 2.2e-10 | 176 -> 80 |
+| 0.005 | 10,000 | 138 | 6 | 134 / 2 | 2.1e-37 | 581 -> 119 |
 
 ## Remaining limitations and optional work
 

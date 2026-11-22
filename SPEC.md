@@ -1,3 +1,5 @@
+> **Historical planning document.** Written before the experiments; some plans here were changed by the results. For how to reproduce the results, see `challenge-1-ml-decoder-kit/RUN.md` and `README.md`.
+
 # Historical planning spec (superseded)
 
 This document records hypotheses and planned filenames, not the final implementation or acceptance criteria. See [AUDIT.md](AUDIT.md), [README.md](README.md), and [RUN.md](challenge-1-ml-decoder-kit/RUN.md) for current behavior. In particular, both baselines are now required and available at all three p values; flag-blind error rates can fall with erasure conversion; ML superiority is not established.
