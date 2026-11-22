@@ -5,11 +5,13 @@ Legacy caches predate full sample hashes; report that limitation instead of trea
 per-round weights as a cryptographic proof of shot identity.
 """
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
 import numpy as np
 from threadpoolctl import threadpool_limits
+from scipy.stats import binomtest
 
 from analyze import load, paired, policies, train_router
 
@@ -36,7 +38,9 @@ def validate_cache(d, path):
 def audit(dirname):
     dirname = Path(dirname)
     report = {'official_revision': '31ceda8be4949a308d95ec9bc7c32029c80d90d2',
-              'checks': [], 'warnings': [], 'sweep': []}
+              'checks': [], 'warnings': [], 'sweep': [], 'erasure': [],
+              'input_sha256': {str(p): hashlib.sha256(p.read_bytes()).hexdigest()
+                               for p in sorted(dirname.glob('*.npz'))}}
     def check(label, passed):
         report['checks'].append({'check': label, 'pass': bool(passed)})
     for p in REFERENCE:
@@ -82,6 +86,14 @@ def audit(dirname):
             arrays.append(d)
         blind = arrays[0]['fail_bposd'] | arrays[1]['fail_bposd']
         aware = arrays[0]['fail_bposd_flags'] | arrays[1]['fail_bposd_flags']
+        only_blind = int((blind & ~aware).sum())
+        only_aware = int((aware & ~blind).sum())
+        discordant = only_blind + only_aware
+        report['erasure'].append(dict(f=f, pairs=len(blind), failed_blind=int(blind.sum()),
+            failed_aware=int(aware.sum()), only_blind=only_blind, only_aware=only_aware,
+            mcnemar_p=binomtest(only_blind, discordant, .5).pvalue if discordant else 1.,
+            blind_mean_ms=float((arrays[0]['time_bposd']+arrays[1]['time_bposd']).mean()*1000),
+            aware_mean_ms=float((arrays[0]['time_bposd_flags']+arrays[1]['time_bposd_flags']).mean()*1000)))
         check(f'f={f}: flags help or tie on saved pairs', aware.sum() <= blind.sum())
         if f == 0:
             check('f=0: flag-hidden and flag-used answers have identical failures', np.array_equal(blind, aware))
