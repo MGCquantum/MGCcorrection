@@ -111,3 +111,30 @@ for p in 0.003 0.004 0.005; do for b in X Z; do python run_job.py --basis $b --p
 Then: python analyze.py --dir results_timing   (use only its mean/p99 times; its error rates are too noisy with 300 shots)
 git pull && git add -f results_timing/*.npz && git commit -m "results: clean timing" && git push
 ```
+
+## Missing BP-OSD baselines (any two free laptops, about 10–20 min each)
+The sponsor wants BP-OSD on the same test shots at every error rate. Same seed and shot count means the same shots. `analyze.py` merges these files in automatically.
+
+**Laptop A (p = 0.003):**
+```text
+cd ~/MGCcorrection/challenge-1-ml-decoder-kit && git pull && source .venv/bin/activate. Do not edit code.
+Two terminals at once (caffeinate -i on a Mac):
+Terminal 1: python run_job.py --basis X --p 0.003 --shots 5000 --seed 2 --decoders bposd --out results/extra_X_p0.003.npz
+Terminal 2: python run_job.py --basis Z --p 0.003 --shots 5000 --seed 2 --decoders bposd --out results/extra_Z_p0.003.npz
+Then: git pull && git add -f results/extra_*.npz && git commit -m "results: bposd p0.003" && git push
+```
+**Laptop B (p = 0.005):**
+```text
+cd ~/MGCcorrection/challenge-1-ml-decoder-kit && git pull && source .venv/bin/activate. Do not edit code.
+Two terminals at once (caffeinate -i on a Mac):
+Terminal 1: python run_job.py --basis X --p 0.005 --shots 2000 --seed 2 --decoders bposd --out results/extra_X_p0.005.npz
+Terminal 2: python run_job.py --basis Z --p 0.005 --shots 2000 --seed 2 --decoders bposd --out results/extra_Z_p0.005.npz
+Then: git pull && git add -f results/extra_*.npz && git commit -m "results: bposd p0.005" && git push
+```
+
+## Live demo (presenter's laptop, during the pitch)
+```bash
+cd ~/MGCcorrection/challenge-1-ml-decoder-kit && git pull && source .venv/bin/activate
+python demo.py --p 0.004 --basis X        # one fresh shot through the router and decoder, plus resources
+python analyze.py --dir results_timing --train-dir results   # clean timing table incl. the ML hybrid
+```

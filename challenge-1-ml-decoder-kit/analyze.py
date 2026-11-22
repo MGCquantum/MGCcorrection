@@ -26,6 +26,7 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 from scipy.stats import beta
 
 CYCLES = 12
+TRAIN_DIR = None   # set by --train-dir; defaults to --dir
 
 
 def per_cycle_ci(failed, cycles=None):
@@ -39,7 +40,18 @@ def per_cycle_ci(failed, cycles=None):
 
 
 def load(path):
-    return dict(np.load(path))
+    """Load a cached result file and merge any extra decoders run later on the same shots
+    (files named extra_<basis>_p<p>*.npz next to test_<basis>_p<p>.npz, same seed and shot count)."""
+    d = dict(np.load(path))
+    base = os.path.basename(path)
+    if base.startswith("test_"):
+        for extra in glob.glob(os.path.join(os.path.dirname(path), base.replace("test_", "extra_").replace(".npz", "*.npz"))):
+            e = dict(np.load(extra))
+            if int(e["seed"]) != int(d["seed"]) or int(e["shots"]) != int(d["shots"]):
+                print(f"skipping {extra}: seed or shot count differs from {base}")
+                continue
+            d.update({k: v for k, v in e.items() if k.split("_")[0] in ("fail", "time", "conv")})
+    return d
 
 
 def features(d):
@@ -47,6 +59,7 @@ def features(d):
 
 
 def train_router(dirname, p):
+    dirname = TRAIN_DIR or dirname
     """ML router and the simple baseline (one threshold on total alarm count), both fit on the train seed only."""
     files = [f"{dirname}/train_{b}_p{p}.npz" for b in "XZ"]
     if not all(os.path.exists(f) for f in files):
@@ -99,7 +112,10 @@ def paired(px, pz, name):
 def main():
     a = argparse.ArgumentParser()
     a.add_argument("--dir", default="results")
+    a.add_argument("--train-dir", help="where train_*.npz live (default: --dir), e.g. results for results_timing")
     args = a.parse_args()
+    global TRAIN_DIR
+    TRAIN_DIR = args.train_dir
     rows = []
     ps = sorted({re.search(r"_p([\d.]+)\.npz", f).group(1) for f in glob.glob(f"{args.dir}/test_X_p*.npz")})
     for p in ps:
