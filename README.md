@@ -48,8 +48,8 @@ Both hybrids have the same observed failed-pair count as relay-BP at all three t
 
 | p | relay-BP mean / slowest 1% | Hybrid (rule) mean / slowest 1% | Hybrid (ML) mean | Shots escalated (rule) |
 |---|---|---|---|---|
-| 0.003 | 97 / 672 ms | **58** / 713 ms | 61 ms | 5% |
-| 0.004 | 482 / 7,054 ms | 422 / 7,099 ms | 425 ms | 23% |
+| 0.003 | 97 / 672 ms | **58** / 713 ms | 62 ms | 5% |
+| 0.004 | 482 / 7,054 ms | 422 / 7,099 ms | 427 ms | 23% |
 | 0.005 | 2,155 / 13,455 ms | 2,165 / 13,590 ms | 2,164 ms | 56% |
 
 ![speed](challenge-1-ml-decoder-kit/figures/speed.png)
@@ -85,28 +85,29 @@ The router does not beat a single threshold. BP's own convergence check is alrea
 - **Scoring:** the kit's rule. An X/Z shot pair fails if either basis fails, and per-cycle rate = 1 − (1 − P)^(1/12).
 
 ## Resources
-From `python demo.py` on a 2-core Xeon at 2.1 GHz (rerun it on the presenting laptop):
+From the audited local `python demo.py` runs on an Apple M5 (10 logical cores, numerical libraries limited to one thread):
 - Decoding problem: 936 checks × 8,784 error mechanisms.
-- Router model: ~0.7 MB.
-- Peak memory: ~180 MB for one decoding process.
-- Decoder setup: ~0.02 s.
+- Router model: 718 kB.
+- Peak memory: 191–196 MB for the whole demo process, including imports and router training.
+- Decoder setup: ~0.02 s. Both fresh X/Z seed-99 demos decoded correctly; a demo is a functional check, not an accuracy benchmark.
 
-The flag-aware matrix is larger (936 × ~32,000 columns). Benchmarks used 7–8 worker processes per laptop on 8–12-core laptops. The timing table used 1 thread.
+The flag-aware matrix is larger (936 × ~32,000 columns). Benchmarks used 7–8 worker processes per laptop on 8–12-core laptops. The historical timing table used 1 thread and lacks BP-OSD. The new local timing sweep includes BP-OSD, relay-BP and both hybrids on matching shots; it is explicitly labeled as a concurrent-load run.
 
 ## Reproduce
 ```bash
 cd challenge-1-ml-decoder-kit
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt scikit-learn matplotlib      # relay-bp needs Rust (rustup.rs)
+pip install -r requirements-dev.txt      # relay-bp needs Rust (rustup.rs)
 python run_job.py --basis X --p 0.004 --shots 2000 --seed 2 --decoders bp relay bposd --out results/test_X_p0.004.npz
-# ...every job is listed in RUN.md and PROMPTS.md
+# Full fresh-data commands are in challenge-1-ml-decoder-kit/RUN.md
+bash scripts/verify_submission.sh                            # tests, audit, evaluation, demos
 python analyze.py --dir results                               # tables and results/results.png
 python analyze.py --dir results_timing --train-dir results    # clean timing table
 python make_figures.py                                        # figures/erasure.png, figures/speed.png
 python demo.py --p 0.004 --basis X                            # one fresh shot through router and decoder, plus resources
 ```
-- All saved results (`results/*.npz`) are in the repo, so `analyze.py` and `make_figures.py` reproduce every number without rerunning the decoders.
-- **Seeds are not portable across Stim builds:** the same seed can give different shots on another machine. That is why every comparison is made within one results file (all decoders on identical shots), and why `analyze.py` only merges extra decoder runs when the shots match.
+- Saved result caches are in the repo. `analyze.py` reproduces accuracy counts without rerunning the decoders; router timings are newly measured and naturally vary. See [RUN.md](challenge-1-ml-decoder-kit/RUN.md) for full regeneration commands and package versions.
+- **Seeds are not portable across Stim builds:** the same seed can give different shots on another machine. That is why every comparison is made within one results file (all decoders on identical shots), and why `analyze.py` checks metadata, per-round weights and flags before merging extras. Legacy caches lack full sample fingerprints, so this compatibility check is not a proof of shot identity. New runs also record a detector/observable SHA-256 and runtime provenance.
 
 ## Files
 | File | What it does |
@@ -115,5 +116,7 @@ python demo.py --p 0.004 --basis X                            # one fresh shot t
 | `run_job.py` | Decodes a batch of shots once with the chosen decoders and caches every answer, time and convergence flag |
 | `analyze.py` | Trains the router, builds the hybrids from the cache, reports exact CIs, writes tables and plots |
 | `make_figures.py` | Presentation figures |
-| `demo.py` | Live single-shot demo and resource report |
-| `SPEC.md`, `PITCH.md`, `TEAM_PLAN.md`, `PROMPTS.md`, `RUN.md` | Plan, pitch notes, and how the team split the compute |
+| `demo.py`, `hybrid.py` | Shared trained router and live decoding interface; resource report |
+| `audit_submission.py`, `scripts/verify_submission.sh` | Repeatable data checks, tests, evaluation and live demos |
+| `AUDIT.md`, `PITCH.md`, `challenge-1-ml-decoder-kit/RUN.md` | Current evidence, presentation, and reproduction guide |
+| `SPEC.md`, `TEAM_PLAN.md`, `PROMPTS.md` | Historical planning notes; superseded by the audit |

@@ -1,4 +1,8 @@
-# Spec v2: erasure-aware hybrid decoder for the Gross code
+# Historical planning spec (superseded)
+
+This document records hypotheses and planned filenames, not the final implementation or acceptance criteria. See [AUDIT.md](AUDIT.md), [README.md](README.md), and [RUN.md](challenge-1-ml-decoder-kit/RUN.md) for current behavior. In particular, both baselines are now required and available at all three p values; flag-blind error rates can fall with erasure conversion; ML superiority is not established.
+
+## Original spec v2: erasure-aware hybrid decoder for the Gross code
 
 **Goal:** measure (a) how much heralded-erasure flags reduce the logical error rate on the Gross code, and (b) whether an ML difficulty router keeps relay-BP accuracy at lower mean decode time.
 

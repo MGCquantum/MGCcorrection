@@ -48,19 +48,25 @@ ax.grid(alpha=0.3, which="both")
 fig.tight_layout()
 fig.savefig("figures/erasure.png", dpi=200)
 
-timing = [r for r in rows("results_timing/results.csv") if r["experiment"] == "sweep"]
-fig, ax = plt.subplots(figsize=(6.5, 4.5))
-for name, label, color in [("relay", "relay-BP (baseline)", "#185FA5"), ("hybrid_rule", "Hybrid: fast BP, then relay-BP", "#1D9E75"),
-                           ("hybrid_ml", "Hybrid with ML router", "#7F77DD")]:
-    rs = sorted([r for r in timing if r["decoder"] == name], key=lambda r: r["p"])
-    if rs:
-        ax.plot([r["p"] for r in rs], [r["mean_ms"] for r in rs], marker="o", lw=2, color=color, label=f"{label}, mean")
-        ax.plot([r["p"] for r in rs], [r["p99_ms"] for r in rs], marker="x", ls="--", color=color, alpha=0.6,
-                label=f"{label}, slowest 1%")
-ax.set(yscale="log", xlabel="Physical error rate p", ylabel="Decode time per X+Z shot pair (ms)",
-       title="Decode time on one idle laptop (1 thread, 300 shots)", xticks=[0.003, 0.004, 0.005])
-ax.legend(fontsize=7)
-ax.grid(alpha=0.3, which="both")
-fig.tight_layout()
-fig.savefig("figures/speed.png", dpi=200)
-print("saved figures/erasure.png and figures/speed.png")
+def plot_timing(dirname, filename, title):
+    timing = [r for r in rows(f"{dirname}/results.csv") if r["experiment"] == "sweep"]
+    fig, ax = plt.subplots(figsize=(6.5, 4.5))
+    for name, label, color in [("bposd", "BP-OSD (baseline)", "#A65E2E"), ("relay", "relay-BP (baseline)", "#185FA5"), ("hybrid_rule", "Hybrid: fast BP, then relay-BP", "#1D9E75"),
+                               ("hybrid_ml", "Hybrid with ML router", "#7F77DD")]:
+        rs = sorted([r for r in timing if r["decoder"] == name], key=lambda r: r["p"])
+        if rs:
+            ax.plot([r["p"] for r in rs], [r["mean_ms"] for r in rs], marker="o", lw=2, color=color, label=f"{label}, mean")
+            ax.plot([r["p"] for r in rs], [r["p99_ms"] for r in rs], marker="x", ls="--", color=color, alpha=0.6,
+                    label=f"{label}, slowest 1%")
+    ax.set(yscale="log", xlabel="Physical error rate p", ylabel="Decode time per X+Z shot pair (ms)",
+           title=title, xticks=[0.003, 0.004, 0.005])
+    ax.legend(fontsize=7)
+    ax.grid(alpha=0.3, which="both")
+    fig.tight_layout()
+    fig.savefig(filename, dpi=200)
+    plt.close(fig)
+
+plot_timing("results_timing", "figures/speed.png", "Historical idle laptop (1 thread, 300 pairs)")
+if os.path.exists("results_local_timing/results.csv"):
+    plot_timing("results_local_timing", "figures/speed_local.png", "Local concurrent load (1 worker, 300 pairs)")
+print("saved erasure and available timing figures")
