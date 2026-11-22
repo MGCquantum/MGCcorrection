@@ -12,8 +12,8 @@ same X/Z pairs (analyze.z_partner), with the conventions of aegis.policy. Rows:
 
 Writes experiments/reports/v2_evaluation.json.
 """
+import csv
 import json
-
 
 from .collect import RECORDS, load
 from .policy import compare, pair_failures, pair_seconds, summarize
@@ -87,7 +87,26 @@ def main():
     if selection.exists():
         report["selection"] = json.loads(selection.read_text())
     (REPORTS / "v2_evaluation.json").write_text(json.dumps(report, indent=1, default=float))
-    print("\nwrote", REPORTS / "v2_evaluation.json")
+    write_csv(report)
+    print("\nwrote", REPORTS / "v2_evaluation.json", "and", REPORTS / "v2_summary.csv")
+
+
+def write_csv(report):
+    """One row per (p, decoder): error rate from the test shots, latency from the single-worker timing shots."""
+    header = ["p", "decoder", "test_pairs", "failed_pairs", "ler_per_cycle", "ler_ci95_low", "ler_ci95_high",
+              "timing_pairs", "ms_mean", "ms_mean_ci95_low", "ms_mean_ci95_high", "ms_median", "ms_p95", "ms_p99", "tier2_fraction"]
+    with open(REPORTS / "v2_summary.csv", "w", newline="") as handle:
+        out = csv.writer(handle)
+        out.writerow(header)
+        for p, sweep in report["sweep"].items():
+            timing = report["timing"].get(p, {"decoders": {}})["decoders"]
+            for name, d in sweep["decoders"].items():
+                t = timing.get(name)
+                lat = [t["pairs"], *(round(t[k], 3) for k in ("ms_mean",)), *(round(v, 3) for v in t["ms_mean_ci95"]),
+                       *(round(t[k], 3) for k in ("ms_median", "ms_p95", "ms_p99"))] if t else [""] * 7
+                out.writerow([p, name.replace(" (online)", ""), d["pairs"], d["failures_pair"], f"{d['ler']:.4e}",
+                              f"{d['ler_ci95'][0]:.4e}", f"{d['ler_ci95'][1]:.4e}", *lat,
+                              f"{d['escalated_fraction']:.4f}" if "escalated_fraction" in d else ""])
 
 
 if __name__ == "__main__":

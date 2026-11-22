@@ -352,3 +352,13 @@ def test_compiled_risk_equals_scikit_learn_exactly():
     nan = F[0].copy()
     nan[model.columns[0]] = np.nan                      # missing values follow scikit-learn's learned direction
     assert model.risk(nan) == float(model.risks(nan[None, :])[0])
+
+
+def test_demo_runs_on_fresh_shots(monkeypatch, capsys):
+    """python -m aegis.demo decodes a few seed-99 shots with the frozen v2 model and relay-BP."""
+    import sys
+    from aegis import demo
+    monkeypatch.setattr(sys, "argv", ["demo", "--p", "0.003", "--shots", "3"])
+    demo.main()
+    out = capsys.readouterr().out
+    assert "QEC-Aegis v2 (speed)" in out and "3 shots: QEC-Aegis" in out

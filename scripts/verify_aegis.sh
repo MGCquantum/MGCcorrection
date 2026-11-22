@@ -18,10 +18,13 @@ mkdir -p experiments/logs
 "$PY" -m pytest | tee experiments/logs/aegis_tests.log
 shasum -a 256 -c <("$PY" -c "import json; d=json.load(open('experiments/reports/frozen_models.json'));
 print('\n'.join(f'{h}  models/{f}' for f, h in d['models'].items()))")
+shasum -a 256 -c <("$PY" -c "import json; d=json.load(open('experiments/reports/v2_frozen.json'));
+print('\n'.join(f'{h}  {f}' for f, h in d['models'].items()))")
 "$PY" -m aegis.reproduce --decode "${DECODE:-0}" | tee experiments/logs/reproduce.log
 "$PY" -m aegis.recheck
 if [ "${RESOURCES:-0}" = 1 ]; then "$PY" -m aegis.resources; fi
 "$PY" -m aegis.evaluate > experiments/logs/evaluate.log
+"$PY" -m aegis.evaluate_v2 > experiments/logs/evaluate_v2.log
 "$PY" -m aegis.report
 "$PY" -m aegis.figures
 git --no-pager diff --stat -- experiments/reports docs || true

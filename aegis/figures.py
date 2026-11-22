@@ -12,6 +12,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
+from matplotlib.ticker import FuncFormatter, LogLocator, NullFormatter  # noqa: E402
 
 from .paths import ROOT  # noqa: E402
 
@@ -195,6 +196,82 @@ def calibration():
     save(fig, "calibration.png")
 
 
+# QEC-Aegis v2 on fresh shots (experiments/reports/v2_evaluation.json). v1 keeps the Aegis green.
+V2_STYLE = {
+    "bposd": STYLE["bposd"],
+    "relay": STYLE["relay"],
+    "aegis v1 (online)": ("QEC-Aegis v1", "#1baf7a", "D"),
+    "aegis v2 speed (online)": ("QEC-Aegis v2, speed", "#6250d6", "^"),
+    "aegis v2 accuracy (online)": ("QEC-Aegis v2, accuracy", "#c8336f", "v"),
+}
+
+
+def v2_ler_vs_p(v2):
+    ps = sorted(v2["sweep"], key=float)
+    fig, ax = plt.subplots(figsize=(6.8, 4.4))
+    shifts = np.linspace(-0.00008, 0.00008, len(V2_STYLE))   # keep overlapping intervals apart
+    for shift, (key, (label, color, marker)) in zip(shifts, V2_STYLE.items()):
+        data = [v2["sweep"][p]["decoders"][key] for p in ps]
+        x = np.array([float(p) for p in ps]) + shift
+        y = np.array([d["ler"] for d in data])
+        low, high = np.array([d["ler_ci95"] for d in data]).T
+        ax.errorbar(x, y, [y - low, high - y], color=color, marker=marker, ms=7, lw=2, capsize=3, label=label,
+                    markeredgecolor=SURFACE, markeredgewidth=1)
+    ax.set(yscale="log", xlabel="physical error rate p", ylabel="logical error rate per cycle", xticks=[float(p) for p in ps],
+           title="Logical error rate on fresh test shots (seed 7)")
+    pairs = ", ".join(f"{v2['sweep'][p]['decoders']['relay']['pairs']:,} at {p}" for p in ps)
+    ax.text(0, -0.27, f"Bars: exact 95% Clopper–Pearson intervals; markers offset sideways for readability.\n"
+            f"Independent X/Z pairs, the same shots for every decoder: {pairs}.", transform=ax.transAxes, fontsize=8, color=MUTED)
+    ax.legend(loc="upper left", fontsize=8)
+    save(fig, "v2_ler_vs_p.png")
+
+
+def v2_latency(v2):
+    ps = sorted(v2["timing"], key=float)
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
+    width = 0.8 / len(V2_STYLE)
+    for ax, field, title in [(axes[0], "ms_mean", "Mean decode time per shot pair"), (axes[1], "ms_p99", "99th percentile")]:
+        for i, (key, (label, color, _)) in enumerate(V2_STYLE.items()):
+            data = [v2["timing"][p]["decoders"][key] for p in ps]
+            values = np.array([d[field] for d in data])
+            x = np.arange(len(ps)) + (i - (len(V2_STYLE) - 1) / 2) * width
+            error = None
+            if field == "ms_mean":
+                low, high = np.array([d["ms_mean_ci95"] for d in data]).T
+                error = [values - low, high - values]
+            ax.bar(x, values, width * 0.9, color=color, label=label, yerr=error, capsize=2, error_kw={"lw": 1, "ecolor": INK})
+        ax.set(yscale="log", xticks=np.arange(len(ps)), xticklabels=[f"p = {p}" for p in ps], ylabel="milliseconds", title=title)
+        ax.grid(axis="x", visible=False)
+    axes[0].legend(loc="upper left", fontsize=8)
+    pairs = " / ".join(f"{v2['timing'][p]['decoders']['relay']['pairs']:,}" for p in ps)
+    fig.text(0.01, 0.005, f"Fresh timing shots (seed 8): one worker, mains power, nothing else running; {pairs} pairs. "
+             "Pair time = X decode + Z decode.\nMean: 95% bootstrap intervals. p99 rests on 5–20 shots.", fontsize=8, color=MUTED)
+    save(fig, "v2_latency.png")
+
+
+def v2_tradeoff(v2):
+    """Accuracy against speed at each p: LER from the test shots, mean time from the timing shots."""
+    ps = sorted(v2["sweep"], key=float)
+    fig, axes = plt.subplots(1, len(ps), figsize=(4.3 * len(ps), 4.1))
+    for ax, p in zip(axes, ps):
+        for key, (label, color, marker) in V2_STYLE.items():
+            d, t = v2["sweep"][p]["decoders"][key], v2["timing"][p]["decoders"][key]
+            low, high = d["ler_ci95"]
+            tlow, thigh = t["ms_mean_ci95"]
+            ax.errorbar(t["ms_mean"], d["ler"], yerr=[[d["ler"] - low], [high - d["ler"]]],
+                        xerr=[[t["ms_mean"] - tlow], [thigh - t["ms_mean"]]], color=color, marker=marker, ms=8, lw=1.2,
+                        capsize=2, label=label, markeredgecolor=SURFACE)
+        ax.set(xscale="log", yscale="log", xlabel="mean decode time per shot pair (ms)", title=f"p = {p}")
+        ax.xaxis.set_major_locator(LogLocator(subs=(1, 2, 5)))
+        ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
+        ax.xaxis.set_minor_formatter(NullFormatter())
+    axes[0].set_ylabel("logical error rate per cycle")
+    axes[-1].legend(fontsize=8, loc="upper right")
+    fig.text(0.01, 0.005, "Lower left is better. Error rate: fresh test shots (seed 7). Time: fresh single-worker timing shots (seed 8). "
+             "Bars: 95% intervals.", fontsize=8, color=MUTED)
+    save(fig, "v2_tradeoff.png")
+
+
 def main():
     report = json.loads((REPORTS / "evaluation.json").read_text())
     ler_vs_p(report)
@@ -203,6 +280,14 @@ def main():
     routing(report)
     loss(report)
     calibration()
+    v2_path = REPORTS / "v2_evaluation.json"
+    if v2_path.exists():
+        v2 = json.loads(v2_path.read_text())
+        if v2.get("sweep"):
+            v2_ler_vs_p(v2)
+        if v2.get("sweep") and v2.get("timing"):
+            v2_latency(v2)
+            v2_tradeoff(v2)
 
 
 if __name__ == "__main__":

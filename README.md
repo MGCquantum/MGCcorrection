@@ -4,6 +4,63 @@ Infleqtion Challenge 1 (ML-assisted QEC decoding), MidQWest 2026. See [AUDIT.md]
 
 **Question:** on neutral-atom hardware, some errors can be converted into *erasures* that come with a flag saying where they happened (idealized heralded erasure conversion; real atom loss is detected later, see limits). How much does a decoder gain on the [[144,12,12]] Gross code by using those flags, and can ML cut decoding time without losing accuracy?
 
+## Deliverables
+
+| Brief asks for | What we provide | Where |
+|---|---|---|
+| A working decoder | **QEC-Aegis**: a fast early-stopping relay-BP (tier 1), a calibrated gradient-boosted risk model that estimates whether tier 1's answer is wrong, and full relay-BP (tier 2) only on risky shots | [`aegis/decoder.py`](aegis/decoder.py), [`aegis/tiers.py`](aegis/tiers.py), [`aegis/model.py`](aegis/model.py); frozen models in [`models/`](models/) (v1) and [`models/v2/`](models/v2/) |
+| Code that generates training and test data | Stim sampling of the kit's Gross-code memory circuits, every decoder run on the same shots, per-shot records with features, times and outcomes | [`aegis/collect.py`](aegis/collect.py) (data), [`aegis/train.py`](aegis/train.py) (fit and calibrate), [`aegis/retune.py`](aegis/retune.py) (v2 operating points) |
+| A script that reproduces the evaluation | Tests, frozen-model hash checks, bit-for-bit record re-decoding, evaluation, report and figures in one command | [`scripts/verify_aegis.sh`](scripts/verify_aegis.sh), [`scripts/run_v2_fresh.sh`](scripts/run_v2_fresh.sh) |
+| Comparison with the baselines, with a plot | BP-OSD and relay-BP on identical shots and noise at p = 0.003, 0.004, 0.005: error rate, latency (mean, median, p95, p99) and resources | Plots below; full tables in [`docs/RESULTS.md`](docs/RESULTS.md); numbers in [`experiments/reports/v2_summary.csv`](experiments/reports/v2_summary.csv) |
+| A short presentation or demo | A live demo that decodes fresh shots with relay-BP and QEC-Aegis side by side, plus the summary below | `python -m aegis.demo` ([`aegis/demo.py`](aegis/demo.py)); talking points in [`PITCH.md`](PITCH.md) |
+
+### The approach in one paragraph
+Most shots on the Gross code are easy: a short relay-BP run finds an answer that explains every alarm. The hard part is the few shots where that answer *converges and is still logically wrong*, which convergence alone cannot detect. QEC-Aegis runs the cheap decoder on every shot, then a gradient-boosted model reads 28 features of that run (syndrome weight and its spread over rounds, BP iterations, posterior margins and uncertain bits, the weight of the answer, and whether a second decoding run disagrees) and outputs a calibrated probability that the answer is wrong. Only shots above a threshold go to full relay-BP. The model is trained on seed-1 shots, calibrated on seed-4 shots, and its threshold and second tier are chosen on seed-3 validation shots, before any test shot is decoded.
+
+### Results on fresh shots
+Every decoder decoded the same shots (seed 7 for error rates; 30,000, 10,000 and 5,000 independent X/Z pairs). Latency comes from separate single-worker timing shots (seed 8) on an Apple M5 laptop on mains power with nothing else running. Failed pairs, then mean time per X/Z pair:
+
+| p | BP-OSD | relay-BP | QEC-Aegis v1 | QEC-Aegis v2, speed | QEC-Aegis v2, accuracy |
+|---|---|---|---|---|---|
+| 0.003 | 184 · 52 ms | 32 · 36 ms | 41 · **8.0 ms** | 41 · 8.1 ms | 41 · 8.1 ms |
+| 0.004 | 511 · 119 ms | 93 · 139 ms | 103 · **84 ms** | 103 · 84 ms | 99 · 94 ms |
+| 0.005 | 1,196 · 212 ms | 407 · 484 ms | 367 · 397 ms | 399 · **325 ms** | **359** · 482 ms |
+
+- **Against relay-BP:** QEC-Aegis is 4.5×, 1.7× and 1.2–1.5× faster on average with no statistically significant loss of accuracy. At p = 0.005, v1 and v2 accuracy mode are significantly *more* accurate (LER ratio 0.90 and 0.88, McNemar p = 0.01 and 0.002).
+- **Against BP-OSD:** 3–5× fewer failed pairs at every p (McNemar p < 1e-26). v1 and v2 speed mode are also faster on average at p = 0.003 and 0.004 (6.5× and 1.4×).
+- **Where it falls short:** the slowest 1% of shots are slower than relay-BP, because escalated shots pay for both tiers. At p = 0.005, BP-OSD is still faster on average, at 3× the failure rate. The risk model misses some wrong answers; the demo below shows one. Details and every limitation are under [Where it works and where it falls short](#where-it-works-and-where-it-falls-short).
+
+![Logical error rate per cycle against p for BP-OSD, relay-BP and QEC-Aegis on fresh test shots](docs/figures/v2_ler_vs_p.png)
+![Mean and 99th-percentile decode time per X/Z pair, single worker](docs/figures/v2_latency.png)
+![Error rate against mean decode time at each p; lower left is better](docs/figures/v2_tradeoff.png)
+
+### Data
+- **Per-shot records** (committed, 100 MB): [`experiments/records/`](experiments/records/). One `.npz` per split, basis, p and erasure fraction, with every decoder's outcome, time, iterations, tier-2 decision and tier-1 features. `python -c "from aegis.collect import load; r = load('experiments/records/test2_X_p0.004.npz'); print(r['relay']['failed'].sum())"`.
+- **Evaluation outputs:** [`experiments/reports/v2_evaluation.json`](experiments/reports/v2_evaluation.json) (all rows and paired comparisons) and [`v2_summary.csv`](experiments/reports/v2_summary.csv) (one row per p and decoder). Provenance of every run (command, machine, package versions, wall and CPU time) is in [`experiments/manifest.json`](experiments/manifest.json).
+- **Seeds:** train 1, test 2, validation 3, calibration 4, timing 5, resources 6, fresh test 7, fresh timing 8, demo 99. Training shots (60,000 / 40,000 / 30,000 at p = 0.003 / 0.004 / 0.005) are regenerated, not committed:
+  ```bash
+  python -m aegis.collect --split train --p 0.003 --shots 60000 --tiers fast relay1      # also 0.004: 40000, 0.005: 30000
+  python -m aegis.collect --split calib --p 0.003 --shots 10000 --tiers fast relay1      # each p
+  python -m aegis.train                                                                  # fit, calibrate, choose v1
+  python -m aegis.retune                                                                 # v2 operating points (validation only)
+  scripts/run_v2_fresh.sh all                                                            # fresh test and timing shots, evaluation
+  python -m aegis.report && python -m aegis.figures                                      # docs/RESULTS.md and docs/figures/
+  ```
+  Refitting replaces the frozen models, whose hashes are checked against [`frozen_models.json`](experiments/reports/frozen_models.json) and [`v2_frozen.json`](experiments/reports/v2_frozen.json).
+
+### Demo
+```bash
+python -m aegis.demo --p 0.005 --shots 15        # fresh seed-99 shots, v2 speed mode against relay-BP
+```
+```
+shot alarms       tier 1     risk tier 2  Aegis ms relay-BP ms  correct (Aegis / relay-BP)
+   1    174    converged  6.6e-05     no       2.5        25.7  yes / yes
+   8    165    converged  6.3e-02     no      73.7       157.0  yes / yes
+  14    175    converged  1.5e-01     no      66.9       215.3  NO / yes
+15 shots: QEC-Aegis 14 correct, mean 100.9 ms; relay-BP 15 correct, mean 197.5 ms (2.0x).
+```
+Shot 14 is the failure mode in miniature: tier 1 converged to a wrong answer, and the model gave it a risk of 0.15, below the 0.288 threshold chosen on validation shots, so it was not escalated.
+
 ## Results
 
 ### 1. Using erasure flags (headline)
@@ -198,4 +255,5 @@ python -m aegis.collect --split test --basis X --p 0.004 --shots 10000 --tiers b
 | `docs/RESULTS.md`, `docs/figures/` | Generated by `python -m aegis.report` and `python -m aegis.figures`; no number typed by hand |
 | `scripts/verify_aegis.sh` | Kit and Aegis tests, frozen-model hashes, record reproduction, re-check, evaluation, report and figures |
 | `aegis/retune.py`, `models/v2/`, `experiments/reports/v2_selection.json`, `v2_frozen.json` | QEC-Aegis v2: per-setting operating points chosen on validation shots, and their frozen hashes |
-| `scripts/run_v2_fresh.sh`, `aegis/evaluate_v2.py`, `experiments/reports/v2_evaluation.json` | Fresh test (seed 7) and timing (seed 8) decoding of baselines, v1 and v2, and their evaluation |
+| `scripts/run_v2_fresh.sh`, `aegis/evaluate_v2.py`, `experiments/reports/v2_evaluation.json`, `v2_summary.csv` | Fresh test (seed 7) and timing (seed 8) decoding of baselines, v1 and v2, and their evaluation |
+| `aegis/demo.py` | Live demo: fresh seed-99 shots through relay-BP and QEC-Aegis v2, shot by shot |
