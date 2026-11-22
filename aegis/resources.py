@@ -33,6 +33,24 @@ def peak_mb():
     return rss / 2**20 if sys.platform == "darwin" else rss / 2**10   # bytes on macOS, KiB on Linux
 
 
+def machine():
+    """Where the numbers were measured: chip, cores, memory, OS and Python."""
+    def sysctl(key):
+        try:
+            return subprocess.run(["sysctl", "-n", key], capture_output=True, text=True, check=True).stdout.strip()
+        except (OSError, subprocess.CalledProcessError):
+            return None
+    chip = sysctl("machdep.cpu.brand_string") if sys.platform == "darwin" else platform.processor() or None
+    ram = sysctl("hw.memsize") if sys.platform == "darwin" else None
+    if ram is None and hasattr(os, "sysconf"):
+        try:
+            ram = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")
+        except (ValueError, OSError):
+            ram = None
+    return {"chip": chip, "cores": os.cpu_count(), "memory_gb": round(int(ram) / 2**30) if ram else None,
+            "platform": platform.platform(), "python": platform.python_version()}
+
+
 def measure(decoder, p, basis, shots):
     """One measurement in this process; call it in a fresh process."""
     from threadpoolctl import threadpool_limits
@@ -103,8 +121,7 @@ def main(argv=None):
                 print(f"p={p} {basis} {decoder:6s} H {row['checks']}x{row['mechanisms']}  setup {row['decoder_setup_s']:.2f} s  "
                       f"peak {row['peak_mb']:.0f} MB (decoder adds {row['decoder_added_mb']:.0f} MB)")
     from importlib import metadata
-    report = {"machine": {"platform": platform.platform(), "processor": platform.processor(), "cores": os.cpu_count(),
-                          "python": platform.python_version()},
+    report = {"machine": machine(),
               "versions": {pkg: metadata.version(pkg) for pkg in ("stim", "ldpc", "relay-bp", "numpy", "scikit-learn")},
               "seed": SEED, "rows": rows}
     REPORTS.mkdir(parents=True, exist_ok=True)

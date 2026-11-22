@@ -41,16 +41,16 @@ QEC-Aegis against each baseline on the same pairs (LER: test shots; speedup of t
 
 ### Decoder resource requirements (`python -m aegis.resources`)
 
-One decoder per fresh process, numerical libraries single-threaded, on macOS-26.5.1-arm64-arm-64bit-Mach-O (10 cores). Ranges are over p = 0.003–0.005 and X/Z memory. Peak memory is the whole Python process, including the circuit,
+One decoder per fresh process, numerical libraries single-threaded, on Apple M5 (10 cores, 16 GB, macOS-26.5.1-arm64-arm-64bit-Mach-O). Figures are specific to this machine; `RESOURCES=1 scripts/verify_aegis.sh` re-measures them. Ranges are over p = 0.003–0.005 and X/Z memory. Peak memory is the whole Python process, including the circuit,
 detector error model and check matrix (problem alone shown separately); *added* is what building the decoder and
 decoding adds on top (for QEC-Aegis this includes the scikit-learn library). QEC-Aegis holds two relay-BP instances (tier 1 and tier 2), the order-0 BP-OSD second opinion
 used by tier-1 features, and the risk model. Setup excludes the one-time scikit-learn import, shown separately.
 
 | Decoder | Components | Check matrix (checks × mechanisms) | One-time import s | Setup s | Problem MB | Peak MB | Added MB | Model on disk | Model inference per shot |
 |---|---|---|---|---|---|---|---|---|---|
-| BP-OSD | bposd | 936 × 8,784 | none | 0.03–0.04 | 103–106 | 166–169 | 62–64 | none | none |
-| relay-BP | relay | 936 × 8,784 | none | 0.00–0.01 | 104–106 | 104–107 | 1 | none | none |
-| QEC-Aegis | relay1 + risk model + relay | 936 × 8,784 | 0.84–0.98 | 0.05 | 104–106 | 175–179 | 72–73 | 274 kB | 626 µs |
+| BP-OSD | bposd | 936 × 8,784 | none | 0.03 | 104–106 | 167–169 | 62–64 | none | none |
+| relay-BP | relay | 936 × 8,784 | none | 0.00–0.01 | 104–106 | 105–106 | 1 | none | none |
+| QEC-Aegis | relay1 + risk model + relay | 936 × 8,784 | 0.85–0.87 | 0.05 | 104–106 | 174–179 | 70–74 | 274 kB | 626 µs |
 
 ## Chosen system (fixed on validation shots, before the test shots were decoded)
 
