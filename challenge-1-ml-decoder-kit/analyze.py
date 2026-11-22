@@ -50,6 +50,15 @@ def load(path):
             if int(e["seed"]) != int(d["seed"]) or int(e["shots"]) != int(d["shots"]):
                 print(f"skipping {extra}: seed or shot count differs from {base}")
                 continue
+            if any(not np.array_equal(d[k], e[k]) for k in ("p", "basis", "f")):
+                raise ValueError(f"{extra} uses different experimental conditions from {base}")
+            if any(not np.array_equal(d[k], e[k]) for k in ("round_weights", "n_flags")):
+                # Different Stim builds can generate different shots for the same seed.
+                # Use the complete rerun, including its matching router inputs.
+                if not d.keys() <= e.keys():
+                    raise ValueError(f"{extra} has different shots and lacks some original decoder results")
+                d = e
+                continue
             d.update({k: v for k, v in e.items() if k.split("_")[0] in ("fail", "time", "conv")})
     return d
 
