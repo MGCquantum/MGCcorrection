@@ -52,6 +52,134 @@ used by tier-1 features, and the risk model. Setup excludes the one-time scikit-
 | relay-BP | relay | 936 × 8,784 | none | 0.00–0.01 | 104–106 | 105–106 | 1 | none | none |
 | QEC-Aegis | relay1 + risk model + relay | 936 × 8,784 | 0.85–0.87 | 0.05 | 104–106 | 174–179 | 70–74 | 274 kB | 626 µs |
 
+## QEC-Aegis v2 on fresh shots (seed 7 test, seed 8 timing)
+
+v2 was designed after the v1 results above were known: it keeps v1's fitted risk models and chooses, for each noise
+setting separately and on validation shots only, the second tier (relay-BP or the larger `strong10` ensemble) and the
+threshold (`python -m aegis.retune`; hashes frozen in `experiments/reports/v2_frozen.json` before any fresh shot was
+decoded). Because the seed-2 test shots informed that design, v2 is scored only on fresh shots, together with both
+baselines and v1 run again on the same shots. The risk model is now evaluated by a compiled tree walk that returns
+exactly scikit-learn's value; v1 on fresh shots uses it too, so its times here are lower than in the tables above.
+
+Latency comes from the single-worker timing shots, all decoded on mains power with nothing else running (timing
+entries first decoded on battery in Low Power Mode were discarded and decoded again). The contended 8-worker times
+of the test shots at p = 0.005 and under erasure were taken on battery in Low Power Mode, and the X-basis p = 0.004
+accuracy-mode run spans a hibernation; use those columns only for comparisons within one setting. Failure counts do
+not depend on machine speed.
+
+### Operating points chosen on validation shots
+
+| Setting | Mode | Tier 2 | Threshold | Validation failed pairs (relay-BP) | Validation mean ms (relay-BP) | Tier 2 used |
+|---|---|---|---|---|---|---|
+| p0.003 | speed | strong10 | 2.00e-01 | 3 (3) | 19.6 (47.6) | 0.01% |
+| p0.003 | accuracy | strong10 | 2.00e-01 | 3 (3) | 19.6 (47.6) | 0.01% |
+| p0.004 | speed | relay | 1.66e-01 | 20 (21) | 150.0 (279.7) | 0.87% |
+| p0.004 | accuracy | relay | 7.99e-02 | 17 (21) | 182.4 (279.7) | 1.92% |
+| p0.005 | speed | relay | 2.88e-01 | 169 (172) | 533.6 (812.6) | 3.33% |
+| p0.005 | accuracy | relay | 9.60e-02 | 150 (172) | 806.7 (812.6) | 11.50% |
+| p0.004_f0.25 | speed | relay+flags | 6.79e-04 | 4 (4) | 69.6 (110.1) | 4.34% |
+| p0.004_f0.25 | accuracy | strong10+flags | 6.79e-04 | 3 (4) | 95.4 (110.1) | 4.34% |
+| p0.004_f0.5 | speed | relay+flags | 1.53e-02 | 1 (1) | 21.3 (56.3) | 0.01% |
+| p0.004_f0.5 | accuracy | strong10+flags | 4.25e-03 | 0 (1) | 22.8 (56.3) | 0.05% |
+| p0.004_f0.75 | speed | relay+flags | 3.26e-04 | 4 (4) | 32.2 (48.5) | 0.07% |
+| p0.004_f0.75 | accuracy | strong10+flags | 3.26e-04 | 3 (4) | 39.2 (48.5) | 0.07% |
+
+### Sweep over p: fresh test shots (LER) and fresh single-worker timing shots (latency)
+
+| p | Decoder | Test pairs | Failed pairs | LER per cycle | 95% interval | Mean ms | Median ms | p95 ms | p99 ms | Pairs/s | Mean ms, contended | Tier 2 used |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.003 | BP-OSD | 30,000 | 184 | 5.13e-04 | 4.41e-04 – 5.92e-04 | 52.0 | 8.2 | 181 | 303 | 19.2 | 127 |  |
+| 0.003 | relay-BP | 30,000 | 32 | 8.89e-05 | 6.08e-05 – 1.26e-04 | 35.8 | 21.1 | 73.7 | 225 | 28.0 | 80.8 |  |
+| 0.003 | QEC-Aegis v1 | 30,000 | 41 | 1.14e-04 | 8.18e-05 – 1.55e-04 | 8.0 | 3.7 | 25.8 | 87.2 | 125.6 | 24.8 | 0.05% |
+| 0.003 | QEC-Aegis v2, speed | 30,000 | 41 | 1.14e-04 | 8.18e-05 – 1.55e-04 | 8.1 | 3.7 | 27.0 | 84.8 | 123.3 | 26.2 | 0.03% |
+| 0.003 | QEC-Aegis v2, accuracy | 30,000 | 41 | 1.14e-04 | 8.18e-05 – 1.55e-04 | 8.1 | 3.7 | 26.5 | 80.7 | 123.2 | 26.1 | 0.03% |
+| 0.004 | BP-OSD | 10,000 | 511 | 4.36e-03 | 3.99e-03 – 4.76e-03 | 119 | 139 | 307 | 336 | 8.4 | 297 |  |
+| 0.004 | relay-BP | 10,000 | 93 | 7.78e-04 | 6.28e-04 – 9.53e-04 | 139 | 40.6 | 485 | 2,124 | 7.2 | 289 |  |
+| 0.004 | QEC-Aegis v1 | 10,000 | 103 | 8.62e-04 | 7.04e-04 – 1.05e-03 | 83.8 | 5.9 | 130 | 2,894 | 11.9 | 169 | 0.88% |
+| 0.004 | QEC-Aegis v2, speed | 10,000 | 103 | 8.62e-04 | 7.04e-04 – 1.05e-03 | 84.0 | 5.9 | 131 | 2,877 | 11.9 | 162 | 0.88% |
+| 0.004 | QEC-Aegis v2, accuracy | 10,000 | 99 | 8.29e-04 | 6.74e-04 – 1.01e-03 | 93.8 | 6.0 | 176 | 2,997 | 10.7 | 233 | 1.99% |
+| 0.005 | BP-OSD | 5,000 | 1196 | 2.25e-02 | 2.13e-02 – 2.38e-02 | 212 | 183 | 341 | 389 | 4.7 | 342 |  |
+| 0.005 | relay-BP | 5,000 | 407 | 7.05e-03 | 6.38e-03 – 7.77e-03 | 484 | 158 | 2,129 | 2,665 | 2.1 | 806 |  |
+| 0.005 | QEC-Aegis v1 | 5,000 | 367 | 6.33e-03 | 5.70e-03 – 7.01e-03 | 397 | 34.2 | 3,655 | 4,275 | 2.5 | 682 | 7.37% |
+| 0.005 | QEC-Aegis v2, speed | 5,000 | 399 | 6.91e-03 | 6.25e-03 – 7.62e-03 | 325 | 35.5 | 2,664 | 4,263 | 3.1 | 555 | 3.61% |
+| 0.005 | QEC-Aegis v2, accuracy | 5,000 | 359 | 6.19e-03 | 5.57e-03 – 6.86e-03 | 482 | 36.5 | 3,740 | 4,262 | 2.1 | 1,358 | 11.15% |
+
+Paired comparisons (LER: fresh test shots; speedup of the mean: fresh single-worker timing shots):
+
+| p | Comparison | LER ratio | 95% interval | Fail only first / only second | McNemar p | Speedup | 95% interval |
+|---|---|---|---|---|---|---|---|
+| 0.003 | aegis v1 vs relay | 1.28 | 0.93 – 1.82 | 22 / 13 | 0.175 | 4.49× | 3.97 – 5.13 |
+| 0.003 | aegis v1 vs bposd | 0.22 | 0.15 – 0.30 | 25 / 168 | 3.26e-27 | 6.54× | 5.49 – 7.69 |
+| 0.003 | aegis v2 speed vs relay | 1.28 | 0.90 – 1.84 | 23 / 14 | 0.188 | 4.41× | 3.89 – 5.03 |
+| 0.003 | aegis v2 speed vs bposd | 0.22 | 0.15 – 0.29 | 24 / 167 | 1.47e-27 | 6.41× | 5.40 – 7.55 |
+| 0.003 | aegis v2 accuracy vs relay | 1.28 | 0.90 – 1.84 | 23 / 14 | 0.188 | 4.41× | 3.88 – 5.04 |
+| 0.003 | aegis v2 accuracy vs bposd | 0.22 | 0.15 – 0.29 | 24 / 167 | 1.47e-27 | 6.41× | 5.39 – 7.54 |
+| 0.003 | aegis v2 speed vs aegis v1 | 1.00 | 0.90 – 1.10 | 2 / 2 | 1 | 0.98× | 0.97 – 0.99 |
+| 0.003 | aegis v2 accuracy vs aegis v1 | 1.00 | 0.90 – 1.10 | 2 / 2 | 1 | 0.98× | 0.97 – 0.99 |
+| 0.004 | aegis v1 vs relay | 1.11 | 0.91 – 1.37 | 51 / 41 | 0.348 | 1.66× | 1.36 – 2.16 |
+| 0.004 | aegis v1 vs bposd | 0.20 | 0.16 – 0.24 | 38 / 446 | 1.99e-89 | 1.42× | 1.06 – 2.04 |
+| 0.004 | aegis v2 speed vs relay | 1.11 | 0.91 – 1.37 | 51 / 41 | 0.348 | 1.66× | 1.35 – 2.16 |
+| 0.004 | aegis v2 speed vs bposd | 0.20 | 0.16 – 0.24 | 38 / 446 | 1.99e-89 | 1.42× | 1.06 – 2.04 |
+| 0.004 | aegis v2 accuracy vs relay | 1.06 | 0.88 – 1.30 | 43 / 37 | 0.576 | 1.48× | 1.24 – 1.89 |
+| 0.004 | aegis v2 accuracy vs bposd | 0.19 | 0.15 – 0.23 | 33 / 445 | 2.71e-93 | 1.27× | 0.96 – 1.77 |
+| 0.004 | aegis v2 speed vs aegis v1 | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 1.00× | 0.99 – 1.00 |
+| 0.004 | aegis v2 accuracy vs aegis v1 | 0.96 | 0.88 – 1.04 | 7 / 11 | 0.481 | 0.89× | 0.82 – 0.95 |
+| 0.005 | aegis v1 vs relay | 0.90 | 0.83 – 0.97 | 100 / 140 | 0.0117 | 1.22× | 1.06 – 1.46 |
+| 0.005 | aegis v1 vs bposd | 0.28 | 0.26 – 0.31 | 55 / 884 | 2.26e-193 | 0.53× | 0.43 – 0.68 |
+| 0.005 | aegis v2 speed vs relay | 0.98 | 0.90 – 1.06 | 130 / 138 | 0.669 | 1.49× | 1.27 – 1.82 |
+| 0.005 | aegis v2 speed vs bposd | 0.31 | 0.28 – 0.33 | 68 / 865 | 8.83e-177 | 0.65× | 0.52 – 0.84 |
+| 0.005 | aegis v2 accuracy vs relay | 0.88 | 0.81 – 0.95 | 96 / 144 | 0.00235 | 1.00× | 0.89 – 1.15 |
+| 0.005 | aegis v2 accuracy vs bposd | 0.27 | 0.25 – 0.30 | 47 / 884 | 4.8e-201 | 0.44× | 0.37 – 0.54 |
+| 0.005 | aegis v2 speed vs aegis v1 | 1.09 | 1.04 – 1.15 | 61 / 29 | 0.000973 | 1.22× | 1.13 – 1.34 |
+| 0.005 | aegis v2 accuracy vs aegis v1 | 0.98 | 0.93 – 1.03 | 45 / 53 | 0.48 | 0.82× | 0.76 – 0.88 |
+
+### Heralded erasure at p = 0.004 (fresh test shots, 8 workers)
+
+| f | Decoder | Pairs | Failed pairs | LER per cycle | 95% interval | Mean ms, contended | p99 ms, contended | Tier 2 used |
+|---|---|---|---|---|---|---|---|---|
+| 0.25 | BP-OSD with flags | 5,000 | 45 | 7.53e-04 | 5.49e-04 – 1.01e-03 | 150 | 779 |  |
+| 0.25 | relay-BP with flags | 5,000 | 9 | 1.50e-04 | 6.86e-05 – 2.85e-04 | 96.9 | 701 |  |
+| 0.25 | QEC-Aegis v1 | 5,000 | 12 | 2.00e-04 | 1.03e-04 – 3.50e-04 | 36.8 | 268 | 0.04% |
+| 0.25 | QEC-Aegis v2, speed | 5,000 | 9 | 1.50e-04 | 6.86e-05 – 2.85e-04 | 69.5 | 975 | 4.52% |
+| 0.25 | QEC-Aegis v2, accuracy | 5,000 | 8 | 1.33e-04 | 5.76e-05 – 2.63e-04 | 99.0 | 1,429 | 4.52% |
+| 0.5 | BP-OSD with flags | 5,000 | 2 | 3.33e-05 | 4.04e-06 – 1.20e-04 | 98.1 | 845 |  |
+| 0.5 | relay-BP with flags | 5,000 | 3 | 5.00e-05 | 1.03e-05 – 1.46e-04 | 72.5 | 250 |  |
+| 0.5 | QEC-Aegis v1 | 5,000 | 5 | 8.34e-05 | 2.71e-05 – 1.95e-04 | 23.7 | 90.2 | 0.02% |
+| 0.5 | QEC-Aegis v2, speed | 5,000 | 5 | 8.34e-05 | 2.71e-05 – 1.95e-04 | 23.6 | 90.7 | 0.03% |
+| 0.5 | QEC-Aegis v2, accuracy | 5,000 | 5 | 8.34e-05 | 2.71e-05 – 1.95e-04 | 25.2 | 89.1 | 0.04% |
+| 0.75 | BP-OSD with flags | 5,000 | 0 | 0.00e+00 | 0.00e+00 – 6.15e-05 | 32.1 | 500 |  |
+| 0.75 | relay-BP with flags | 5,000 | 3 | 5.00e-05 | 1.03e-05 – 1.46e-04 | 46.3 | 81.0 |  |
+| 0.75 | QEC-Aegis v1 | 5,000 | 3 | 5.00e-05 | 1.03e-05 – 1.46e-04 | 30.7 | 27.5 | 0.08% |
+| 0.75 | QEC-Aegis v2, speed | 5,000 | 3 | 5.00e-05 | 1.03e-05 – 1.46e-04 | 31.6 | 29.0 | 0.09% |
+| 0.75 | QEC-Aegis v2, accuracy | 5,000 | 3 | 5.00e-05 | 1.03e-05 – 1.46e-04 | 42.6 | 45.8 | 0.09% |
+
+| f | Comparison | LER ratio | 95% interval | Fail only first / only second | McNemar p | Speedup (contended) |
+|---|---|---|---|---|---|---|
+| 0.25 | aegis v1 vs relay+flags | 1.33 | 1.00 – 2.00 | 3 / 0 | 0.25 | 2.63× |
+| 0.25 | aegis v1 vs bposd+flags | 0.27 | 0.14 – 0.42 | 4 / 37 | 1.03e-07 | 4.06× |
+| 0.25 | aegis v2 speed vs relay+flags | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 1.39× |
+| 0.25 | aegis v2 speed vs bposd+flags | 0.20 | 0.09 – 0.33 | 2 / 38 | 1.49e-09 | 2.15× |
+| 0.25 | aegis v2 accuracy vs relay+flags | 0.89 | 0.50 – 1.40 | 1 / 2 | 1 | 0.98× |
+| 0.25 | aegis v2 accuracy vs bposd+flags | 0.18 | 0.07 – 0.30 | 2 / 39 | 7.84e-10 | 1.51× |
+| 0.25 | aegis v2 speed vs aegis v1 | 0.75 | 0.50 – 1.00 | 0 / 3 | 0.25 | 0.53× |
+| 0.25 | aegis v2 accuracy vs aegis v1 | 0.67 | 0.33 – 1.00 | 1 / 5 | 0.219 | 0.37× |
+| 0.5 | aegis v1 vs relay+flags | 1.67 | 1.00 – 4.00 | 2 / 0 | 0.5 | 3.06× |
+| 0.5 | aegis v1 vs bposd+flags | 2.50 | 0.33 – 8.01 | 5 / 2 | 0.453 | 4.14× |
+| 0.5 | aegis v2 speed vs relay+flags | 1.67 | 1.00 – 4.00 | 2 / 0 | 0.5 | 3.07× |
+| 0.5 | aegis v2 speed vs bposd+flags | 2.50 | 0.33 – 8.01 | 5 / 2 | 0.453 | 4.16× |
+| 0.5 | aegis v2 accuracy vs relay+flags | 1.67 | 1.00 – 4.00 | 2 / 0 | 0.5 | 2.87× |
+| 0.5 | aegis v2 accuracy vs bposd+flags | 2.50 | 0.33 – 8.01 | 5 / 2 | 0.453 | 3.89× |
+| 0.5 | aegis v2 speed vs aegis v1 | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 1.00× |
+| 0.5 | aegis v2 accuracy vs aegis v1 | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 0.94× |
+| 0.75 | aegis v1 vs relay+flags | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 1.51× |
+| 0.75 | aegis v1 vs bposd+flags | n/a | n/a | 3 / 0 | 0.25 | 1.04× |
+| 0.75 | aegis v2 speed vs relay+flags | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 1.46× |
+| 0.75 | aegis v2 speed vs bposd+flags | n/a | n/a | 3 / 0 | 0.25 | 1.02× |
+| 0.75 | aegis v2 accuracy vs relay+flags | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 1.09× |
+| 0.75 | aegis v2 accuracy vs bposd+flags | n/a | n/a | 3 / 0 | 0.25 | 0.75× |
+| 0.75 | aegis v2 speed vs aegis v1 | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 0.97× |
+| 0.75 | aegis v2 accuracy vs aegis v1 | 1.00 | 1.00 – 1.00 | 0 / 0 | 1 | 0.72× |
+
 ## Chosen system (fixed on validation shots, before the test shots were decoded)
 
 Selection-time numbers from `experiments/reports/training.json`. That selection paired X shot k with Z shot k;
@@ -472,3 +600,9 @@ As recorded at selection time (X shot k paired with Z shot k).
 | timing_Z_p0.004.npz | 1,000 | bposd relay aegis | 1 | 146 | 145 | 240 |
 | timing_X_p0.005.npz | 500 | bposd relay aegis | 1 | 489 | 485 | 241 |
 | timing_Z_p0.005.npz | 500 | bposd relay aegis | 1 | 640 | 636 | 241 |
+| val_X_p0.004_f0.25.npz | 4,000 | relay1+flags relay+flags strong10+flags | 8 | 124 | 862 | 169 |
+| val_Z_p0.004_f0.25.npz | 4,000 | relay1+flags relay+flags strong10+flags | 8 | 108 | 801 | 180 |
+| val_X_p0.004_f0.5.npz | 4,000 | relay1+flags relay+flags strong10+flags | 8 | 68 | 503 | 171 |
+| val_Z_p0.004_f0.5.npz | 4,000 | relay1+flags relay+flags strong10+flags | 8 | 68 | 508 | 171 |
+| val_X_p0.004_f0.75.npz | 4,000 | relay1+flags relay+flags strong10+flags | 8 | 95 | 519 | 170 |
+| val_Z_p0.004_f0.75.npz | 4,000 | relay1+flags relay+flags strong10+flags | 8 | 56 | 426 | 170 |

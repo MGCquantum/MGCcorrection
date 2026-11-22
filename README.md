@@ -104,6 +104,16 @@ The router does not beat a single threshold. BP's own convergence check is alrea
 
 Error rates are statistically indistinguishable from relay-BP at every p; the point estimate is worse at p = 0.003 and 0.004 (LER ratio 1.27 and 1.17, both intervals include 1). Times are from separate single-worker timing shots (seed 5). The gain shrinks with noise as more shots need tier 2 (0.04%, 1.1% and 6.8% escalated), and at p = 0.005 the slowest 1% are slower than relay-BP. The required sweep (LER, latency percentiles and per-decoder resources for BP-OSD, relay-BP and QEC-Aegis side by side) is the first section of [docs/RESULTS.md](docs/RESULTS.md), followed by the oracle-router bound, erasure settings and calibration; verify with `scripts/verify_aegis.sh`.
 
+**QEC-Aegis v2 (fresh shots).** v2 keeps v1's risk models but picks the second tier and threshold separately for each setting, on validation shots only, in two modes: *speed* (fastest with no more failed pairs than relay-BP) and *accuracy* (fewest failed pairs, no slower than relay-BP). Its files were hashed in `experiments/reports/v2_frozen.json` before decoding. Because the v1 test results shaped v2, v2 is scored only on fresh shots: seed 7 for error rates, and seed 8 for single-worker timing on mains power with nothing else running. Baselines and v1 were decoded again on the same shots. The risk model now runs as a compiled tree walk (same value as scikit-learn, ~60 µs instead of ~600 µs per call), and v1 uses it too here.
+
+| p | relay-BP failed pairs | v1 | v2 speed | v2 accuracy | Mean ms, one worker: relay-BP / v1 / v2 speed / v2 accuracy |
+|---|---|---|---|---|---|
+| 0.003 | 32 | 41 | 41 | 41 | 35.8 / 8.0 / 8.1 / 8.1 |
+| 0.004 | 93 | 103 | 103 | 99 | 139 / 84 / 84 / 94 |
+| 0.005 | 407 | 367 | 399 | 359 | 484 / 397 / 325 / 482 |
+
+Test pairs: 30,000, 10,000 and 5,000. Full tables, paired comparisons and erasure settings are in [docs/RESULTS.md](docs/RESULTS.md) under "QEC-Aegis v2 on fresh shots".
+
 ## Where it works and where it falls short
 - **Works:** using erasure flags gives large, statistically significant accuracy gains on the Gross code, for BP-OSD and for relay-BP; with relay-BP the flags also make decoding 2–5× faster. The simple hybrid keeps relay-BP accuracy and is ~1.7× faster on average at low noise (p = 0.003).
 - **Falls short:**
@@ -121,6 +131,14 @@ Error rates are statistically indistinguishable from relay-BP at every p; the po
   - *Falls short:* the speedup collapses at p = 0.005 (1.12× mean, interval 0.99–1.30). Escalated shots pay for tier 1 and tier 2, so p95/p99 are worse than relay-BP (6.2 vs 4.2 s and 9.6 vs 6.2 s), and BP-OSD is 2.3× faster on average there (at 3.2× more failed pairs).
   - *Falls short:* far from a perfect router. Of the converged-but-wrong tier-1 answers the model sends 6 of 30, 47 of 115 and 115 of 245 to tier 2; the oracle router (knows the truth) has 1.9×, 1.7× and 1.3× fewer failed pairs.
   - *Falls short:* latencies are Python on a laptop CPU, milliseconds to seconds per pair, orders of magnitude above real-time budgets; the 626 µs per-shot model call (scikit-learn overhead) is a visible share of tier 1 at p = 0.003. Under erasure (f = 0.25) it fails on 7 pairs vs 2 for flag-aware relay-BP (p = 0.06), with a threshold borrowed from the sweep rather than validated. At p = 0.003 only 26–33 pairs fail, too few to resolve differences of about 25%.
+- **QEC-Aegis v2 (fresh shots; [docs/RESULTS.md](docs/RESULTS.md)):**
+  - *Works:* at p = 0.005, speed mode is 1.49× faster than relay-BP on one worker (v1: 1.22×) at relay-BP accuracy (LER ratio 0.98, McNemar p = 0.67). Accuracy mode has the lowest error rate of any decoder there (LER ratio 0.88 vs relay-BP, McNemar p = 0.002) at the same mean time (1.00×).
+  - *Works:* at 25% erasure, v2 closes v1's gap to flag-aware relay-BP (9 and 8 failed pairs vs 9; v1 12).
+  - *Works:* v1 replicates on fresh shots: 4.5×, 1.7× and 1.2× faster than relay-BP on one worker, and at p = 0.005 it is more accurate than relay-BP (LER ratio 0.90, McNemar p = 0.01).
+  - *Falls short:* at p = 0.003 and 0.004, v2 brings nothing over v1 (same or near-same failed pairs and times). Neither mode beats relay-BP's error rate there (LER ratio 1.06–1.28, intervals include 1).
+  - *Falls short:* speed at p = 0.005 costs accuracy against v1: 399 vs 367 failed pairs, a significant difference (McNemar p = 0.001). That is within the rule it was chosen by, which only asks to match relay-BP.
+  - *Falls short:* the slowest shots are still slower than relay-BP (p99 4.3 vs 2.7 s at p = 0.005, 2.9 vs 2.1 s at p = 0.004). BP-OSD remains faster on average at p = 0.005 (212 ms), at 3× more failed pairs. At 25% erasure, v2 sends 4.5% of shots to tier 2, so it is about half as fast as v1.
+  - *Falls short:* single-worker timing used 2,000, 1,000 and 500 pairs per p, so p99 rests on 5–20 shots.
 - **Model limits:** erasures are *idealized*. Flags fire instantly at the gate with the exact location, and the qubit returns to the code space. Real atom loss is detected later and a lost atom keeps causing errors. Preparation and measurement errors are not converted. The DEM/decoder also approximates correlations between disjoint Pauli outcomes; corrected conditional marginals do not make it an exact joint decoder.
 
 ## Method
@@ -179,3 +197,5 @@ python -m aegis.collect --split test --basis X --p 0.004 --shots 10000 --tiers b
 | `models/`, `experiments/records/`, `experiments/reports/`, `experiments/manifest.json` | Frozen risk models, committed per-shot validation/test/timing records, generated reports, run provenance |
 | `docs/RESULTS.md`, `docs/figures/` | Generated by `python -m aegis.report` and `python -m aegis.figures`; no number typed by hand |
 | `scripts/verify_aegis.sh` | Kit and Aegis tests, frozen-model hashes, record reproduction, re-check, evaluation, report and figures |
+| `aegis/retune.py`, `models/v2/`, `experiments/reports/v2_selection.json`, `v2_frozen.json` | QEC-Aegis v2: per-setting operating points chosen on validation shots, and their frozen hashes |
+| `scripts/run_v2_fresh.sh`, `aegis/evaluate_v2.py`, `experiments/reports/v2_evaluation.json` | Fresh test (seed 7) and timing (seed 8) decoding of baselines, v1 and v2, and their evaluation |

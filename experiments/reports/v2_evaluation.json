@@ -1,0 +1,2415 @@
+{
+ "sweep": {
+  "0.003": {
+   "decoders": {
+    "bposd": {
+     "pairs": 30000,
+     "failures_X": 77,
+     "failures_Z": 107,
+     "failures_pair": 184,
+     "ler": 0.0005125535566238293,
+     "ler_sigma": 3.7784178850919226e-05,
+     "ler_ci95": [
+      0.0004411753798689855,
+      0.0005921780148971933
+     ],
+     "ms_mean": 126.79711924445509,
+     "ms_mean_ci95": [
+      124.62383869947887,
+      129.00655037285105
+     ],
+     "ms_median": 19.221187496441416,
+     "ms_p95": 474.81960001750844,
+     "ms_p99": 785.2402416585384,
+     "ms_max": 1182.5307090039132,
+     "pairs_per_second": 7.8866145063759445
+    },
+    "relay": {
+     "pairs": 30000,
+     "failures_X": 13,
+     "failures_Z": 19,
+     "failures_pair": 32,
+     "ler": 8.893237531704123e-05,
+     "ler_sigma": 1.5721832596016228e-05,
+     "ler_ci95": [
+      6.082951834263106e-05,
+      0.00012554368341066713
+     ],
+     "ms_mean": 80.75830524817817,
+     "ms_mean_ci95": [
+      78.24028480339933,
+      83.48053088613476
+     ],
+     "ms_median": 48.59597850008868,
+     "ms_p95": 170.5907357412798,
+     "ms_p99": 560.3086092682494,
+     "ms_max": 5399.95129199815,
+     "pairs_per_second": 12.382627358596768
+    },
+    "aegis v1 (online)": {
+     "pairs": 30000,
+     "failures_X": 16,
+     "failures_Z": 25,
+     "failures_pair": 41,
+     "ler": 0.00011396028997490149,
+     "ler_sigma": 1.7798336818919402e-05,
+     "ler_ci95": [
+      8.177982175072707e-05,
+      0.00015459686467533817
+     ],
+     "ms_mean": 24.779339866054457,
+     "ms_mean_ci95": [
+      22.19270723886184,
+      27.492756523699864
+     ],
+     "ms_median": 9.2188124981476,
+     "ms_p95": 67.94412354938684,
+     "ms_p99": 213.4437289070044,
+     "ms_max": 10403.285792010138,
+     "pairs_per_second": 40.35620018150335,
+     "escalated_fraction": 0.00048333333333333334,
+     "ms_model_mean": 0.19609110881234906
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 30000,
+     "failures_X": 16,
+     "failures_Z": 25,
+     "failures_pair": 41,
+     "ler": 0.00011396028997490149,
+     "ler_sigma": 1.7798336818919402e-05,
+     "ler_ci95": [
+      8.177982175072707e-05,
+      0.00015459686467533817
+     ],
+     "ms_mean": 26.236829234096998,
+     "ms_mean_ci95": [
+      22.74035800655707,
+      30.071895322594937
+     ],
+     "ms_median": 9.301978992880322,
+     "ms_p95": 68.2662708502903,
+     "ms_p99": 212.3855216635274,
+     "ms_max": 15721.047876009834,
+     "pairs_per_second": 38.11436172707999,
+     "escalated_fraction": 0.00028333333333333335,
+     "ms_model_mean": 0.19851694437723685
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 30000,
+     "failures_X": 16,
+     "failures_Z": 25,
+     "failures_pair": 41,
+     "ler": 0.00011396028997490149,
+     "ler_sigma": 1.7798336818919402e-05,
+     "ler_ci95": [
+      8.177982175072707e-05,
+      0.00015459686467533817
+     ],
+     "ms_mean": 26.09369884309417,
+     "ms_mean_ci95": [
+      22.628678429530385,
+      29.898378235818214
+     ],
+     "ms_median": 9.2529790053959,
+     "ms_p95": 67.55969521109364,
+     "ms_p99": 213.32452498827453,
+     "ms_max": 15440.09425000695,
+     "pairs_per_second": 38.32342842665462,
+     "escalated_fraction": 0.00028333333333333335,
+     "ms_model_mean": 0.19633787749529197
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay": {
+     "both_fail": 19,
+     "only_a_fails": 22,
+     "only_b_fails": 13,
+     "mcnemar_p": 0.175465248990804,
+     "ler_ratio": 1.28142635984518,
+     "ler_ratio_ci95": [
+      0.9285288228871215,
+      1.8186823108328642
+     ],
+     "speedup_mean": 3.259098332914431,
+     "speedup_mean_ci95": [
+      2.986910693863121,
+      3.561348671745431
+     ]
+    },
+    "aegis v1 (online) vs bposd": {
+     "both_fail": 16,
+     "only_a_fails": 25,
+     "only_b_fails": 168,
+     "mcnemar_p": 3.2648968591374945e-27,
+     "ler_ratio": 0.2223383068991923,
+     "ler_ratio_ci95": [
+      0.15431266053011758,
+      0.297763737514425
+     ],
+     "speedup_mean": 5.11704992666718,
+     "speedup_mean_ci95": [
+      4.625243791414771,
+      5.67046780113942
+     ]
+    },
+    "aegis v2 speed (online) vs relay": {
+     "both_fail": 18,
+     "only_a_fails": 23,
+     "only_b_fails": 14,
+     "mcnemar_p": 0.18774155899882317,
+     "ler_ratio": 1.28142635984518,
+     "ler_ratio_ci95": [
+      0.904668500496998,
+      1.840745603530213
+     ],
+     "speedup_mean": 3.0780512586950053,
+     "speedup_mean_ci95": [
+      2.7209599324503255,
+      3.482099508779412
+     ]
+    },
+    "aegis v2 speed (online) vs bposd": {
+     "both_fail": 17,
+     "only_a_fails": 24,
+     "only_b_fails": 167,
+     "mcnemar_p": 1.4715280498331594e-27,
+     "ler_ratio": 0.2223383068991923,
+     "ler_ratio_ci95": [
+      0.15459242210831364,
+      0.2947216810209915
+     ],
+     "speedup_mean": 4.832791268834857,
+     "speedup_mean_ci95": [
+      4.218400130780935,
+      5.527355263393643
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay": {
+     "both_fail": 18,
+     "only_a_fails": 23,
+     "only_b_fails": 14,
+     "mcnemar_p": 0.18774155899882317,
+     "ler_ratio": 1.28142635984518,
+     "ler_ratio_ci95": [
+      0.904668500496998,
+      1.840745603530213
+     ],
+     "speedup_mean": 3.094935131036483,
+     "speedup_mean_ci95": [
+      2.7338579994800374,
+      3.4998544588854736
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd": {
+     "both_fail": 17,
+     "only_a_fails": 24,
+     "only_b_fails": 167,
+     "mcnemar_p": 1.4715280498331594e-27,
+     "ler_ratio": 0.2223383068991923,
+     "ler_ratio_ci95": [
+      0.15459242210831364,
+      0.2947216810209915
+     ],
+     "speedup_mean": 4.859300324070866,
+     "speedup_mean_ci95": [
+      4.241547422433419,
+      5.557805294589562
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 39,
+     "only_a_fails": 2,
+     "only_b_fails": 2,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      0.9047065549670256,
+      1.1042511324832582
+     ],
+     "speedup_mean": 0.9444487230130534,
+     "speedup_mean_ci95": [
+      0.8994370975191174,
+      0.998387209518179
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 39,
+     "only_a_fails": 2,
+     "only_b_fails": 2,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      0.9047065549670256,
+      1.1042511324832582
+     ],
+     "speedup_mean": 0.9496292578164875,
+     "speedup_mean_ci95": [
+      0.9049946115882935,
+      1.003552132143044
+     ]
+    }
+   }
+  },
+  "0.004": {
+   "decoders": {
+    "bposd": {
+     "pairs": 10000,
+     "failures_X": 269,
+     "failures_Z": 248,
+     "failures_pair": 511,
+     "ler": 0.004361449467181422,
+     "ler_sigma": 0.0001927449657025404,
+     "ler_ci95": [
+      0.0039919390050287,
+      0.004755636889238857
+     ],
+     "ms_mean": 297.2885081064683,
+     "ms_mean_ci95": [
+      292.67262870751836,
+      302.3594150910128
+     ],
+     "ms_median": 340.067833501962,
+     "ms_p95": 768.0900187500811,
+     "ms_p99": 882.7107395741042,
+     "ms_max": 1221.8626660032896,
+     "pairs_per_second": 3.3637358079171653
+    },
+    "relay": {
+     "pairs": 10000,
+     "failures_X": 44,
+     "failures_Z": 49,
+     "failures_pair": 93,
+     "ler": 0.000778323199503439,
+     "ler_sigma": 8.071308136381461e-05,
+     "ler_ci95": [
+      0.0006282224310611983,
+      0.0009534158256919723
+     ],
+     "ms_mean": 289.3803189469647,
+     "ms_mean_ci95": [
+      274.9540504544093,
+      303.3877426692574
+     ],
+     "ms_median": 92.55391650367528,
+     "ms_p95": 1042.9760398910717,
+     "ms_p99": 4737.208795666084,
+     "ms_max": 8098.787832990638,
+     "pairs_per_second": 3.4556600242854527
+    },
+    "aegis v1 (online)": {
+     "pairs": 10000,
+     "failures_X": 52,
+     "failures_Z": 51,
+     "failures_pair": 103,
+     "ler": 0.0008624122485682006,
+     "ler_sigma": 8.497947182040111e-05,
+     "ler_ci95": [
+      0.0007039486579706322,
+      0.001045830758057975
+     ],
+     "ms_mean": 169.14672403751612,
+     "ms_mean_ci95": [
+      151.26934474060312,
+      188.26615506239665
+     ],
+     "ms_median": 15.76945749548031,
+     "ms_p95": 371.86220416479034,
+     "ms_p99": 5213.404081660848,
+     "ms_max": 12818.821207998553,
+     "pairs_per_second": 5.912027003125426,
+     "escalated_fraction": 0.008799999999999999,
+     "ms_model_mean": 0.21994692845473765
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 10000,
+     "failures_X": 52,
+     "failures_Z": 51,
+     "failures_pair": 103,
+     "ler": 0.0008624122485682006,
+     "ler_sigma": 8.497947182040111e-05,
+     "ler_ci95": [
+      0.0007039486579706322,
+      0.001045830758057975
+     ],
+     "ms_mean": 162.0819390234101,
+     "ms_mean_ci95": [
+      144.7371704372041,
+      180.33272106489707
+     ],
+     "ms_median": 15.034062991617247,
+     "ms_p95": 356.6571237344758,
+     "ms_p99": 5161.088899841715,
+     "ms_max": 12535.196751006879,
+     "pairs_per_second": 6.169718884320395,
+     "escalated_fraction": 0.008799999999999999,
+     "ms_model_mean": 0.20093287773052
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 10000,
+     "failures_X": 50,
+     "failures_Z": 49,
+     "failures_pair": 99,
+     "ler": 0.0008287672869986551,
+     "ler_sigma": 8.329824777675299e-05,
+     "ler_ci95": [
+      0.0006735990580353235,
+      0.001008904479428141
+     ],
+     "ms_mean": 233.1541182166853,
+     "ms_mean_ci95": [
+      207.76067497724455,
+      261.93881523719034
+     ],
+     "ms_median": 16.00729200436035,
+     "ms_p95": 509.3964319057683,
+     "ms_p99": 6239.042228428594,
+     "ms_max": 35952.32341600058,
+     "pairs_per_second": 4.289008522125416,
+     "escalated_fraction": 0.01995,
+     "ms_model_mean": 0.2643563598758192
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay": {
+     "both_fail": 52,
+     "only_a_fails": 51,
+     "only_b_fails": 41,
+     "mcnemar_p": 0.3481412903192068,
+     "ler_ratio": 1.1080387287933977,
+     "ler_ratio_ci95": [
+      0.9126947144815302,
+      1.3668185453883421
+     ],
+     "speedup_mean": 1.7108242597875036,
+     "speedup_mean_ci95": [
+      1.579630356763333,
+      1.8591076964813875
+     ]
+    },
+    "aegis v1 (online) vs bposd": {
+     "both_fail": 65,
+     "only_a_fails": 38,
+     "only_b_fails": 446,
+     "mcnemar_p": 1.989923229534323e-89,
+     "ler_ratio": 0.19773523803441723,
+     "ler_ratio_ci95": [
+      0.16170307725422337,
+      0.23736036429560498
+     ],
+     "speedup_mean": 1.757577687644313,
+     "speedup_mean_ci95": [
+      1.5817683856857783,
+      1.9569445744256841
+     ]
+    },
+    "aegis v2 speed (online) vs relay": {
+     "both_fail": 52,
+     "only_a_fails": 51,
+     "only_b_fails": 41,
+     "mcnemar_p": 0.3481412903192068,
+     "ler_ratio": 1.1080387287933977,
+     "ler_ratio_ci95": [
+      0.9126947144815302,
+      1.3668185453883421
+     ],
+     "speedup_mean": 1.785395218557747,
+     "speedup_mean_ci95": [
+      1.6495081207902895,
+      1.9401220009774747
+     ]
+    },
+    "aegis v2 speed (online) vs bposd": {
+     "both_fail": 65,
+     "only_a_fails": 38,
+     "only_b_fails": 446,
+     "mcnemar_p": 1.989923229534323e-89,
+     "ler_ratio": 0.19773523803441723,
+     "ler_ratio_ci95": [
+      0.16170307725422337,
+      0.23736036429560498
+     ],
+     "speedup_mean": 1.8341865225559146,
+     "speedup_mean_ci95": [
+      1.6491861609339327,
+      2.043651105541034
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay": {
+     "both_fail": 56,
+     "only_a_fails": 43,
+     "only_b_fails": 37,
+     "mcnemar_p": 0.5764306261883931,
+     "ler_ratio": 1.064811234622582,
+     "ler_ratio_ci95": [
+      0.8823254530392202,
+      1.3027084196439154
+     ],
+     "speedup_mean": 1.2411546540989025,
+     "speedup_mean_ci95": [
+      1.1376929681672656,
+      1.3533589587546486
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd": {
+     "both_fail": 66,
+     "only_a_fails": 33,
+     "only_b_fails": 445,
+     "mcnemar_p": 2.712950122633977e-93,
+     "ler_ratio": 0.1900210682789922,
+     "ler_ratio_ci95": [
+      0.1547146906598506,
+      0.23022882045034002
+     ],
+     "speedup_mean": 1.2750729447985936,
+     "speedup_mean_ci95": [
+      1.1393691172643259,
+      1.4308291142786955
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 103,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 1.0435877375151938,
+     "speedup_mean_ci95": [
+      1.0380272457357251,
+      1.0489725605790001
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 92,
+     "only_a_fails": 7,
+     "only_b_fails": 11,
+     "mcnemar_p": 0.480682373046875,
+     "ler_ratio": 0.9609873797300493,
+     "ler_ratio_ci95": [
+      0.8812880359259333,
+      1.0423148286793031
+     ],
+     "speedup_mean": 0.7254717408865026,
+     "speedup_mean_ci95": [
+      0.6768004847446673,
+      0.776916454287293
+     ]
+    }
+   }
+  },
+  "0.005": {
+   "decoders": {
+    "bposd": {
+     "pairs": 5000,
+     "failures_X": 637,
+     "failures_Z": 651,
+     "failures_pair": 1196,
+     "ler": 0.022524512320008738,
+     "ler_sigma": 0.0006482888439958145,
+     "ler_ci95": [
+      0.021273245495902704,
+      0.02382680578541041
+     ],
+     "ms_mean": 342.0509122188611,
+     "ms_mean_ci95": [
+      337.29692122316766,
+      346.4634463985928
+     ],
+     "ms_median": 331.1260000045877,
+     "ms_p95": 569.1739350411808,
+     "ms_p99": 684.0203469914559,
+     "ms_max": 971.0785829956876,
+     "pairs_per_second": 2.923541391873706
+    },
+    "relay": {
+     "pairs": 5000,
+     "failures_X": 199,
+     "failures_Z": 220,
+     "failures_pair": 407,
+     "ler": 0.007050404050046422,
+     "ler_sigma": 0.00034901923201202667,
+     "ler_ci95": [
+      0.00638328549973477,
+      0.0077672324010855665
+     ],
+     "ms_mean": 805.9255272343202,
+     "ms_mean_ci95": [
+      771.8167338257797,
+      838.8836112339233
+     ],
+     "ms_median": 227.35999999713385,
+     "ms_p95": 3138.0490461437153,
+     "ms_p99": 4740.336445262222,
+     "ms_max": 8051.895957993111,
+     "pairs_per_second": 1.2408094373579177
+    },
+    "aegis v1 (online)": {
+     "pairs": 5000,
+     "failures_X": 179,
+     "failures_Z": 199,
+     "failures_pair": 367,
+     "ler": 0.006332639284538755,
+     "ler_sigma": 0.0003301948085181472,
+     "ler_ci95": [
+      0.005702318891907976,
+      0.007012644006158197
+     ],
+     "ms_mean": 681.6598185605719,
+     "ms_mean_ci95": [
+      638.7811305640955,
+      725.5139925503895
+     ],
+     "ms_median": 53.885062494373415,
+     "ms_p95": 5633.883506215353,
+     "ms_p99": 6147.360367318761,
+     "ms_max": 12173.795208000229,
+     "pairs_per_second": 1.467007402771153,
+     "escalated_fraction": 0.0737,
+     "ms_model_mean": 0.12367658659350125
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 5000,
+     "failures_X": 197,
+     "failures_Z": 215,
+     "failures_pair": 399,
+     "ler": 0.006906393920267595,
+     "ler_sigma": 0.00034531437756935013,
+     "ler_ci95": [
+      0.0062465171333144776,
+      0.007615974812401949
+     ],
+     "ms_mean": 555.1887021955248,
+     "ms_mean_ci95": [
+      513.9503186895747,
+      596.2088215797946
+     ],
+     "ms_median": 55.75629149825545,
+     "ms_p95": 5218.605491648492,
+     "ms_p99": 6528.567305411271,
+     "ms_max": 12467.27408299921,
+     "pairs_per_second": 1.8011893902837792,
+     "escalated_fraction": 0.0361,
+     "ms_model_mean": 0.14034081131394488
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 5000,
+     "failures_X": 169,
+     "failures_Z": 200,
+     "failures_pair": 359,
+     "ler": 0.006189768313224264,
+     "ler_sigma": 0.0003263343941788399,
+     "ler_ci95": [
+      0.005566995112033624,
+      0.0068622217179376
+     ],
+     "ms_mean": 1358.4835559958503,
+     "ms_mean_ci95": [
+      1276.7942926493824,
+      1440.118078144248
+     ],
+     "ms_median": 95.46210398548283,
+     "ms_p95": 9347.495000653013,
+     "ms_p99": 11505.232899830595,
+     "ms_max": 22096.639583003707,
+     "pairs_per_second": 0.736114909588979,
+     "escalated_fraction": 0.1115,
+     "ms_model_mean": 0.22048810852866152
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay": {
+     "both_fail": 267,
+     "only_a_fails": 100,
+     "only_b_fails": 140,
+     "mcnemar_p": 0.011664092317677694,
+     "ler_ratio": 0.898195229604899,
+     "ler_ratio_ci95": [
+      0.8304439163081733,
+      0.9718292097890066
+     ],
+     "speedup_mean": 1.1822987145349921,
+     "speedup_mean_ci95": [
+      1.134512710497354,
+      1.2400453566181429
+     ]
+    },
+    "aegis v1 (online) vs bposd": {
+     "both_fail": 312,
+     "only_a_fails": 55,
+     "only_b_fails": 884,
+     "mcnemar_p": 2.2600002239558285e-193,
+     "ler_ratio": 0.2811443459716289,
+     "ler_ratio_ci95": [
+      0.2550366928529381,
+      0.30633409575040105
+     ],
+     "speedup_mean": 0.501791220349695,
+     "speedup_mean_ci95": [
+      0.4714154838424178,
+      0.5379431501216823
+     ]
+    },
+    "aegis v2 speed (online) vs relay": {
+     "both_fail": 269,
+     "only_a_fails": 130,
+     "only_b_fails": 138,
+     "mcnemar_p": 0.6690270656844106,
+     "ler_ratio": 0.9795742018816811,
+     "ler_ratio_ci95": [
+      0.901617318164757,
+      1.0634246249353634
+     ],
+     "speedup_mean": 1.4516245090133184,
+     "speedup_mean_ci95": [
+      1.3760853275775138,
+      1.5374144953356215
+     ]
+    },
+    "aegis v2 speed (online) vs bposd": {
+     "both_fail": 331,
+     "only_a_fails": 68,
+     "only_b_fails": 865,
+     "mcnemar_p": 8.83277044237478e-177,
+     "ler_ratio": 0.30661680138275754,
+     "ler_ratio_ci95": [
+      0.27925205290266647,
+      0.3343392697210495
+     ],
+     "speedup_mean": 0.6160984740255009,
+     "speedup_mean_ci95": [
+      0.5743069211986691,
+      0.6656765179570152
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay": {
+     "both_fail": 263,
+     "only_a_fails": 96,
+     "only_b_fails": 144,
+     "mcnemar_p": 0.0023454452285535054,
+     "ler_ratio": 0.877931004987368,
+     "ler_ratio_ci95": [
+      0.8051840964366674,
+      0.9516092215473246
+     ],
+     "speedup_mean": 0.5932537966155418,
+     "speedup_mean_ci95": [
+      0.5720959868926326,
+      0.6171816275824041
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd": {
+     "both_fail": 312,
+     "only_a_fails": 47,
+     "only_b_fails": 884,
+     "mcnemar_p": 4.795809873636451e-201,
+     "ler_ratio": 0.2748014352224547,
+     "ler_ratio_ci95": [
+      0.24863727345025136,
+      0.3017310482136634
+     ],
+     "speedup_mean": 0.2517887763228147,
+     "speedup_mean_ci95": [
+      0.2380175154970402,
+      0.26771637042654156
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 338,
+     "only_a_fails": 61,
+     "only_b_fails": 29,
+     "mcnemar_p": 0.000972760707951367,
+     "ler_ratio": 1.0906027660741189,
+     "ler_ratio_ci95": [
+      1.0378786942327367,
+      1.1465465801314458
+     ],
+     "speedup_mean": 1.227798432974068,
+     "speedup_mean_ci95": [
+      1.1944571008916613,
+      1.264409602318279
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 314,
+     "only_a_fails": 45,
+     "only_b_fails": 53,
+     "mcnemar_p": 0.4796924995674868,
+     "ler_ratio": 0.9774389531923423,
+     "ler_ratio_ci95": [
+      0.9250780442102511,
+      1.0329958720950183
+     ],
+     "speedup_mean": 0.5017799557101552,
+     "speedup_mean_ci95": [
+      0.4907577655956479,
+      0.512963951976268
+     ]
+    }
+   }
+  }
+ },
+ "timing": {
+  "0.003": {
+   "decoders": {
+    "bposd": {
+     "pairs": 2000,
+     "failures_X": 11,
+     "failures_Z": 6,
+     "failures_pair": 17,
+     "ler": 0.0007111079613304483,
+     "ler_sigma": 0.00017257201904996577,
+     "ler_ci95": [
+      0.00041420355543231313,
+      0.0011383118576583362
+     ],
+     "ms_mean": 52.015600820450345,
+     "ms_mean_ci95": [
+      48.52920931575991,
+      55.625971826287426
+     ],
+     "ms_median": 8.247853991633747,
+     "ms_p95": 181.47195059718794,
+     "ms_p99": 302.71038657519966,
+     "ms_max": 377.28208299085964,
+     "pairs_per_second": 19.225001427011147
+    },
+    "relay": {
+     "pairs": 2000,
+     "failures_X": 0,
+     "failures_Z": 0,
+     "failures_pair": 0,
+     "ler": 0.0,
+     "ler_sigma": 0.0,
+     "ler_ci95": [
+      0.0,
+      0.00015369149883937006
+     ],
+     "ms_mean": 35.77356280765525,
+     "ms_mean_ci95": [
+      31.76559726958367,
+      40.405531046710344
+     ],
+     "ms_median": 21.112041496962775,
+     "ms_p95": 73.70626485790126,
+     "ms_p99": 225.4732419255015,
+     "ms_max": 2107.1737930033123,
+     "pairs_per_second": 27.95360376534842
+    },
+    "aegis v1 (online)": {
+     "pairs": 2000,
+     "failures_X": 0,
+     "failures_Z": 1,
+     "failures_pair": 1,
+     "ler": 4.167621832917856e-05,
+     "ler_sigma": 4.1684906340933026e-05,
+     "ler_ci95": [
+      1.054908109643371e-06,
+      0.00023218292253712747
+     ],
+     "ms_mean": 7.9593733641304425,
+     "ms_mean_ci95": [
+      6.756860346842404,
+      9.408433967562269
+     ],
+     "ms_median": 3.671791506349109,
+     "ms_p95": 25.75206736000835,
+     "ms_p99": 87.21015293020173,
+     "ms_max": 785.1652499957709,
+     "pairs_per_second": 125.63803131871921,
+     "escalated_fraction": 0.00025,
+     "ms_model_mean": 0.06452549006644404
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 2000,
+     "failures_X": 0,
+     "failures_Z": 1,
+     "failures_pair": 1,
+     "ler": 4.167621832917856e-05,
+     "ler_sigma": 4.1684906340933026e-05,
+     "ler_ci95": [
+      1.054908109643371e-06,
+      0.00023218292253712747
+     ],
+     "ms_mean": 8.112974349103752,
+     "ms_mean_ci95": [
+      6.892304027942555,
+      9.602087672237577
+     ],
+     "ms_median": 3.7487500012503006,
+     "ms_p95": 27.043664297525535,
+     "ms_p99": 84.81958147400286,
+     "ms_max": 787.8075000044191,
+     "pairs_per_second": 123.25935679933106,
+     "escalated_fraction": 0.00025,
+     "ms_model_mean": 0.06694793979113456
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 2000,
+     "failures_X": 0,
+     "failures_Z": 1,
+     "failures_pair": 1,
+     "ler": 4.167621832917856e-05,
+     "ler_sigma": 4.1684906340933026e-05,
+     "ler_ci95": [
+      1.054908109643371e-06,
+      0.00023218292253712747
+     ],
+     "ms_mean": 8.114226164485444,
+     "ms_mean_ci95": [
+      6.888236111024708,
+      9.618882370504798
+     ],
+     "ms_median": 3.737957500561606,
+     "ms_p95": 26.541514613199972,
+     "ms_p99": 80.67462375300231,
+     "ms_max": 816.4977080014069,
+     "pairs_per_second": 123.24034106626532,
+     "escalated_fraction": 0.00025,
+     "ms_model_mean": 0.06700703362730565
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay": {
+     "both_fail": 0,
+     "only_a_fails": 1,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": null,
+     "ler_ratio_ci95": null,
+     "speedup_mean": 4.49452000441036,
+     "speedup_mean_ci95": [
+      3.9660129789830516,
+      5.125192559544152
+     ]
+    },
+    "aegis v1 (online) vs bposd": {
+     "both_fail": 1,
+     "only_a_fails": 0,
+     "only_b_fails": 16,
+     "mcnemar_p": 3.0517578125e-05,
+     "ler_ratio": 0.058607441619981854,
+     "ler_ratio_ci95": [
+      0.0,
+      0.1994533247416906
+     ],
+     "speedup_mean": 6.535137684941737,
+     "speedup_mean_ci95": [
+      5.491340186081806,
+      7.694702595796661
+     ]
+    },
+    "aegis v2 speed (online) vs relay": {
+     "both_fail": 0,
+     "only_a_fails": 1,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": null,
+     "ler_ratio_ci95": null,
+     "speedup_mean": 4.4094263420920585,
+     "speedup_mean_ci95": [
+      3.885984977368362,
+      5.029339461854294
+     ]
+    },
+    "aegis v2 speed (online) vs bposd": {
+     "both_fail": 1,
+     "only_a_fails": 0,
+     "only_b_fails": 16,
+     "mcnemar_p": 3.0517578125e-05,
+     "ler_ratio": 0.058607441619981854,
+     "ler_ratio_ci95": [
+      0.0,
+      0.1994533247416906
+     ],
+     "speedup_mean": 6.411409500659467,
+     "speedup_mean_ci95": [
+      5.403795708763254,
+      7.549830739108439
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay": {
+     "both_fail": 0,
+     "only_a_fails": 1,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": null,
+     "ler_ratio_ci95": null,
+     "speedup_mean": 4.408746081570897,
+     "speedup_mean_ci95": [
+      3.8819490826402574,
+      5.036318191298509
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd": {
+     "both_fail": 1,
+     "only_a_fails": 0,
+     "only_b_fails": 16,
+     "mcnemar_p": 3.0517578125e-05,
+     "ler_ratio": 0.058607441619981854,
+     "ler_ratio_ci95": [
+      0.0,
+      0.1994533247416906
+     ],
+     "speedup_mean": 6.410420385879011,
+     "speedup_mean_ci95": [
+      5.393894666898568,
+      7.544540216465602
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 1,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 0.9810672413884463,
+     "speedup_mean_ci95": [
+      0.9717181808755058,
+      0.9877449352848684
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 1,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 0.9809158880691833,
+     "speedup_mean_ci95": [
+      0.9706656322284299,
+      0.9879258643615378
+     ]
+    }
+   }
+  },
+  "0.004": {
+   "decoders": {
+    "bposd": {
+     "pairs": 1000,
+     "failures_X": 30,
+     "failures_Z": 26,
+     "failures_pair": 56,
+     "ler": 0.004790912859462759,
+     "ler_sigma": 0.0006410310630584615,
+     "ler_ci95": [
+      0.003619140409228949,
+      0.006217230775600546
+     ],
+     "ms_mean": 119.2027200950979,
+     "ms_mean_ci95": [
+      113.27037206271488,
+      125.70436171849614
+     ],
+     "ms_median": 139.41731198428897,
+     "ms_p95": 306.8299937614938,
+     "ms_p99": 336.0126900881005,
+     "ms_max": 385.9245829953579,
+     "pairs_per_second": 8.38907030982361
+    },
+    "relay": {
+     "pairs": 1000,
+     "failures_X": 9,
+     "failures_Z": 9,
+     "failures_pair": 18,
+     "ler": 0.0015125192070827298,
+     "ler_sigma": 0.00035694030844934943,
+     "ler_ci95": [
+      0.0008962336135805993,
+      0.0023894056036358746
+     ],
+     "ms_mean": 139.044241309035,
+     "ms_mean_ci95": [
+      119.24413666943838,
+      161.9474554252218
+     ],
+     "ms_median": 40.578167005151045,
+     "ms_p95": 485.3881833463662,
+     "ms_p99": 2123.8466103297833,
+     "ms_max": 3106.3893759856,
+     "pairs_per_second": 7.191955528581972
+    },
+    "aegis v1 (online)": {
+     "pairs": 1000,
+     "failures_X": 10,
+     "failures_Z": 11,
+     "failures_pair": 21,
+     "ler": 0.0017670732553261015,
+     "ler_sigma": 0.0003860935986260694,
+     "ler_ci95": [
+      0.0010936538679844343,
+      0.0026999288410285427
+     ],
+     "ms_mean": 83.82840524773928,
+     "ms_mean_ci95": [
+      58.83895416371415,
+      112.63969530234462
+     ],
+     "ms_median": 5.924541510466952,
+     "ms_p95": 129.98069230161488,
+     "ms_p99": 2894.311200084775,
+     "ms_max": 4234.111126002972,
+     "pairs_per_second": 11.929130669308163,
+     "escalated_fraction": 0.0115,
+     "ms_model_mean": 0.07137591917125974
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 1000,
+     "failures_X": 10,
+     "failures_Z": 11,
+     "failures_pair": 21,
+     "ler": 0.0017670732553261015,
+     "ler_sigma": 0.0003860935986260694,
+     "ler_ci95": [
+      0.0010936538679844343,
+      0.0026999288410285427
+     ],
+     "ms_mean": 83.96534499680274,
+     "ms_mean_ci95": [
+      58.85326866780524,
+      112.88250143028199
+     ],
+     "ms_median": 5.857604002812877,
+     "ms_p95": 131.09296010516118,
+     "ms_p99": 2876.9093319190133,
+     "ms_max": 4290.312250988791,
+     "pairs_per_second": 11.909675355208488,
+     "escalated_fraction": 0.0115,
+     "ms_model_mean": 0.07076203028555028
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 1000,
+     "failures_X": 10,
+     "failures_Z": 10,
+     "failures_pair": 20,
+     "ler": 0.001682142552739574,
+     "ler_sigma": 0.0003766087847291155,
+     "ler_ci95": [
+      0.0010273069782512634,
+      0.002596771279676835
+     ],
+     "ms_mean": 93.75952095277898,
+     "ms_mean_ci95": [
+      67.28253404965108,
+      124.63964574829987
+     ],
+     "ms_median": 5.973895997158252,
+     "ms_p95": 176.29105624146172,
+     "ms_p99": 2997.461494659799,
+     "ms_max": 4380.656833003741,
+     "pairs_per_second": 10.66558350381973,
+     "escalated_fraction": 0.019,
+     "ms_model_mean": 0.07219488341070246
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay": {
+     "both_fail": 16,
+     "only_a_fails": 5,
+     "only_b_fails": 2,
+     "mcnemar_p": 0.453125,
+     "ler_ratio": 1.1682980599858581,
+     "ler_ratio_ci95": [
+      0.8939047589815705,
+      1.6214026785362265
+     ],
+     "speedup_mean": 1.6586769233902943,
+     "speedup_mean_ci95": [
+      1.357157703296075,
+      2.164469579606271
+     ]
+    },
+    "aegis v1 (online) vs bposd": {
+     "both_fail": 18,
+     "only_a_fails": 3,
+     "only_b_fails": 38,
+     "mcnemar_p": 1.0479197953827679e-08,
+     "ler_ratio": 0.3688385297670091,
+     "ler_ratio_ci95": [
+      0.24067220320770225,
+      0.5141288178860423
+     ],
+     "speedup_mean": 1.4219848241513888,
+     "speedup_mean_ci95": [
+      1.0608891362694524,
+      2.0439516049530075
+     ]
+    },
+    "aegis v2 speed (online) vs relay": {
+     "both_fail": 16,
+     "only_a_fails": 5,
+     "only_b_fails": 2,
+     "mcnemar_p": 0.453125,
+     "ler_ratio": 1.1682980599858581,
+     "ler_ratio_ci95": [
+      0.8939047589815705,
+      1.6214026785362265
+     ],
+     "speedup_mean": 1.655971774001876,
+     "speedup_mean_ci95": [
+      1.3532043654858237,
+      2.1559585708427154
+     ]
+    },
+    "aegis v2 speed (online) vs bposd": {
+     "both_fail": 18,
+     "only_a_fails": 3,
+     "only_b_fails": 38,
+     "mcnemar_p": 1.0479197953827679e-08,
+     "ler_ratio": 0.3688385297670091,
+     "ler_ratio_ci95": [
+      0.24067220320770225,
+      0.5141288178860423
+     ],
+     "speedup_mean": 1.4196656977904032,
+     "speedup_mean_ci95": [
+      1.0591676116570714,
+      2.0412373567118736
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay": {
+     "both_fail": 15,
+     "only_a_fails": 5,
+     "only_b_fails": 3,
+     "mcnemar_p": 0.7265625,
+     "ler_ratio": 1.1121462424163229,
+     "ler_ratio_ci95": [
+      0.8174067723566355,
+      1.5497599132915605
+     ],
+     "speedup_mean": 1.4829879664067736,
+     "speedup_mean_ci95": [
+      1.2353863196895112,
+      1.8880010073285791
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd": {
+     "both_fail": 16,
+     "only_a_fails": 4,
+     "only_b_fails": 40,
+     "mcnemar_p": 1.7051434042514302e-08,
+     "ler_ratio": 0.35111107258340013,
+     "ler_ratio_ci95": [
+      0.22446258311537645,
+      0.5051234180010108
+     ],
+     "speedup_mean": 1.271366565056717,
+     "speedup_mean_ci95": [
+      0.9588421964996241,
+      1.7678440396919417
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 21,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 0.9983690920454305,
+     "speedup_mean_ci95": [
+      0.9942501960776498,
+      1.0021506810111345
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 19,
+     "only_a_fails": 1,
+     "only_b_fails": 2,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 0.9519370788219789,
+     "ler_ratio_ci95": [
+      0.788007205519027,
+      1.118687410434311
+     ],
+     "speedup_mean": 0.8940788561618035,
+     "speedup_mean_ci95": [
+      0.8221698371272597,
+      0.9463280781382335
+     ]
+    }
+   }
+  },
+  "0.005": {
+   "decoders": {
+    "bposd": {
+     "pairs": 500,
+     "failures_X": 62,
+     "failures_Z": 46,
+     "failures_pair": 105,
+     "ler": 0.01945185082377021,
+     "ler_sigma": 0.001904286815785694,
+     "ler_ci95": [
+      0.015913340766452788,
+      0.02351154219360141
+     ],
+     "ms_mean": 211.66252416558564,
+     "ms_mean_ci95": [
+      202.8282853234632,
+      220.67591300107816
+     ],
+     "ms_median": 182.99381298857043,
+     "ms_p95": 341.41800596335077,
+     "ms_p99": 389.12978090127575,
+     "ms_max": 412.26504200312775,
+     "pairs_per_second": 4.724501911437522
+    },
+    "relay": {
+     "pairs": 500,
+     "failures_X": 21,
+     "failures_Z": 17,
+     "failures_pair": 38,
+     "ler": 0.006565287649289986,
+     "ler_sigma": 0.0010680963150809797,
+     "ler_ci95": [
+      0.004645261302948733,
+      0.009001325808215777
+     ],
+     "ms_mean": 484.17779029370286,
+     "ms_mean_ci95": [
+      425.0241705754779,
+      553.2656734965028
+     ],
+     "ms_median": 158.4052079997491,
+     "ms_p95": 2129.1971794395063,
+     "ms_p99": 2664.6066462331505,
+     "ms_max": 4141.783332990599,
+     "pairs_per_second": 2.0653570239010732
+    },
+    "aegis v1 (online)": {
+     "pairs": 500,
+     "failures_X": 18,
+     "failures_Z": 18,
+     "failures_pair": 36,
+     "ler": 0.006207614833215747,
+     "ler_sigma": 0.001037561807233689,
+     "ler_ci95": [
+      0.004346965052785201,
+      0.00858456342055236
+     ],
+     "ms_mean": 396.72857115630177,
+     "ms_mean_ci95": [
+      311.35556382632933,
+      487.71014412205835
+     ],
+     "ms_median": 34.199896501377225,
+     "ms_p95": 3655.1286291600245,
+     "ms_p99": 4275.279503580969,
+     "ms_max": 6532.452291998197,
+     "pairs_per_second": 2.5206150317972016,
+     "escalated_fraction": 0.049,
+     "ms_model_mean": 0.07405606046086177
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 500,
+     "failures_X": 19,
+     "failures_Z": 17,
+     "failures_pair": 36,
+     "ler": 0.006207614833215747,
+     "ler_sigma": 0.001037561807233689,
+     "ler_ci95": [
+      0.004346965052785201,
+      0.00858456342055236
+     ],
+     "ms_mean": 324.8049334278621,
+     "ms_mean_ci95": [
+      252.52742523588168,
+      407.04525698203065
+     ],
+     "ms_median": 35.53914599615382,
+     "ms_p95": 2663.8359107003985,
+     "ms_p99": 4263.3393682475435,
+     "ms_max": 4822.495707994676,
+     "pairs_per_second": 3.078770970152447,
+     "escalated_fraction": 0.029,
+     "ms_model_mean": 0.07462617004057392
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 500,
+     "failures_X": 16,
+     "failures_Z": 18,
+     "failures_pair": 34,
+     "ler": 0.005851352453994041,
+     "ler_sigma": 0.0010063477467496806,
+     "ler_ci95": [
+      0.00405142290997873,
+      0.008167927582428902
+     ],
+     "ms_mean": 481.829062076431,
+     "ms_mean_ci95": [
+      393.69278214181907,
+      584.281011704298
+     ],
+     "ms_median": 36.534415994537994,
+     "ms_p95": 3740.2304580013124,
+     "ms_p99": 4261.501584016949,
+     "ms_max": 6987.055125006009,
+     "pairs_per_second": 2.0754248315585686,
+     "escalated_fraction": 0.093,
+     "ms_model_mean": 0.07987659185891971
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay": {
+     "both_fail": 28,
+     "only_a_fails": 8,
+     "only_b_fails": 10,
+     "mcnemar_p": 0.8145294189453125,
+     "ler_ratio": 0.9455206176513956,
+     "ler_ratio_ci95": [
+      0.7427395491987759,
+      1.19452474435787
+     ],
+     "speedup_mean": 1.2204258162766608,
+     "speedup_mean_ci95": [
+      1.0598196186385085,
+      1.461566437012366
+     ]
+    },
+    "aegis v1 (online) vs bposd": {
+     "both_fail": 30,
+     "only_a_fails": 6,
+     "only_b_fails": 75,
+     "mcnemar_p": 2.91096598559025e-16,
+     "ler_ratio": 0.31912720745472845,
+     "ler_ratio_ci95": [
+      0.23088099314127303,
+      0.41972887885839766
+     ],
+     "speedup_mean": 0.5335197400799137,
+     "speedup_mean_ci95": [
+      0.4328952284100222,
+      0.6823901200650351
+     ]
+    },
+    "aegis v2 speed (online) vs relay": {
+     "both_fail": 27,
+     "only_a_fails": 9,
+     "only_b_fails": 11,
+     "mcnemar_p": 0.8238029479980469,
+     "ler_ratio": 0.9455206176513956,
+     "ler_ratio_ci95": [
+      0.730476736817506,
+      1.2057745505165405
+     ],
+     "speedup_mean": 1.4906725251488115,
+     "speedup_mean_ci95": [
+      1.2654983396839972,
+      1.8198119061447167
+     ]
+    },
+    "aegis v2 speed (online) vs bposd": {
+     "both_fail": 30,
+     "only_a_fails": 6,
+     "only_b_fails": 75,
+     "mcnemar_p": 2.91096598559025e-16,
+     "ler_ratio": 0.31912720745472845,
+     "ler_ratio_ci95": [
+      0.23052722714653776,
+      0.42073053840680136
+     ],
+     "speedup_mean": 0.6516604348701959,
+     "speedup_mean_ci95": [
+      0.520902973234173,
+      0.8382307317132028
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay": {
+     "both_fail": 28,
+     "only_a_fails": 6,
+     "only_b_fails": 10,
+     "mcnemar_p": 0.454498291015625,
+     "ler_ratio": 0.8912560677561242,
+     "ler_ratio_ci95": [
+      0.7021198008763511,
+      1.1031950997323157
+     ],
+     "speedup_mean": 1.0048746088647083,
+     "speedup_mean_ci95": [
+      0.8945895333143661,
+      1.1492561673251154
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd": {
+     "both_fail": 28,
+     "only_a_fails": 6,
+     "only_b_fails": 77,
+     "mcnemar_p": 8.445814568882953e-17,
+     "ler_ratio": 0.30081211844600786,
+     "ler_ratio_ci95": [
+      0.216667851071913,
+      0.40391033909253715
+     ],
+     "speedup_mean": 0.43928965856362207,
+     "speedup_mean_ci95": [
+      0.365561833491443,
+      0.5407963447746477
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 35,
+     "only_a_fails": 1,
+     "only_b_fails": 1,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      0.9163410703926829,
+      1.0801011890189178
+     ],
+     "speedup_mean": 1.2214364079060813,
+     "speedup_mean_ci95": [
+      1.1286281691306363,
+      1.335643557169898
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 34,
+     "only_a_fails": 0,
+     "only_b_fails": 2,
+     "mcnemar_p": 0.5,
+     "ler_ratio": 0.9426088137241675,
+     "ler_ratio_ci95": [
+      0.8538658366470944,
+      1.0
+     ],
+     "speedup_mean": 0.8233803279665393,
+     "speedup_mean_ci95": [
+      0.7589430157234731,
+      0.8783798525001366
+     ]
+    }
+   }
+  }
+ },
+ "loss": {
+  "0.25": {
+   "decoders": {
+    "bposd+flags": {
+     "pairs": 5000,
+     "failures_X": 25,
+     "failures_Z": 20,
+     "failures_pair": 45,
+     "ler": 0.0007531116566323881,
+     "ler_sigma": 0.00011229473581941818,
+     "ler_ci95": [
+      0.0005493250969309527,
+      0.0010075956516856222
+     ],
+     "ms_mean": 149.52124768480135,
+     "ms_mean_ci95": [
+      143.63722283532894,
+      154.8046380216045
+     ],
+     "ms_median": 21.459416500874795,
+     "ms_p95": 469.5066806001706,
+     "ms_p99": 779.4206975844284,
+     "ms_max": 1021.3930000027176,
+     "pairs_per_second": 6.688012677021346
+    },
+    "relay+flags": {
+     "pairs": 5000,
+     "failures_X": 3,
+     "failures_Z": 6,
+     "failures_pair": 9,
+     "ler": 0.00015012389249957625,
+     "ler_sigma": 5.005132589519512e-05,
+     "ler_ci95": [
+      6.864212415824689e-05,
+      0.0002849627377791153
+     ],
+     "ms_mean": 96.88245733873627,
+     "ms_mean_ci95": [
+      91.43175776282253,
+      103.30595355331629
+     ],
+     "ms_median": 59.42200050048996,
+     "ms_p95": 215.24177470419093,
+     "ms_p99": 700.7168274247674,
+     "ms_max": 4798.980916006258,
+     "pairs_per_second": 10.321786084591524
+    },
+    "aegis v1 (online)": {
+     "pairs": 5000,
+     "failures_X": 5,
+     "failures_Z": 7,
+     "failures_pair": 12,
+     "ler": 0.00020022033792477245,
+     "ler_sigma": 5.7811242191951884e-05,
+     "ler_ci95": [
+      0.00010345140590406476,
+      0.0003497185655531032
+     ],
+     "ms_mean": 36.80921246049111,
+     "ms_mean_ci95": [
+      32.14704336814233,
+      43.297315639917144
+     ],
+     "ms_median": 18.634896499861497,
+     "ms_p95": 88.70953305595326,
+     "ms_p99": 267.76016685064127,
+     "ms_max": 9187.961167001049,
+     "pairs_per_second": 27.167112066669244,
+     "escalated_fraction": 0.00039999999999999996,
+     "ms_model_mean": 0.20289366875076667
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 5000,
+     "failures_X": 3,
+     "failures_Z": 6,
+     "failures_pair": 9,
+     "ler": 0.00015012389249957625,
+     "ler_sigma": 5.005132589519512e-05,
+     "ler_ci95": [
+      6.864212415824689e-05,
+      0.0002849627377791153
+     ],
+     "ms_mean": 69.49348438557936,
+     "ms_mean_ci95": [
+      59.83023559087865,
+      80.68794689534066
+     ],
+     "ms_median": 20.159937506832648,
+     "ms_p95": 194.85780384275148,
+     "ms_p99": 974.8559399042398,
+     "ms_max": 11634.56583401421,
+     "pairs_per_second": 14.389838253778949,
+     "escalated_fraction": 0.045200000000000004,
+     "ms_model_mean": 0.22751649171696045
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 5000,
+     "failures_X": 4,
+     "failures_Z": 4,
+     "failures_pair": 8,
+     "ler": 0.00013343121117848078,
+     "ler_sigma": 4.7184159315150076e-05,
+     "ler_ci95": [
+      5.7602541838397414e-05,
+      0.0002628956918016012
+     ],
+     "ms_mean": 98.96449809305486,
+     "ms_mean_ci95": [
+      83.12715927547012,
+      117.00872824952079
+     ],
+     "ms_median": 20.558584001264535,
+     "ms_p95": 288.80637705733557,
+     "ms_p99": 1428.8624285721946,
+     "ms_max": 17367.50591600139,
+     "pairs_per_second": 10.10463367438811,
+     "escalated_fraction": 0.045200000000000004,
+     "ms_model_mean": 0.2305030543007888
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay+flags": {
+     "both_fail": 9,
+     "only_a_fails": 3,
+     "only_b_fails": 0,
+     "mcnemar_p": 0.25,
+     "ler_ratio": 1.333700682756661,
+     "ler_ratio_ci95": [
+      1.0,
+      2.0013043784855826
+     ],
+     "speedup_mean": 2.6320165758157508,
+     "speedup_mean_ci95": [
+      2.310222491159189,
+      2.9337576295044405
+     ]
+    },
+    "aegis v1 (online) vs bposd+flags": {
+     "both_fail": 8,
+     "only_a_fails": 4,
+     "only_b_fails": 37,
+     "mcnemar_p": 1.0258372640237212e-07,
+     "ler_ratio": 0.26585744113970716,
+     "ler_ratio_ci95": [
+      0.14224099221531633,
+      0.42454902824443963
+     ],
+     "speedup_mean": 4.062060492201208,
+     "speedup_mean_ci95": [
+      3.4527952310181838,
+      4.678732708657782
+     ]
+    },
+    "aegis v2 speed (online) vs relay+flags": {
+     "both_fail": 9,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 1.3941228907330543,
+     "speedup_mean_ci95": [
+      1.2712968374002094,
+      1.5336794893858903
+     ]
+    },
+    "aegis v2 speed (online) vs bposd+flags": {
+     "both_fail": 7,
+     "only_a_fails": 2,
+     "only_b_fails": 38,
+     "mcnemar_p": 1.4933903003111482e-09,
+     "ler_ratio": 0.19933816078597139,
+     "ler_ratio_ci95": [
+      0.09044289424857872,
+      0.33247647515135687
+     ],
+     "speedup_mean": 2.1515865696875114,
+     "speedup_mean_ci95": [
+      1.850049094323165,
+      2.4946939155542673
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay+flags": {
+     "both_fail": 7,
+     "only_a_fails": 1,
+     "only_b_fails": 2,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 0.8888072974717026,
+     "ler_ratio_ci95": [
+      0.499908296648756,
+      1.4002569429033662
+     ],
+     "speedup_mean": 0.978961740882464,
+     "speedup_mean_ci95": [
+      0.8731225515675147,
+      1.103007033561365
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd+flags": {
+     "both_fail": 6,
+     "only_a_fails": 2,
+     "only_b_fails": 39,
+     "mcnemar_p": 7.839844329282641e-10,
+     "ler_ratio": 0.17717321197115896,
+     "ler_ratio_ci95": [
+      0.07117272720508111,
+      0.3015405144825285
+     ],
+     "speedup_mean": 1.5108574343923689,
+     "speedup_mean_ci95": [
+      1.2697702634095185,
+      1.7973623923325133
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 9,
+     "only_a_fails": 0,
+     "only_b_fails": 3,
+     "mcnemar_p": 0.25,
+     "ler_ratio": 0.749793422863872,
+     "ler_ratio_ci95": [
+      0.4995867559285696,
+      1.0
+     ],
+     "speedup_mean": 0.5296786135554518,
+     "speedup_mean_ci95": [
+      0.48641944661141734,
+      0.5820699413011232
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 7,
+     "only_a_fails": 1,
+     "only_b_fails": 5,
+     "mcnemar_p": 0.21875,
+     "ler_ratio": 0.6664218658376956,
+     "ler_ratio_ci95": [
+      0.33314987002004626,
+      1.0
+     ],
+     "speedup_mean": 0.3719436077559849,
+     "speedup_mean_ci95": [
+      0.33645718069801284,
+      0.41763977401737945
+     ]
+    }
+   }
+  },
+  "0.5": {
+   "decoders": {
+    "bposd+flags": {
+     "pairs": 5000,
+     "failures_X": 2,
+     "failures_Z": 0,
+     "failures_pair": 2,
+     "ler": 3.3339446006586115e-05,
+     "ler_sigma": 2.3577212752923238e-05,
+     "ler_ci95": [
+      4.037216903785001e-06,
+      0.00012042830067626742
+     ],
+     "ms_mean": 98.06409927991044,
+     "ms_mean_ci95": [
+      92.50049259465436,
+      104.3030409286428
+     ],
+     "ms_median": 18.841916498786304,
+     "ms_p95": 637.0773395959986,
+     "ms_p99": 845.2015694869631,
+     "ms_max": 1727.475207997486,
+     "pairs_per_second": 10.197411767844194
+    },
+    "relay+flags": {
+     "pairs": 5000,
+     "failures_X": 0,
+     "failures_Z": 3,
+     "failures_pair": 3,
+     "ler": 5.001375527313723e-05,
+     "ler_sigma": 2.8879320277619414e-05,
+     "ler_ci95": [
+      1.0313211678547596e-05,
+      0.00014615439582221779
+     ],
+     "ms_mean": 72.47026825530047,
+     "ms_mean_ci95": [
+      69.05006622387067,
+      76.39096014183284
+     ],
+     "ms_median": 57.91616649366915,
+     "ms_p95": 128.73949436034314,
+     "ms_p99": 250.46167281339908,
+     "ms_max": 6862.028667004779,
+     "pairs_per_second": 13.798762224491423
+    },
+    "aegis v1 (online)": {
+     "pairs": 5000,
+     "failures_X": 2,
+     "failures_Z": 3,
+     "failures_pair": 5,
+     "ler": 8.337155219761971e-05,
+     "ler_sigma": 3.729098696714228e-05,
+     "ler_ci95": [
+      2.7068569092070227e-05,
+      0.00019455058894368715
+     ],
+     "ms_mean": 23.675565156931405,
+     "ms_mean_ci95": [
+      19.796824999534582,
+      29.3150798154826
+     ],
+     "ms_median": 16.8493540113559,
+     "ms_p95": 26.320830146869422,
+     "ms_p99": 90.20412258978479,
+     "ms_max": 9484.376125008566,
+     "pairs_per_second": 42.237640088909714,
+     "escalated_fraction": 0.0002,
+     "ms_model_mean": 0.2156379259104142
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 5000,
+     "failures_X": 2,
+     "failures_Z": 3,
+     "failures_pair": 5,
+     "ler": 8.337155219761971e-05,
+     "ler_sigma": 3.729098696714228e-05,
+     "ler_ci95": [
+      2.7068569092070227e-05,
+      0.00019455058894368715
+     ],
+     "ms_mean": 23.58103619100002,
+     "ms_mean_ci95": [
+      19.711184393709917,
+      29.292332842047472
+     ],
+     "ms_median": 16.842166493006516,
+     "ms_p95": 25.361919095303165,
+     "ms_p99": 90.65224324760518,
+     "ms_max": 9467.567541985773,
+     "pairs_per_second": 42.406957518756606,
+     "escalated_fraction": 0.00030000000000000003,
+     "ms_model_mean": 0.21743525974743536
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 5000,
+     "failures_X": 2,
+     "failures_Z": 3,
+     "failures_pair": 5,
+     "ler": 8.337155219761971e-05,
+     "ler_sigma": 3.729098696714228e-05,
+     "ler_ci95": [
+      2.7068569092070227e-05,
+      0.00019455058894368715
+     ],
+     "ms_mean": 25.212508144872846,
+     "ms_mean_ci95": [
+      19.688114517537834,
+      33.31021814661369
+     ],
+     "ms_median": 16.558728995732963,
+     "ms_p95": 26.227870562433967,
+     "ms_p99": 89.0591267513812,
+     "ms_max": 13501.09654199332,
+     "pairs_per_second": 39.6628528289978,
+     "escalated_fraction": 0.0004,
+     "ms_model_mean": 0.21196584710560273
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay+flags": {
+     "both_fail": 3,
+     "only_a_fails": 2,
+     "only_b_fails": 0,
+     "mcnemar_p": 0.5,
+     "ler_ratio": 1.6669724507249553,
+     "ler_ratio_ci95": [
+      1.0,
+      4.001871868176048
+     ],
+     "speedup_mean": 3.0609731077141205,
+     "speedup_mean_ci95": [
+      2.609903850413646,
+      3.517592978721941
+     ]
+    },
+    "aegis v1 (online) vs bposd+flags": {
+     "both_fail": 0,
+     "only_a_fails": 5,
+     "only_b_fails": 2,
+     "mcnemar_p": 0.453125,
+     "ler_ratio": 2.5006879892710243,
+     "ler_ratio_ci95": [
+      0.33327220778776073,
+      8.005138772569614
+     ],
+     "speedup_mean": 4.141996131027968,
+     "speedup_mean_ci95": [
+      3.332102262450995,
+      5.010346363432292
+     ]
+    },
+    "aegis v2 speed (online) vs relay+flags": {
+     "both_fail": 3,
+     "only_a_fails": 2,
+     "only_b_fails": 0,
+     "mcnemar_p": 0.5,
+     "ler_ratio": 1.6669724507249553,
+     "ler_ratio_ci95": [
+      1.0,
+      4.001871868176048
+     ],
+     "speedup_mean": 3.0732435872754227,
+     "speedup_mean_ci95": [
+      2.6181492121949015,
+      3.5349666154079866
+     ]
+    },
+    "aegis v2 speed (online) vs bposd+flags": {
+     "both_fail": 0,
+     "only_a_fails": 5,
+     "only_b_fails": 2,
+     "mcnemar_p": 0.453125,
+     "ler_ratio": 2.5006879892710243,
+     "ler_ratio_ci95": [
+      0.33327220778776073,
+      8.005138772569614
+     ],
+     "speedup_mean": 4.158600092278292,
+     "speedup_mean_ci95": [
+      3.3450889671274515,
+      5.039709445089977
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay+flags": {
+     "both_fail": 3,
+     "only_a_fails": 2,
+     "only_b_fails": 0,
+     "mcnemar_p": 0.5,
+     "ler_ratio": 1.6669724507249553,
+     "ler_ratio_ci95": [
+      1.0,
+      4.001871868176048
+     ],
+     "speedup_mean": 2.8743775842879735,
+     "speedup_mean_ci95": [
+      2.2980379355193628,
+      3.5385829606230557
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd+flags": {
+     "both_fail": 0,
+     "only_a_fails": 5,
+     "only_b_fails": 2,
+     "mcnemar_p": 0.453125,
+     "ler_ratio": 2.5006879892710243,
+     "ler_ratio_ci95": [
+      0.33327220778776073,
+      8.005138772569614
+     ],
+     "speedup_mean": 3.8895019375473168,
+     "speedup_mean_ci95": [
+      2.9290611978443217,
+      5.030218686259709
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 5,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 1.0040086858425443,
+     "speedup_mean_ci95": [
+      0.9966814252184979,
+      1.0094090762497192
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 5,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 0.9390404564627185,
+     "speedup_mean_ci95": [
+      0.8776459089504924,
+      1.0103929057392427
+     ]
+    }
+   }
+  },
+  "0.75": {
+   "decoders": {
+    "bposd+flags": {
+     "pairs": 5000,
+     "failures_X": 0,
+     "failures_Z": 0,
+     "failures_pair": 0,
+     "ler": 0.0,
+     "ler_sigma": 0.0,
+     "ler_ci95": [
+      0.0,
+      6.147943429735125e-05
+     ],
+     "ms_mean": 32.07647383863805,
+     "ms_mean_ci95": [
+      29.483753001837613,
+      34.82956892145223
+     ],
+     "ms_median": 8.553583502362017,
+     "ms_p95": 32.09564195858548,
+     "ms_p99": 499.796630662604,
+     "ms_max": 1025.9271260001697,
+     "pairs_per_second": 31.175496565817642
+    },
+    "relay+flags": {
+     "pairs": 5000,
+     "failures_X": 1,
+     "failures_Z": 2,
+     "failures_pair": 3,
+     "ler": 5.001375527313723e-05,
+     "ler_sigma": 2.8879320277619414e-05,
+     "ler_ci95": [
+      1.0313211678547596e-05,
+      0.00014615439582221779
+     ],
+     "ms_mean": 46.2550825926679,
+     "ms_mean_ci95": [
+      40.23467816125987,
+      53.13970093590404
+     ],
+     "ms_median": 33.05168799852254,
+     "ms_p95": 52.58615620186902,
+     "ms_p99": 81.02378657305964,
+     "ms_max": 5209.495125003741,
+     "pairs_per_second": 21.619245798482577
+    },
+    "aegis v1 (online)": {
+     "pairs": 5000,
+     "failures_X": 1,
+     "failures_Z": 2,
+     "failures_pair": 3,
+     "ler": 5.001375527313723e-05,
+     "ler_sigma": 2.8879320277619414e-05,
+     "ler_ci95": [
+      1.0313211678547596e-05,
+      0.00014615439582221779
+     ],
+     "ms_mean": 30.716343944013353,
+     "ms_mean_ci95": [
+      20.655771945921007,
+      42.443339213734
+     ],
+     "ms_median": 13.911770503909793,
+     "ms_p95": 18.64975380667602,
+     "ms_p99": 27.450115087558558,
+     "ms_max": 10600.642834004248,
+     "pairs_per_second": 32.555957890779545,
+     "escalated_fraction": 0.0007999999999999999,
+     "ms_model_mean": 0.20879756348731462
+    },
+    "aegis v2 speed (online)": {
+     "pairs": 5000,
+     "failures_X": 1,
+     "failures_Z": 2,
+     "failures_pair": 3,
+     "ler": 5.001375527313723e-05,
+     "ler_sigma": 2.8879320277619414e-05,
+     "ler_ci95": [
+      1.0313211678547596e-05,
+      0.00014615439582221779
+     ],
+     "ms_mean": 31.57803672517766,
+     "ms_mean_ci95": [
+      21.48364149474248,
+      43.83245560835225
+     ],
+     "ms_median": 14.308916492154822,
+     "ms_p95": 19.554372654965846,
+     "ms_p99": 28.955922092573037,
+     "ms_max": 9794.776458002161,
+     "pairs_per_second": 31.66757986580858,
+     "escalated_fraction": 0.0009,
+     "ms_model_mean": 0.22381732930371073
+    },
+    "aegis v2 accuracy (online)": {
+     "pairs": 5000,
+     "failures_X": 1,
+     "failures_Z": 2,
+     "failures_pair": 3,
+     "ler": 5.001375527313723e-05,
+     "ler_sigma": 2.8879320277619414e-05,
+     "ler_ci95": [
+      1.0313211678547596e-05,
+      0.00014615439582221779
+     ],
+     "ms_mean": 42.60132926389051,
+     "ms_mean_ci95": [
+      26.4222083418259,
+      61.13217431514109
+     ],
+     "ms_median": 15.059728495543823,
+     "ms_p95": 24.553839254804195,
+     "ms_p99": 45.84519865267795,
+     "ms_max": 16615.531124989502,
+     "pairs_per_second": 23.473445952955608,
+     "escalated_fraction": 0.0009,
+     "ms_model_mean": 0.23832230197440366
+    }
+   },
+   "comparisons": {
+    "aegis v1 (online) vs relay+flags": {
+     "both_fail": 3,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 1.505878521121426,
+     "speedup_mean_ci95": [
+      1.2389698307212202,
+      1.9518167503335924
+     ]
+    },
+    "aegis v1 (online) vs bposd+flags": {
+     "both_fail": 0,
+     "only_a_fails": 3,
+     "only_b_fails": 0,
+     "mcnemar_p": 0.25,
+     "ler_ratio": null,
+     "ler_ratio_ci95": null,
+     "speedup_mean": 1.0442803315753921,
+     "speedup_mean_ci95": [
+      0.7754988940404806,
+      1.4934254038750403
+     ]
+    },
+    "aegis v2 speed (online) vs relay+flags": {
+     "both_fail": 3,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 1.4647865222028829,
+     "speedup_mean_ci95": [
+      1.2168253824389048,
+      1.8662696399301268
+     ]
+    },
+    "aegis v2 speed (online) vs bposd+flags": {
+     "both_fail": 0,
+     "only_a_fails": 3,
+     "only_b_fails": 0,
+     "mcnemar_p": 0.25,
+     "ler_ratio": null,
+     "ler_ratio_ci95": null,
+     "speedup_mean": 1.01578429709859,
+     "speedup_mean_ci95": [
+      0.7487300780307199,
+      1.4487649850565056
+     ]
+    },
+    "aegis v2 accuracy (online) vs relay+flags": {
+     "both_fail": 3,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 1.0857661812884876,
+     "speedup_mean_ci95": [
+      0.8640961472524782,
+      1.5023230061424224
+     ]
+    },
+    "aegis v2 accuracy (online) vs bposd+flags": {
+     "both_fail": 0,
+     "only_a_fails": 3,
+     "only_b_fails": 0,
+     "mcnemar_p": 0.25,
+     "ler_ratio": null,
+     "ler_ratio_ci95": null,
+     "speedup_mean": 0.7529453750126648,
+     "speedup_mean_ci95": [
+      0.5339015283360332,
+      1.1563482035314003
+     ]
+    },
+    "aegis v2 speed (online) vs aegis v1 (online)": {
+     "both_fail": 3,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 0.9727122750326885,
+     "speedup_mean_ci95": [
+      0.9050651768470923,
+      1.014583213603635
+     ]
+    },
+    "aegis v2 accuracy (online) vs aegis v1 (online)": {
+     "both_fail": 3,
+     "only_a_fails": 0,
+     "only_b_fails": 0,
+     "mcnemar_p": 1.0,
+     "ler_ratio": 1.0,
+     "ler_ratio_ci95": [
+      1.0,
+      1.0
+     ],
+     "speedup_mean": 0.7210184394421927,
+     "speedup_mean_ci95": [
+      0.6680215060614103,
+      0.7893794790610154
+     ]
+    }
+   }
+  }
+ },
+ "splits": {
+  "test2": "seed 7, 8 parallel workers",
+  "timing2": "seed 8, one worker, nothing else running"
+ },
+ "selection": {
+  "rule": {
+   "speed": "fastest mean with failed pairs <= relay-BP at the setting",
+   "accuracy": "fewest failed pairs with mean <= relay-BP at the setting"
+  },
+  "split": "val (seed 3)",
+  "settings": {
+   "p0.003": {
+    "relay_failures": 3,
+    "relay_ms": 47.61003214345328,
+    "pairs": 4000,
+    "candidates": 126,
+    "inference_us": 60.73212499904912,
+    "chosen": {
+     "speed": {
+      "threshold": 0.1998721146617946,
+      "failures_pair": 3,
+      "ler": 6.252149467522727e-05,
+      "ms_mean": 19.59032509679946,
+      "escalated": 0.000125,
+      "tier2": "strong10",
+      "order": 55
+     },
+     "accuracy": {
+      "threshold": 0.1998721146617946,
+      "failures_pair": 3,
+      "ler": 6.252149467522727e-05,
+      "ms_mean": 19.59032509679946,
+      "escalated": 0.000125,
+      "tier2": "strong10",
+      "order": 55
+     }
+    }
+   },
+   "p0.004": {
+    "relay_failures": 21,
+    "relay_ms": 279.65307846205906,
+    "pairs": 3000,
+    "candidates": 126,
+    "inference_us": 60.725916002411395,
+    "chosen": {
+     "speed": {
+      "threshold": 0.16638288403323945,
+      "failures_pair": 20,
+      "ler": 0.0005572603519752306,
+      "ms_mean": 149.97453496675493,
+      "escalated": 0.008666666666666666,
+      "tier2": "relay",
+      "order": 54
+     },
+     "accuracy": {
+      "threshold": 0.07989772443875508,
+      "failures_pair": 17,
+      "ler": 0.0004734531469616776,
+      "ms_mean": 182.35911839775872,
+      "escalated": 0.019166666666666665,
+      "tier2": "relay",
+      "order": 50
+     }
+    }
+   },
+   "p0.005": {
+    "relay_failures": 172,
+    "relay_ms": 812.6025366905669,
+    "pairs": 2000,
+    "candidates": 126,
+    "inference_us": 58.4467910011881,
+    "chosen": {
+     "speed": {
+      "threshold": 0.28842926692105963,
+      "failures_pair": 169,
+      "ler": 0.007330079200565165,
+      "ms_mean": 533.5581478129607,
+      "escalated": 0.03325,
+      "tier2": "relay",
+      "order": 57
+     },
+     "accuracy": {
+      "threshold": 0.09597938653983788,
+      "failures_pair": 150,
+      "ler": 0.006475736578073321,
+      "ms_mean": 806.7450044804755,
+      "escalated": 0.11499999999999999,
+      "tier2": "relay",
+      "order": 51
+     }
+    }
+   },
+   "p0.004_f0.25": {
+    "relay_failures": 4,
+    "relay_ms": 110.12429226228414,
+    "pairs": 4000,
+    "candidates": 126,
+    "inference_us": 60.318374999042135,
+    "chosen": {
+     "speed": {
+      "threshold": 0.0006788938368924995,
+      "failures_pair": 4,
+      "ler": 8.337155219761971e-05,
+      "ms_mean": 69.59723270331233,
+      "escalated": 0.043375,
+      "tier2": "relay+flags",
+      "order": 24
+     },
+     "accuracy": {
+      "threshold": 0.0006788938368924995,
+      "failures_pair": 3,
+      "ler": 6.252149467522727e-05,
+      "ms_mean": 95.43039634979503,
+      "escalated": 0.043375,
+      "tier2": "strong10+flags",
+      "order": 24
+     }
+    }
+   },
+   "p0.004_f0.5": {
+    "relay_failures": 1,
+    "relay_ms": 56.29353378851374,
+    "pairs": 4000,
+    "candidates": 126,
+    "inference_us": 60.164791997522116,
+    "chosen": {
+     "speed": {
+      "threshold": 0.01533706915512147,
+      "failures_pair": 1,
+      "ler": 2.083572086741814e-05,
+      "ms_mean": 21.321163846496347,
+      "escalated": 0.000125,
+      "tier2": "relay+flags",
+      "order": 41
+     },
+     "accuracy": {
+      "threshold": 0.004248517975082626,
+      "failures_pair": 0,
+      "ler": 0.0,
+      "ms_mean": 22.84947927324356,
+      "escalated": 0.0005,
+      "tier2": "strong10+flags",
+      "order": 34
+     }
+    }
+   },
+   "p0.004_f0.75": {
+    "relay_failures": 4,
+    "relay_ms": 48.53208176480621,
+    "pairs": 4000,
+    "candidates": 126,
+    "inference_us": 59.60445799428271,
+    "chosen": {
+     "speed": {
+      "threshold": 0.00032600752786788873,
+      "failures_pair": 4,
+      "ler": 8.337155219761971e-05,
+      "ms_mean": 32.24347600980582,
+      "escalated": 0.00075,
+      "tier2": "relay+flags",
+      "order": 20
+     },
+     "accuracy": {
+      "threshold": 0.00032600752786788873,
+      "failures_pair": 3,
+      "ler": 6.252149467522727e-05,
+      "ms_mean": 39.21270581180216,
+      "escalated": 0.00075,
+      "tier2": "strong10+flags",
+      "order": 20
+     }
+    }
+   }
+  }
+ }
+}

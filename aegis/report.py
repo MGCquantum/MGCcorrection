@@ -144,7 +144,12 @@ def v2_section(v2):
            "threshold (`python -m aegis.retune`; hashes frozen in `experiments/reports/v2_frozen.json` before any fresh shot was",
            "decoded). Because the seed-2 test shots informed that design, v2 is scored only on fresh shots, together with both",
            "baselines and v1 run again on the same shots. The risk model is now evaluated by a compiled tree walk that returns",
-           "exactly scikit-learn's value; v1 on fresh shots uses it too, so its times here are lower than in the tables above.", ""]
+           "exactly scikit-learn's value; v1 on fresh shots uses it too, so its times here are lower than in the tables above.", "",
+           "Latency comes from the single-worker timing shots, all decoded on mains power with nothing else running (timing",
+           "entries first decoded on battery in Low Power Mode were discarded and decoded again). The contended 8-worker times",
+           "of the test shots at p = 0.005 and under erasure were taken on battery in Low Power Mode, and the X-basis p = 0.004",
+           "accuracy-mode run spans a hibernation; use those columns only for comparisons within one setting. Failure counts do",
+           "not depend on machine speed.", ""]
     selection = v2.get("selection", {}).get("settings", {})
     if selection:
         out += ["### Operating points chosen on validation shots", "",
