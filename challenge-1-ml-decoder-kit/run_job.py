@@ -9,6 +9,7 @@ Decoders
   bposd        BP-OSD at the kit's settings
   bposd_flags  BP-OSD that uses the erasure flags (needs --f > 0)
   bp_flags     fast BP that uses the erasure flags (needs --f > 0)
+  relay_flags  relay-BP on the blind matrix, rebuilt each shot with the flags folded into its priors (needs --f > 0)
 
 Saved per shot: fail_<dec>, time_<dec> (seconds, decode call only), conv_<dec> (BP decoders),
 round_weights (alarms per round, router features), n_flags.
@@ -29,7 +30,7 @@ from circuit import GROSS_CIRCUITS, detector_ids, load_circuit, sample
 from decoders import bposd_decoder, relay_decoder
 from hybrid import FAST_BP
 from threadpoolctl import threadpool_limits
-from lossy import aware_matrices, blind_matrices, herald_ids, lossy_circuit, shot_priors
+from lossy import aware_matrices, blind_column_map, blind_matrices, fold_priors, herald_ids, lossy_circuit, shot_priors
 
 
 
@@ -70,6 +71,12 @@ def build(circuit, basis, names):
         elif n == "bposd_flags":
             H, L, p, hc, nc = out["aware"]
             dec[n] = bposd_decoder(H, p)
+        elif n == "relay_flags":
+            H, L, p, hc, nc = out["aware"]
+            out["column_map"] = blind_column_map((Hb, Lb), (H, L))
+            if (out["column_map"] < 0).any():
+                raise ValueError("an aware column has no blind counterpart")
+            dec[n] = None   # rebuilt per shot (17 ms) because relay-BP has no prior update
         else:
             raise ValueError(f"unknown decoder {n}")
     return out, dec
@@ -87,10 +94,14 @@ def work(job):
     for name, d in dec.items():
         flags = name.endswith("_flags")
         H, L, p, hc, nc = mats["aware"] if flags else (*mats["blind"], None, None)
+        if name == "relay_flags":
+            L = mats["blind"][1]
         fail, secs, conv = np.zeros(n, bool), np.zeros(n), np.zeros(n, bool)
         for k in range(n):
             t = time.perf_counter()     # the per-shot prior update counts as decode time
-            if flags:
+            if name == "relay_flags":
+                d = relay_decoder(mats["blind"][0], fold_priors(shot_priors(p, hc, fired_lists[k], nc), mats["column_map"], mats["blind"][0].shape[1]))
+            elif flags:
                 d.update_channel_probs(shot_priors(p, hc, fired_lists[k], nc))
             e = np.asarray(d.decode(syn[k]), np.uint8)
             secs[k] = time.perf_counter() - t

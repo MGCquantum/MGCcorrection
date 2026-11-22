@@ -143,3 +143,25 @@ def shot_priors(base_priors, herald_col, fired_heralds, n_components):
     p[is_erasure & fired] = np.minimum(COMPONENT_PRIOR * n_components[is_erasure & fired], 0.75)
     p[is_erasure & ~fired] = UNFLAGGED_PRIOR
     return p
+
+
+def blind_column_map(blind, aware):
+    """For each flag-aware column, the flag-blind column with the same detectors and observables.
+
+    blind and aware are (H, L) pairs. Every aware column is an erasure component or an ordinary
+    error whose signature also appears in the blind matrix, so the result has no -1 entries.
+    """
+    def signatures(H, L):
+        H, L = H.tocsc(), L.tocsc()
+        return [(tuple(H.indices[H.indptr[j]:H.indptr[j + 1]]), tuple(L.indices[L.indptr[j]:L.indptr[j + 1]]))
+                for j in range(H.shape[1])]
+    index = {s: j for j, s in enumerate(signatures(*blind))}
+    return np.array([index.get(s, -1) for s in signatures(*aware)])
+
+
+def fold_priors(aware_priors, column_map, n_blind):
+    """Per-shot aware priors folded onto the blind columns (independent errors combine as 1 - prod(1 - q))."""
+    keep = column_map >= 0
+    log_ok = np.zeros(n_blind)
+    np.add.at(log_ok, column_map[keep], np.log1p(-np.minimum(aware_priors[keep], 0.499)))
+    return np.clip(-np.expm1(log_ok), 1e-12, 0.499)
