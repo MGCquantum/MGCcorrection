@@ -1,7 +1,7 @@
 # Pitch notes (not part of the code spec)
 
 ## Pitch cheat sheet
-**Claim:** "Neutral atoms tell you where they failed. Our decoder uses those flags, which cuts logical errors N×, and a small ML model sends only the hard cases to the slow decoder."
+**Claim:** "Neutral atoms can flag where some errors happened. On the Gross code, a decoder that uses those flags makes about 5.5× fewer logical errors than one that ignores them, when half the noise is flagged. The cost is about 6× more decode time. We also tested an ML router to save time; it ties a simple rule, and we show why."
 
 | Term | Say it as |
 |---|---|

@@ -1,130 +1,105 @@
-<img width="2172" height="724" alt="qubits-and-gradients" src="assets/qubits-and-gradients.png" />
+# MGC: erasure-aware decoding of the Gross code
 
-# Infleqtion Challenge: Qubits & Gradients
+Infleqtion Challenge 1 (ML-assisted QEC decoding), MidQWest 2026. The challenge brief is in [CHALLENGE.md](CHALLENGE.md).
 
-Quantum computation and machine learning are two rapidly emerging fields that have largely evolved in parallel, but their respective capabilities also create opportunities for them to advance one another. Quantum computers have the potential to offer more efficient modeling of contextual relationships. Meanwhile, new machine learning techniques can help address current challenges in quantum computing by bolstering quantum error correction (QEC) decoders.
+**Question:** on neutral-atom hardware, some errors come with a flag saying where they happened (heralded erasure, e.g. detected atom loss). How much does a decoder gain on the [[144,12,12]] Gross code by using those flags, and can ML cut decoding time without losing accuracy?
 
-For this hackathon, choose one of two challenges exploring the intersection of these two fields. We anticipate the first challenge to require some prerequisite knowledge of QEC, whereas the second challenge is more beginner-friendly.
+## Results
 
----
+### 1. Using erasure flags (headline)
+p = 0.004, 12 syndrome cycles, X and Z memory. The same simulated shots are decoded with flags hidden and with flags visible. Rates are logical errors per cycle with exact (Clopper-Pearson) 95% intervals.
 
-# Challenge 1: ML-Assisted QEC Decoding
+| Noise flagged as erasure | Flags hidden (BP-OSD) | Flags used (BP-OSD) | Gain | Pairs |
+|---|---|---|---|---|
+| 0% | 4.3e-3 [3.2–5.6e-3] | 4.3e-3 (identical, as expected) | — | 1,000 |
+| 25% | 1.4e-3 [0.8–2.3e-3] | 6.7e-4 [2.9–13e-4] | ~2× | 1,000 |
+| 50% | 9.2e-4 [5.8–14e-4] | 1.7e-4 [0.5–4.3e-4] | **~5.5×** | 2,000 |
+| 75% | 4.2e-4 [2.0–7.7e-4] | < 1.5e-4 (0 failures) | ≥ ~3× | 2,000 |
 
-## Challenge
+![erasure](challenge-1-ml-decoder-kit/figures/erasure.png)
 
-QEC decoders must identify and correct errors quickly. They must also stay accurate. Powerful decoders can be computationally expensive. Simpler decoders may be faster but less accurate.
+- **Cost:** flag-aware BP-OSD is about 6× slower per shot at 50% erasure, because the decoder considers each erasure component separately and its priors are updated every shot.
+- **Why the flag-blind line also falls:** an erasure applies a random Pauli, and a quarter of those are the identity, so converting noise to erasure also lowers the effective error rate. The fair comparison is therefore flags hidden vs used **at the same erasure share, on the same shots**.
 
-For this challenge, teams will work with the Gross code, a quantum low-density parity-check (qLDPC) code in the bivariate bicycle family. Its parameters are `[[144, 12, 12]]` — 12 logical qubits in 144 data qubits, with a code distance of 12.
+### 2. Required sweep: baselines and hybrid decoders
+Logical error rate per cycle (95% CI) and failed pairs, same test shots for every decoder:
 
-This challenge focuses on using machine learning to improve decoding, especially in the presence of qubit loss in addition to conventional Pauli errors. These error mechanisms are relevant to neutral-atom hardware where information about loss may be available to the decoder.
+| p | relay-BP | BP-OSD | Hybrid (rule) | Hybrid (ML router) | Kit reference (relay / BP-OSD) |
+|---|---|---|---|---|---|
+| 0.003 | 3.3e-5 (2/5,000) | 3.3e-4 (20/5,000) | 3.3e-5 (2/5,000) | 3.3e-5 (2/5,000) | 4.2e-5 / 4.7e-4 |
+| 0.004 | 6.3e-4 (15/2,000) | 4.1e-3 (97/2,000) | 6.3e-4 (15/2,000) | 6.3e-4 (15/2,000) | 8.7e-4 / 4.4e-3 |
+| 0.005 | 6.3e-3 (145/2,000) | *pending* | 6.3e-3 (145/2,000) | 6.3e-3 (145/2,000) | 6.9e-3 / 2.3e-2 |
 
-## Task
+Both hybrids lose no accuracy relative to relay-BP at any p.
 
-Build an ML-assisted decoder that improves an existing QEC decoder. Start with the BP-OSD and relay-BP decoders as baselines and examine whether a machine-learning approach can improve its accuracy, speed, or ability to handle loss.
+**Decode time** (one idle laptop, 1 thread, 300 X+Z pairs per p):
 
-**We have provided a possible scaffolding for this decoder comparison [here](challenge-1-ml-decoder-kit.zip). Download the zip file and follow its setup instructions before implementing your decoder.**
+| p | relay-BP mean / slowest 1% | Hybrid (rule) mean / slowest 1% | Hybrid (ML) mean | Shots escalated (rule) |
+|---|---|---|---|---|
+| 0.003 | 97 / 672 ms | **58** / 713 ms | 61 ms | 5% |
+| 0.004 | 482 / 7,054 ms | 422 / 7,099 ms | 425 ms | 23% |
+| 0.005 | 2,155 / 13,455 ms | 2,165 / 13,590 ms | 2,164 ms | 56% |
 
-One approach is hierarchical decoding: use a fast first-stage decoder for simpler error patterns and pass harder cases to a stronger decoder. Machine learning could help identify likely errors, make use of loss information, or decide when a result should be passed to the next stage.
+![speed](challenge-1-ml-decoder-kit/figures/speed.png)
 
-The goal is to see whether your decoder can outperform the baseline, particularly when loss information is available.
+### 3. The ML router (an honest negative result)
+A gradient-boosted classifier reads the alarms per round (and the loss-flag count) and predicts whether fast BP will converge, so hard shots can skip it. Accuracy on held-out shots:
 
-## Requirements
+| p | ML router | One alarm-count threshold | Always guess the majority |
+|---|---|---|---|
+| 0.003 | 0.929 | 0.929 | 0.929 |
+| 0.004 | 0.757 | 0.773 | 0.775 |
+| 0.005 | 0.597 | 0.614 | 0.530 |
 
-- Set up the code and baseline decoders. Download the [decoder kit](challenge-1-ml-decoder-kit.zip) and run the BP-OSD and relay-BP decoders, then reproduce their baseline performance before making changes.
-- Simulate memory experiments with noise. Use heralding information, such as loss-detection flags, where available.
-- Build your ML-assisted decoder. Use syndrome information and, where applicable, loss information. You can build a standalone decoder or add a learned component to an existing decoding pipeline.
-- Compare your decoder against the baseline approaches under the same noise conditions.
+The router does not beat a single threshold. BP's own convergence check is already a good router, and fast BP was never wrong when it converged. Learned routing cannot save time here, because it can only skip about 30–100 ms of BP on shots that then need seconds of relay-BP.
 
-## Possible Approaches
+## Where it works and where it falls short
+- **Works:** erasure flags give large accuracy gains on the Gross code. The simple hybrid keeps relay-BP accuracy and is ~1.7× faster on average at low noise (p = 0.003).
+- **Falls short:**
+  - The slowest 1% of shots do not get faster.
+  - There is no speedup at p = 0.005.
+  - Flag-aware decoding costs about 6× more time.
+  - The ML router ties a simple rule.
+  - Error bars at p = 0.003 are wide, with only 2–3 failures.
+- **Model limits:** erasures are *idealized*. Flags fire instantly at the gate with the exact location, and the qubit returns to the code space. Real atom loss is detected later and a lost atom keeps causing errors. Preparation and measurement errors are not converted.
 
-Some possible directions:
+## Method
+- **Code and noise:** the kit's Gross-code memory circuits (Bravyi et al.; the relay-BP paper's error model). In `lossy.py`, each depolarizing channel of strength p becomes `DEPOLARIZE((1−f)p)` plus `HERALDED_ERASE`, with probability f·p per qubit for one-qubit channels and f·p/2 per qubit for two-qubit channels, so the expected number of fault events per gate stays about p. Each herald is recorded as a detector (coordinate 2).
+- **Flag-aware priors:** erasure components keep their own decoder columns. Per shot, a column whose herald fired gets prior (merged Pauli components) × 1/4, e.g. 0.5 when two components look identical to the checks. Unfired erasure columns get 1e-9. The prior update is counted as decode time.
+- **Hybrid:** min-sum BP (200 iterations). If it converges, its answer is accepted. Otherwise relay-BP runs, at the kit's settings.
+- **Router:** scikit-learn `HistGradientBoostingClassifier`, trained on seed-1 shots and tested on seed-2 shots.
+- **Scoring:** the kit's rule. An X/Z shot pair fails if either basis fails, and per-cycle rate = 1 − (1 − P)^(1/12).
 
-- **[Learned predecoders](https://github.com/NVIDIA/ising-decoding):** Train a model to recognize common error patterns and resolve them before passing the remaining syndrome to a stronger decoder.
-- **Confidence-based routing:** Predict whether a decoding result is reliable enough to accept or should be sent to a stronger decoder.
-- **Belief propagation:** Use BP as a partial decoder, resolving confident corrections before passing the remaining syndrome onward.
-- **CNNs or graph neural networks:** Use neural networks to identify patterns in syndrome data, potentially using the structure of the code or its Tanner graph.
-- **Leakage tracking:** Use temporal models, such as hidden Markov models, to identify leakage events and inform decoding.
+## Resources
+From `python demo.py` on a 2-core Xeon at 2.1 GHz (rerun it on the presenting laptop):
+- Decoding problem: 936 checks × 8,784 error mechanisms.
+- Router model: ~0.7 MB.
+- Peak memory: ~180 MB for one decoding process.
+- Decoder setup: ~0.02 s.
 
-> **Note:** You do not need to implement a hierarchical decoder. These are possible ways to approach the problem, not a required set of methods.
+The flag-aware matrix is larger (936 × ~32,000 columns). Benchmarks used 7–8 worker processes per laptop on 8–12-core laptops. The timing table used 1 thread.
 
-## Experiments and Metrics
+## Reproduce
+```bash
+cd challenge-1-ml-decoder-kit
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt scikit-learn matplotlib      # relay-bp needs Rust (rustup.rs)
+python run_job.py --basis X --p 0.004 --shots 2000 --seed 2 --decoders bp relay bposd --out results/test_X_p0.004.npz
+# ...every job is listed in RUN.md and PROMPTS.md
+python analyze.py --dir results                               # tables and results/results.png
+python analyze.py --dir results_timing --train-dir results    # clean timing table
+python make_figures.py                                        # figures/erasure.png, figures/speed.png
+python demo.py --p 0.004 --basis X                            # one fresh shot through router and decoder, plus resources
+```
+- All saved results (`results/*.npz`) are in the repo, so `analyze.py` and `make_figures.py` reproduce every number without rerunning the decoders.
+- **Seeds are not portable across Stim builds:** the same seed can give different shots on another machine. That is why every comparison is made within one results file (all decoders on identical shots), and why `analyze.py` only merges extra decoder runs when the shots match.
 
-Compare your decoder with the BP-OSD and relay-BP baselines using the same test data and noise conditions. While more experiments are encouraged for a more thorough analysis, we *require* one for this challenge:
-
-- A sweep of your decoder across the physical error rates `[0.003, 0.004, 0.005]`.
-
-Required metrics to report include logical error rate, decoding latency*, and decoder resource requirements. In your evaluation, discuss where your approach works well and where it falls short.
-
-\*This is where hierarchical decoding approaches really shine!
-
-## Deliverables
-
-- A working decoder, the code used to generate training and test data, and the script for reproducing evaluation results on GitHub.
-- A comparison of your decoder to the baselines, including at least one plot of logical error rate or decoding time.
-- A short presentation or demo explaining the approach and results.
-
-## Stretch Goals
-
-- Train a router to decide when to accept a first-stage result or invoke a stronger decoder.
-- Test the approach on a second QEC code or code family.
-- Run the decoder on sliding syndrome windows.
-- Study how performance changes with code distance.
-- Estimate the hardware cost of the decoder, such as GPU resource usage or latency.
-
-## Recommended Tools
-
-A few open-source tools may be useful for this Challenge:
-
-- **[qLDPC](https://github.com/qLDPCOrg/qLDPC):** A library for working with quantum error-correcting codes. It can be used for code construction and related QEC workflows.
-- **[clifft](https://github.com/unitaryfoundation/clifft/releases/tag/v0.13.0):** A non-Clifford simulation tool extended from [Stim](https://github.com/quantumlib/stim) for quantum error correction and decoding workflows that support leakage, loss, etc.
-
----
-
-# Challenge 2: Give Your LLM a Quantum Backend
-
-## Challenge
-
-Language models use classical machine-learning methods for tasks like processing language, representing context, and handling memory and reasoning. This challenge asks whether quantum computing could play a useful role in any part of this process.
-
-## Task
-
-Develop a pipeline that integrates quantum computing or information processing into a sequence or language modeling task. This requires you to identify stages within a classical machine learning workflow that could benefit from quantum information processing, and develop a quantum backend that can execute those tasks.
-
-For example, you could explore how quantum contextuality could be used to represent relationships between tokens, encode word sequences with quantum states and quantum circuits, or formulate an ML subproblem as a QUBO or related optimization problem to generate candidate solutions. However, don't feel required to tie your project to any of these.
-
-We're keeping this challenge deliberately open-ended, so feel free to think outside the box, get creative, and surprise us!
-
-## Requirements
-
-- Use an existing or custom language model for a language-modeling or sequence-processing task.
-- Identify a part of the workflow where quantum computing or quantum information processing could be useful.
-- Implement a backend that sends this part of the computation to a quantum simulator or hardware and returns results to the application.
-- Use at least one quantum algorithm or information-processing technique.
-- Demonstrate the full workflow, from input to final output.
-
-## Experiments and Metrics
-
-Evaluate your application using metrics that make sense for the task. These must include accuracy, execution time, and resource requirements. Additional metrics can include solution quality/sampling diversity, circuit depth, and/or qubit count.
-
-## Deliverables
-
-- Your working application that connects a language or sequence model to a quantum backend, with the workflow uploaded to GitHub.
-- An evaluation using appropriate metrics.
-- A short presentation or demo highlighting your approach and results.
-
-## Stretch Goals
-
-- Use Superstaq to optimize circuits for execution on available hardware.
-- Support multiple quantum hardware platforms or simulators.
-- Route tasks between classical and quantum backends based on problem characteristics or estimated execution costs.
-- Build a workflow where quantum outputs influence later language-model processing.
-- Compare the quantum approach with a classical baseline.
-
----
-
-# Shared Expectations
-
-- Be prepared to explain why you chose your approach and what role quantum computing or machine learning plays in it.
-- Results should be clear and reproducible, and the corresponding GitHub codebase should follow best coding practices.
-- You can use existing libraries and tools rather than implementing everything from scratch.
-- AI use is encouraged — but be prepared to explain your implementation!
+## Files
+| File | What it does |
+|---|---|
+| `lossy.py` | Heralded-erasure circuits; flag-blind and flag-aware decoding matrices; per-shot priors |
+| `run_job.py` | Decodes a batch of shots once with the chosen decoders and caches every answer, time and convergence flag |
+| `analyze.py` | Trains the router, builds the hybrids from the cache, reports exact CIs, writes tables and plots |
+| `make_figures.py` | Presentation figures |
+| `demo.py` | Live single-shot demo and resource report |
+| `SPEC.md`, `PITCH.md`, `TEAM_PLAN.md`, `PROMPTS.md`, `RUN.md` | Plan, pitch notes, and how the team split the compute |
