@@ -4,7 +4,7 @@
 
 **Final running order:** 1 title · 2 Q1 why is the best decoder slow? · 3 Q2 how do we know when the fast answer is safe? (pipeline) · 4–7 benchmarks (device and resources, logical error rate, mean and p99 decode time) · 8 Q4 can atom-loss flags help, even imperfect? · 9 Q5 tradeoffs against other decoders · 10 Q6 what it means for Infleqtion's systems · 11 Q7 limits · 12–16 backup.
 
-The outline below is the original talk plan; the numbers in it match the final deck.
+The outline below is the original talk plan.
 
 One heading per slide. Numbers come from fresh shots that no design or tuning step saw ([RESULTS.md](RESULTS.md)).
 
