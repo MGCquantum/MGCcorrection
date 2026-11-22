@@ -2,10 +2,10 @@
 # Verify the QEC-Aegis extension and the kit it builds on. Run from any directory after installing
 # challenge-1-ml-decoder-kit/requirements-dev.txt into .venv at the repository root.
 #
-#   scripts/verify_aegis.sh            kit tests, aegis tests, sampling check of every committed record,
+#   scripts/reproduce.sh            kit tests, aegis tests, sampling check of every committed record,
 #                                      then regenerate reports, docs/RESULTS.md and docs/figures
-#   DECODE=1 scripts/verify_aegis.sh   also re-decode one chunk per record and tier, bit for bit (slow)
-#   RESOURCES=1 scripts/verify_aegis.sh  also re-measure per-decoder memory and setup on this machine
+#   DECODE=1 scripts/reproduce.sh   also re-decode one chunk per record and tier, bit for bit (slow)
+#   RESOURCES=1 scripts/reproduce.sh  also re-measure per-decoder memory and setup on this machine
 #
 # No step trains a model or decodes test shots for evaluation: the frozen models in models/ and the
 # committed records in experiments/records/ are only read.

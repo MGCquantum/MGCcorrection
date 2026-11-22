@@ -2,9 +2,9 @@
 # QEC-Aegis v2 on fresh shots. Run after `python -m aegis.retune` has written and frozen models/v2/.
 # Resumable: aegis.collect checkpoints every chunk and skips tiers a record already holds.
 #
-#   scripts/run_v2_fresh.sh test     test2 (seed 7): baselines, v1 and v2 online, 8 workers  (~2.5 h)
-#   scripts/run_v2_fresh.sh timing   timing2 (seed 8): one worker, run with nothing else running (~1 h)
-#   scripts/run_v2_fresh.sh all      both, test first
+#   scripts/run_fresh_evaluation.sh test     test2 (seed 7): baselines, v1 and v2 online, 8 workers  (~2.5 h)
+#   scripts/run_fresh_evaluation.sh timing   timing2 (seed 8): one worker, run with nothing else running (~1 h)
+#   scripts/run_fresh_evaluation.sh all      both, test first
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1

@@ -111,7 +111,7 @@ def required_evaluation(ev, res):
         out += ["### Decoder resource requirements (`python -m aegis.resources`)", "",
                 f"One decoder per fresh process, numerical libraries single-threaded, on {m.get('chip') or m['platform']} "
                 f"({m['cores']} cores{', %d GB' % m['memory_gb'] if m.get('memory_gb') else ''}, {m['platform']}). Figures are specific to this machine; "
-                "`RESOURCES=1 scripts/verify_aegis.sh` re-measures them. "
+                "`RESOURCES=1 scripts/reproduce.sh` re-measures them. "
                 "Ranges are over p = 0.003–0.005 and X/Z memory. Peak memory is the whole Python process, including the circuit,",
                 "detector error model and check matrix (problem alone shown separately); *added* is what building the decoder and",
                 "decoding adds on top (for QEC-Aegis this includes the scikit-learn library). QEC-Aegis holds two relay-BP instances (tier 1 and tier 2), the order-0 BP-OSD second opinion",

@@ -41,7 +41,7 @@ QEC-Aegis against each baseline on the same pairs (LER: test shots; speedup of t
 
 ### Decoder resource requirements (`python -m aegis.resources`)
 
-One decoder per fresh process, numerical libraries single-threaded, on Apple M5 (10 cores, 16 GB, macOS-26.5.1-arm64-arm-64bit-Mach-O). Figures are specific to this machine; `RESOURCES=1 scripts/verify_aegis.sh` re-measures them. Ranges are over p = 0.003–0.005 and X/Z memory. Peak memory is the whole Python process, including the circuit,
+One decoder per fresh process, numerical libraries single-threaded, on Apple M5 (10 cores, 16 GB, macOS-26.5.1-arm64-arm-64bit-Mach-O). Figures are specific to this machine; `RESOURCES=1 scripts/reproduce.sh` re-measures them. Ranges are over p = 0.003–0.005 and X/Z memory. Peak memory is the whole Python process, including the circuit,
 detector error model and check matrix (problem alone shown separately); *added* is what building the decoder and
 decoding adds on top (for QEC-Aegis this includes the scikit-learn library). QEC-Aegis holds two relay-BP instances (tier 1 and tier 2), the order-0 BP-OSD second opinion
 used by tier-1 features, and the risk model. Setup excludes the one-time scikit-learn import, shown separately.
