@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+/* Design tokens. Light is the reading default; dark is selected, not inverted. The categorical
+   series colours are validated (dataviz validate_palette.js) against --paper in each mode. */
+:root {
+  color-scheme: light;
+  --paper: #faf9f6;
+  --panel: #ffffff;
+  --sunken: #f2f0eb;
+  --ink: #142033;
+  --ink-2: #364256;
+  --muted: #5c6575;
+  --rule: #e3e0d8;
+  --rule-strong: #c8c3b8;
+  --navy: #1b2d4f;
+  --accent: #0b7a8f;
+  --accent-soft: #e2f2f5;
+  --focus: #0b7a8f;
+
+  --s1: #2b62b0;
+  --s2: #0f9bb5;
+  --s3: #c0782b;
+  --s4: #a04e92;
+  --s5: #3f8f3a;
+  --s6: #7a5fd0;
+
+  --xcheck: #2b62b0;     /* X-type stabilizers */
+  --zcheck: #c0782b;     /* Z-type stabilizers */
+  --fault: #b3263a;      /* an injected or sampled error */
+  --fired: #0f9bb5;      /* a detection event */
+
+  --prov-theory: #1b2d4f;
+  --prov-live: #0b7a8f;
+  --prov-stored: #4b5563;
+  --prov-hardware: #8a5a12;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0e1522;
+    --panel: #131c2b;
+    --sunken: #0b111b;
+    --ink: #e7ebf1;
+    --ink-2: #c3cad6;
+    --muted: #98a2b1;
+    --rule: #243045;
+    --rule-strong: #33415a;
+    --navy: #cdd9ef;
+    --accent: #3cc3da;
+    --accent-soft: #10303a;
+    --focus: #3cc3da;
+    --s1: #5e8de6; --s2: #14a898; --s3: #c77c30; --s4: #c163ac; --s5: #4e9a45; --s6: #9580e8;
+    --xcheck: #5e8de6; --zcheck: #c77c30; --fault: #e5566b; --fired: #3cc3da;
+    --prov-theory: #b9c8e6; --prov-live: #3cc3da; --prov-stored: #aab3c0; --prov-hardware: #e0a458;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #0e1522; --panel: #131c2b; --sunken: #0b111b; --ink: #e7ebf1; --ink-2: #c3cad6; --muted: #98a2b1;
+  --rule: #243045; --rule-strong: #33415a; --navy: #cdd9ef; --accent: #3cc3da; --accent-soft: #10303a; --focus: #3cc3da;
+  --s1: #5e8de6; --s2: #14a898; --s3: #c77c30; --s4: #c163ac; --s5: #4e9a45; --s6: #9580e8;
+  --xcheck: #5e8de6; --zcheck: #c77c30; --fault: #e5566b; --fired: #3cc3da;
+  --prov-theory: #b9c8e6; --prov-live: #3cc3da; --prov-stored: #aab3c0; --prov-hardware: #e0a458;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-panel: var(--panel);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-navy: var(--navy);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-fault: var(--fault);
+  --color-fired: var(--fired);
+  --color-xcheck: var(--xcheck);
+  --color-zcheck: var(--zcheck);
+  --font-serif: var(--font-source-serif), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html { background: var(--paper); }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Prose: the explanatory text reads like a paper. */
+.prose-lab { font-family: var(--font-serif); font-size: 1.0625rem; line-height: 1.68; color: var(--ink-2); }
+.prose-lab p + p { margin-top: 0.85em; }
+.prose-lab strong { color: var(--ink); font-weight: 600; }
+.prose-lab em { font-style: italic; }
+.prose-lab a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.prose-lab ul { list-style: disc; padding-left: 1.25rem; }
+.prose-lab ol { list-style: decimal; padding-left: 1.25rem; }
+.prose-lab li + li { margin-top: 0.3em; }
+
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+svg [role="button"]:focus-visible { outline: none; }
+svg [role="button"]:focus-visible > .focus-ring { stroke: var(--focus); stroke-width: 2.5; }
+
+.katex { font-size: 1.04em; }
+.katex-display { margin: 0.6em 0; overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

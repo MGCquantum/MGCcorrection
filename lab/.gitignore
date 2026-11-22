@@ -1,0 +1,12 @@
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+test-results/
+playwright-report/
+e2e/screenshots/
+docs/screenshots/
+
+# The root .gitignore excludes every directory named results/ (experiment outputs).
+# Module 7 of the lab lives in app/results/ and is source code.
+!app/results/

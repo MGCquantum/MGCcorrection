@@ -1,0 +1,30 @@
+{
+ "p": 0.004,
+ "basis": "X",
+ "shots": 1500,
+ "split": "val",
+ "train_shots": 20000,
+ "commit_level": 0.7,
+ "committed_per_shot": 2.1433333333333335,
+ "table_max": 0.8128078672363663,
+ "results": {
+  "tier 1": {
+   "failed": 56,
+   "unconverged": 53,
+   "ms_mean": 11.846724605379373,
+   "iterations_mean": 69.29666666666667
+  },
+  "soft": {
+   "failed": 233,
+   "unconverged": 242,
+   "ms_mean": 31.940031829925527,
+   "iterations_mean": 172.65133333333333
+  },
+  "hard": {
+   "failed": 75,
+   "unconverged": 73,
+   "ms_mean": 13.810071150044678,
+   "iterations_mean": 80.036
+  }
+ }
+}

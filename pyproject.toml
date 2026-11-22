@@ -1,0 +1,10 @@
+[project]
+name = "mgccorrection"
+version = "0.1.0"
+description = "ML-assisted decoding of the [[144,12,12]] Gross code (MidQWest 2026, Challenge 1)"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "challenge-1-ml-decoder-kit/test_kit.py"]
+pythonpath = [".", "challenge-1-ml-decoder-kit"]
+addopts = "-q"

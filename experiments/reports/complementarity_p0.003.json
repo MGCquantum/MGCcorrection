@@ -1,0 +1,427 @@
+{
+ "p": 0.003,
+ "split": "val",
+ "pairs": 4000,
+ "paired_outcomes_bposd_relay": {
+  "both correct": {
+   "shots": 7982,
+   "bposd_ms": 39.23832694248168,
+   "relay_ms": 22.577281898876326
+  },
+  "bposd correct, relay wrong": {
+   "shots": 1,
+   "bposd_ms": 214.62137500202516,
+   "relay_ms": 2971.810874998482
+  },
+  "relay correct, bposd wrong": {
+   "shots": 15,
+   "bposd_ms": 211.71370266674785,
+   "relay_ms": 436.4330749325745
+  },
+  "both wrong": {
+   "shots": 2,
+   "bposd_ms": 241.83354150045488,
+   "relay_ms": 354.97872899759386
+  }
+ },
+ "tiers": {
+  "bposd": {
+   "failures_X": 7,
+   "failures_Z": 10,
+   "failures_pair": 16,
+   "ler": 0.0003339460107422143,
+   "ms_mean": 79.26857991322322,
+   "ms_p99": 515.2836325095994,
+   "unconverged": 0.0
+  },
+  "relay": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 47.61003214345328,
+   "ms_p99": 330.42205059474935,
+   "unconverged": 0.000125
+  },
+  "relay1": {
+   "failures_X": 2,
+   "failures_Z": 2,
+   "failures_pair": 4,
+   "ler": 8.337155219761971e-05,
+   "ms_mean": 19.41266785730113,
+   "ms_p99": 194.649863179655,
+   "unconverged": 0.0
+  },
+  "fast": {
+   "failures_X": 11,
+   "failures_Z": 13,
+   "failures_pair": 24,
+   "ler": 0.0005013802940021517,
+   "ms_mean": 16.8888366520423,
+   "ms_p99": 193.2851624971952,
+   "unconverged": 0.00325
+  },
+  "fast0": {
+   "failures_X": 114,
+   "failures_Z": 109,
+   "failures_pair": 219,
+   "ler": 0.004681162064751443,
+   "ms_mean": 6.4058693052365925,
+   "ms_p99": 19.67152897912455,
+   "unconverged": 0.035250000000000004
+  },
+  "strong": {
+   "failures_X": 2,
+   "failures_Z": 0,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 183.23154831697502,
+   "ms_p99": 1104.9456000799182,
+   "unconverged": 0.000125
+  },
+  "strong10": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 95.12292861449077,
+   "ms_p99": 617.9875713317944,
+   "unconverged": 0.0
+  },
+  "bp30": {
+   "failures_X": 1168,
+   "failures_Z": 1357,
+   "failures_pair": 2077,
+   "ler": 0.059208739400268495,
+   "ms_mean": 9.00792676504716,
+   "ms_p99": 16.123342079481514,
+   "unconverged": 0.41425
+  },
+  "bp200": {
+   "failures_X": 230,
+   "failures_Z": 250,
+   "failures_pair": 462,
+   "ler": 0.010175605072917149,
+   "ms_mean": 17.38982761301213,
+   "ms_p99": 65.98060174062975,
+   "unconverged": 0.076875
+  }
+ },
+ "bposd_relay_routing": {
+  "oracle": {
+   "failures_X": 1,
+   "failures_Z": 1,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 126.8786120566765,
+   "ms_p99": 672.7477826789948
+  },
+  "lighter_answer": {
+   "failures_X": 1,
+   "failures_Z": 3,
+   "failures_pair": 4,
+   "ler": 8.337155219761971e-05,
+   "ms_mean": 126.8786120566765,
+   "ms_p99": 672.7477826789948
+  }
+ },
+ "rule_based": {
+  "bp30 -> relay": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 40.294972766771025,
+   "ms_p99": 340.8652590023093,
+   "escalated": 0.41425
+  },
+  "bp30 -> relay (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 40.294972766771025,
+   "ms_p99": 340.8652590023093,
+   "escalated": 0.41425
+  },
+  "bp30 -> strong10": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 71.3993016907898,
+   "ms_p99": 617.7833899112343,
+   "escalated": 0.41425
+  },
+  "bp30 -> strong10 (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 71.3993016907898,
+   "ms_p99": 617.7833899112343,
+   "escalated": 0.41425
+  },
+  "bp30 -> strong": {
+   "failures_X": 2,
+   "failures_Z": 0,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 126.24058086253717,
+   "ms_p99": 1088.9308579875772,
+   "escalated": 0.41425
+  },
+  "bp30 -> strong (perfect router)": {
+   "failures_X": 2,
+   "failures_Z": 0,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 126.24058086253717,
+   "ms_p99": 1088.9308579875772,
+   "escalated": 0.41425
+  },
+  "bp200 -> relay": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 34.19344699451449,
+   "ms_p99": 351.7241308252043,
+   "escalated": 0.076875
+  },
+  "bp200 -> relay (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 34.19344699451449,
+   "ms_p99": 351.7241308252043,
+   "escalated": 0.076875
+  },
+  "bp200 -> strong10": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 50.06062725027459,
+   "ms_p99": 633.3196623229719,
+   "escalated": 0.076875
+  },
+  "bp200 -> strong10 (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 50.06062725027459,
+   "ms_p99": 633.3196623229719,
+   "escalated": 0.076875
+  },
+  "bp200 -> strong": {
+   "failures_X": 2,
+   "failures_Z": 0,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 74.64093713499733,
+   "ms_p99": 1096.000228435433,
+   "escalated": 0.076875
+  },
+  "bp200 -> strong (perfect router)": {
+   "failures_X": 2,
+   "failures_Z": 0,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 74.64093713499733,
+   "ms_p99": 1096.000228435433,
+   "escalated": 0.076875
+  },
+  "fast0 -> relay": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 20.064054124988616,
+   "ms_p99": 312.50422609904405,
+   "escalated": 0.035250000000000004
+  },
+  "fast0 -> relay (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 20.189407364488034,
+   "ms_p99": 312.50422609904405,
+   "escalated": 0.035375000000000004
+  },
+  "fast0 -> strong10": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 31.200920429240796,
+   "ms_p99": 526.6028495697536,
+   "escalated": 0.035250000000000004
+  },
+  "fast0 -> strong10 (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 31.36457567924117,
+   "ms_p99": 526.6028495697536,
+   "escalated": 0.035375000000000004
+  },
+  "fast0 -> strong": {
+   "failures_X": 2,
+   "failures_Z": 0,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 48.29373224323808,
+   "ms_p99": 973.8856034207852,
+   "escalated": 0.035250000000000004
+  },
+  "fast0 -> strong (perfect router)": {
+   "failures_X": 2,
+   "failures_Z": 0,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 48.525494409987914,
+   "ms_p99": 976.1617758335261,
+   "escalated": 0.035375000000000004
+  },
+  "fast -> relay": {
+   "failures_X": 2,
+   "failures_Z": 2,
+   "failures_pair": 4,
+   "ler": 8.337155219761971e-05,
+   "ms_mean": 22.63731950554393,
+   "ms_p99": 202.16751124986325,
+   "escalated": 0.00325
+  },
+  "fast -> relay (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 22.84520716179395,
+   "ms_p99": 204.44968999508984,
+   "escalated": 0.0034999999999999996
+  },
+  "fast -> strong10": {
+   "failures_X": 2,
+   "failures_Z": 2,
+   "failures_pair": 4,
+   "ler": 8.337155219761971e-05,
+   "ms_mean": 26.15948669354475,
+   "ms_p99": 202.16751124986325,
+   "escalated": 0.00325
+  },
+  "fast -> strong10 (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 26.379334933045357,
+   "ms_p99": 204.44968999508984,
+   "escalated": 0.0034999999999999996
+  },
+  "fast -> strong": {
+   "failures_X": 3,
+   "failures_Z": 0,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 31.63308914179288,
+   "ms_p99": 202.16751124986325,
+   "escalated": 0.00325
+  },
+  "fast -> strong (perfect router)": {
+   "failures_X": 2,
+   "failures_Z": 0,
+   "failures_pair": 2,
+   "ler": 4.167621832917856e-05,
+   "ms_mean": 32.016139277292496,
+   "ms_p99": 204.44968999508984,
+   "escalated": 0.0034999999999999996
+  },
+  "relay1 -> relay": {
+   "failures_X": 2,
+   "failures_Z": 2,
+   "failures_pair": 4,
+   "ler": 8.337155219761971e-05,
+   "ms_mean": 19.41266785730113,
+   "ms_p99": 194.649863179655,
+   "escalated": 0.0
+  },
+  "relay1 -> relay (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 20.415644357300152,
+   "ms_p99": 201.8533869959353,
+   "escalated": 0.0005
+  },
+  "relay1 -> strong10": {
+   "failures_X": 2,
+   "failures_Z": 2,
+   "failures_pair": 4,
+   "ler": 8.337155219761971e-05,
+   "ms_mean": 19.41266785730113,
+   "ms_p99": 194.649863179655,
+   "escalated": 0.0
+  },
+  "relay1 -> strong10 (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 2,
+   "failures_pair": 3,
+   "ler": 6.252149467522727e-05,
+   "ms_mean": 21.387651440551963,
+   "ms_p99": 201.8533869959353,
+   "escalated": 0.0005
+  },
+  "relay1 -> strong": {
+   "failures_X": 2,
+   "failures_Z": 2,
+   "failures_pair": 4,
+   "ler": 8.337155219761971e-05,
+   "ms_mean": 19.41266785730113,
+   "ms_p99": 194.649863179655,
+   "escalated": 0.0
+  },
+  "relay1 -> strong (perfect router)": {
+   "failures_X": 1,
+   "failures_Z": 0,
+   "failures_pair": 1,
+   "ler": 2.083572086741814e-05,
+   "ms_mean": 21.64526808680148,
+   "ms_p99": 201.8533869959353,
+   "escalated": 0.0005
+  }
+ },
+ "hidden_failures": {
+  "bp30": {
+   "converged_but_wrong": 0,
+   "converged": 4686,
+   "shots": 8000
+  },
+  "bp200": {
+   "converged_but_wrong": 0,
+   "converged": 7385,
+   "shots": 8000
+  },
+  "fast0": {
+   "converged_but_wrong": 1,
+   "converged": 7718,
+   "shots": 8000
+  },
+  "fast": {
+   "converged_but_wrong": 2,
+   "converged": 7974,
+   "shots": 8000
+  },
+  "relay1": {
+   "converged_but_wrong": 4,
+   "converged": 8000,
+   "shots": 8000
+  }
+ }
+}

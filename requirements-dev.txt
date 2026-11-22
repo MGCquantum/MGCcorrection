@@ -1,0 +1,7 @@
+# Direct dependencies of the project environment (Python 3.12).
+# For an exact, reproducible install use requirements.lock (see docs/SETUP.md).
+-r challenge-1-ml-decoder-kit/requirements.txt   # stim, ldpc, numpy, scipy, relay-bp (needs Rust)
+scikit-learn    # router models (TEAM_PLAN.md step 2)
+matplotlib      # plots (analyze.py)
+pytest          # tests
+joblib          # model artifacts
