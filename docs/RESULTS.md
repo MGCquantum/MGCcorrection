@@ -9,6 +9,49 @@ Z shot k. A pair fails when either shot fails, the logical error rate (LER) per 
 decode time is the X time plus its Z partner's time. Every decoder compared on one setting uses the same pairs.
 Intervals are 95%: exact Clopper–Pearson for failure rates, paired bootstrap for ratios and mean times.
 
+## Challenge 1 required evaluation: sweep over p = 0.003, 0.004, 0.005
+
+Same test data and noise conditions: at each p, all three decoders decode the identical frozen test shots (seed 2)
+of the kit's Gross-code memory circuits at that p, in X and Z memory, scored on the same X/Z pairs. Latency is from
+separate single-worker timing shots (seed 5) with nothing else running; the contended column is the mean time on
+the test shots, decoded with 8 parallel workers. QEC-Aegis is the online routed decoder run as one program.
+
+| p | Decoder | Test pairs | Failed pairs | LER per cycle | 95% interval | Mean ms | Median ms | p95 ms | p99 ms | Pairs/s | Mean ms, contended | Tier 2 used |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.003 | BP-OSD | 30,000 | 157 | 4.37e-04 | 3.71e-04 – 5.11e-04 | 50.6 | 7.8 | 178 | 295 | 19.7 | 143 |  |
+| 0.003 | relay-BP | 30,000 | 26 | 7.23e-05 | 4.72e-05 – 1.06e-04 | 34.2 | 21.0 | 68.7 | 181 | 29.2 | 83.7 |  |
+| 0.003 | QEC-Aegis | 30,000 | 33 | 9.17e-05 | 6.31e-05 – 1.29e-04 | 11.7 | 4.4 | 25.9 | 61.3 | 85.4 | 14.3 | 0.04% |
+| 0.004 | BP-OSD | 10,000 | 552 | 4.72e-03 | 4.34e-03 – 5.13e-03 | 114 | 137 | 308 | 338 | 8.7 | 351 |  |
+| 0.004 | relay-BP | 10,000 | 102 | 8.54e-04 | 6.96e-04 – 1.04e-03 | 125 | 39.6 | 524 | 2,064 | 8.0 | 325 |  |
+| 0.004 | QEC-Aegis | 10,000 | 119 | 9.97e-04 | 8.26e-04 – 1.19e-03 | 60.0 | 6.2 | 160 | 1,351 | 16.7 | 105 | 1.12% |
+| 0.005 | BP-OSD | 5,000 | 1256 | 2.38e-02 | 2.25e-02 – 2.52e-02 | 377 | 405 | 649 | 720 | 2.7 | 458 |  |
+| 0.005 | relay-BP | 5,000 | 404 | 7.00e-03 | 6.33e-03 – 7.71e-03 | 988 | 272 | 4,151 | 6,204 | 1.0 | 1,059 |  |
+| 0.005 | QEC-Aegis | 5,000 | 398 | 6.89e-03 | 6.23e-03 – 7.60e-03 | 885 | 56.8 | 6,229 | 9,625 | 1.1 | 681 | 6.84% |
+
+QEC-Aegis against each baseline on the same pairs (LER: test shots; speedup of the mean: single-worker timing shots):
+
+| p | Baseline | LER ratio QEC-Aegis / baseline | 95% interval | Fail only QEC-Aegis / only baseline | McNemar p | Speedup | 95% interval |
+|---|---|---|---|---|---|---|---|
+| 0.003 | BP-OSD | 0.21 | 0.14 – 0.28 | 18 / 142 | 4.27e-25 | 4.33× | 2.86 – 6.78 |
+| 0.003 | relay-BP | 1.27 | 0.90 – 1.86 | 17 / 10 | 0.248 | 2.92× | 2.14 – 4.18 |
+| 0.004 | BP-OSD | 0.21 | 0.18 – 0.25 | 37 / 470 | 1.19e-96 | 1.91× | 1.42 – 2.73 |
+| 0.004 | relay-BP | 1.17 | 0.98 – 1.39 | 55 / 38 | 0.0966 | 2.09× | 1.67 – 2.79 |
+| 0.005 | BP-OSD | 0.29 | 0.26 – 0.32 | 55 / 913 | 2.35e-201 | 0.43× | 0.36 – 0.53 |
+| 0.005 | relay-BP | 0.98 | 0.91 – 1.07 | 119 / 125 | 0.749 | 1.12× | 0.99 – 1.30 |
+
+### Decoder resource requirements (`python -m aegis.resources`)
+
+One decoder per fresh process, numerical libraries single-threaded, on macOS-26.5.1-arm64-arm-64bit-Mach-O (10 cores). Ranges are over p = 0.003–0.005 and X/Z memory. Peak memory is the whole Python process, including the circuit,
+detector error model and check matrix (problem alone shown separately); *added* is what building the decoder and
+decoding adds on top (for QEC-Aegis this includes the scikit-learn library). QEC-Aegis holds two relay-BP instances (tier 1 and tier 2), the order-0 BP-OSD second opinion
+used by tier-1 features, and the risk model. Setup excludes the one-time scikit-learn import, shown separately.
+
+| Decoder | Components | Check matrix (checks × mechanisms) | One-time import s | Setup s | Problem MB | Peak MB | Added MB | Model on disk | Model inference per shot |
+|---|---|---|---|---|---|---|---|---|---|
+| BP-OSD | bposd | 936 × 8,784 | none | 0.03–0.04 | 103–106 | 166–169 | 62–64 | none | none |
+| relay-BP | relay | 936 × 8,784 | none | 0.00–0.01 | 104–106 | 104–107 | 1 | none | none |
+| QEC-Aegis | relay1 + risk model + relay | 936 × 8,784 | 0.84–0.98 | 0.05 | 104–106 | 175–179 | 72–73 | 274 kB | 626 µs |
+
 ## Chosen system (fixed on validation shots, before the test shots were decoded)
 
 Selection-time numbers from `experiments/reports/training.json`. That selection paired X shot k with Z shot k;

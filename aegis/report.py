@@ -64,9 +64,76 @@ def routing_table(settings):
     return lines
 
 
+REQUIRED = [("bposd", "BP-OSD"), ("relay", "relay-BP"), ("aegis (online)", "QEC-Aegis")]
+
+
+def span(values, fmt):
+    lo, hi = min(values), max(values)
+    return fmt.format(lo) if fmt.format(lo) == fmt.format(hi) else f"{fmt.format(lo)}–{fmt.format(hi)}"
+
+
+def required_evaluation(ev, res):
+    """The Challenge 1 required sweep in one place: LER, latency and resources of QEC-Aegis and both baselines."""
+    out = ["## Challenge 1 required evaluation: sweep over p = 0.003, 0.004, 0.005", "",
+           "Same test data and noise conditions: at each p, all three decoders decode the identical frozen test shots (seed 2)",
+           "of the kit's Gross-code memory circuits at that p, in X and Z memory, scored on the same X/Z pairs. Latency is from",
+           "separate single-worker timing shots (seed 5) with nothing else running; the contended column is the mean time on",
+           "the test shots, decoded with 8 parallel workers. QEC-Aegis is the online routed decoder run as one program.", "",
+           "| p | Decoder | Test pairs | Failed pairs | LER per cycle | 95% interval | Mean ms | Median ms | p95 ms | p99 ms | Pairs/s | Mean ms, contended | Tier 2 used |",
+           "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    for p, sweep in ev["sweep"].items():
+        timing = ev.get("timing", {}).get(p, {"decoders": {}})["decoders"]
+        for key, label in REQUIRED:
+            d, t = sweep["decoders"].get(key), timing.get(key)
+            if d is None:
+                continue
+            lat = f"{ms(t['ms_mean'])} | {ms(t['ms_median'])} | {ms(t['ms_p95'])} | {ms(t['ms_p99'])} | {t['pairs_per_second']:.1f}" if t \
+                else " | | | | "
+            esc = f"{100 * d['escalated_fraction']:.2f}%" if "escalated_fraction" in d else ""
+            out.append(f"| {p} | {label} | {d['pairs']:,} | {d['failures_pair']} | {d['ler']:.2e} | {d['ler_ci95'][0]:.2e} – {d['ler_ci95'][1]:.2e} | "
+                       f"{lat} | {ms(d['ms_mean'])} | {esc} |")
+    out += ["", "QEC-Aegis against each baseline on the same pairs (LER: test shots; speedup of the mean: single-worker timing shots):", "",
+            "| p | Baseline | LER ratio QEC-Aegis / baseline | 95% interval | Fail only QEC-Aegis / only baseline | McNemar p | Speedup | 95% interval |",
+            "|---|---|---|---|---|---|---|---|"]
+    for p, sweep in ev["sweep"].items():
+        for key, label in REQUIRED[:2]:
+            c = sweep["comparisons"].get(f"aegis (online) vs {key}")
+            t = ev.get("timing", {}).get(p, {"comparisons": {}})["comparisons"].get(f"aegis (online) vs {key}")
+            if c is None:
+                continue
+            speed = f"{t['speedup_mean']:.2f}× | {t['speedup_mean_ci95'][0]:.2f} – {t['speedup_mean_ci95'][1]:.2f}" if t else " | "
+            ratio = "n/a | n/a" if c["ler_ratio"] is None else f"{c['ler_ratio']:.2f} | {c['ler_ratio_ci95'][0]:.2f} – {c['ler_ratio_ci95'][1]:.2f}"
+            out.append(f"| {p} | {label} | {ratio} | "
+                       f"{c['only_a_fails']} / {c['only_b_fails']} | {c['mcnemar_p']:.3g} | {speed} |")
+    out.append("")
+    if res:
+        m = res["machine"]
+        out += ["### Decoder resource requirements (`python -m aegis.resources`)", "",
+                f"One decoder per fresh process, numerical libraries single-threaded, on {m['platform']} ({m['cores']} cores). "
+                "Ranges are over p = 0.003–0.005 and X/Z memory. Peak memory is the whole Python process, including the circuit,",
+                "detector error model and check matrix (problem alone shown separately); *added* is what building the decoder and",
+                "decoding adds on top (for QEC-Aegis this includes the scikit-learn library). QEC-Aegis holds two relay-BP instances (tier 1 and tier 2), the order-0 BP-OSD second opinion",
+                "used by tier-1 features, and the risk model. Setup excludes the one-time scikit-learn import, shown separately.", "",
+                "| Decoder | Components | Check matrix (checks × mechanisms) | One-time import s | Setup s | Problem MB | Peak MB | Added MB | Model on disk | Model inference per shot |",
+                "|---|---|---|---|---|---|---|---|---|---|"]
+        for key, label in REQUIRED:
+            rows = [r for r in res["rows"] if r["decoder"] == key.split(" ")[0]]
+            if not rows:
+                continue
+            model = f"{rows[0]['model_kb']:.0f} kB" if rows[0]["model_kb"] else "none"
+            infer = span([r["inference_us"] for r in rows], "{:.0f} µs") if rows[0]["inference_us"] else "none"
+            out.append(f"| {label} | {rows[0]['parts']} | {span([r['checks'] for r in rows], '{:,}')} × {span([r['mechanisms'] for r in rows], '{:,}')} | "
+                       f"{span([r['import_s'] for r in rows], '{:.2f}') if rows[0].get('import_s') else 'none'} | "
+                       f"{span([r['decoder_setup_s'] for r in rows], '{:.2f}')} | {span([r['problem_peak_mb'] for r in rows], '{:.0f}')} | "
+                       f"{span([r['peak_mb'] for r in rows], '{:.0f}')} | {span([r['decoder_added_mb'] for r in rows], '{:.0f}')} | {model} | {infer} |")
+        out.append("")
+    return out
+
+
 def main():
     ev = load("evaluation.json")
     tr = load("training.json")
+    res = load("resources.json")
     out = ["# Results", "",
            "Generated by `python -m aegis.report` from `experiments/reports/*.json`. Every number is a measurement from this",
            "repository's runs on one machine (Apple M5, 10 cores, 16 GB). Run details are in `experiments/manifest.json`.", "",
@@ -75,6 +142,8 @@ def main():
            "Z shot k. A pair fails when either shot fails, the logical error rate (LER) per cycle is 1 − (1 − P)^(1/12), and a pair's",
            "decode time is the X time plus its Z partner's time. Every decoder compared on one setting uses the same pairs.",
            "Intervals are 95%: exact Clopper–Pearson for failure rates, paired bootstrap for ratios and mean times.", ""]
+    if ev and ev.get("sweep"):
+        out += required_evaluation(ev, res)
     if tr:
         chosen = tr["chosen"]
         out += ["## Chosen system (fixed on validation shots, before the test shots were decoded)", "",

@@ -5,6 +5,7 @@
 #   scripts/verify_aegis.sh            kit tests, aegis tests, sampling check of every committed record,
 #                                      then regenerate reports, docs/RESULTS.md and docs/figures
 #   DECODE=1 scripts/verify_aegis.sh   also re-decode one chunk per record and tier, bit for bit (slow)
+#   RESOURCES=1 scripts/verify_aegis.sh  also re-measure per-decoder memory and setup on this machine
 #
 # No step trains a model or decodes test shots for evaluation: the frozen models in models/ and the
 # committed records in experiments/records/ are only read.
@@ -19,6 +20,7 @@ shasum -a 256 -c <("$PY" -c "import json; d=json.load(open('experiments/reports/
 print('\n'.join(f'{h}  models/{f}' for f, h in d['models'].items()))")
 "$PY" -m aegis.reproduce --decode "${DECODE:-0}" | tee experiments/logs/reproduce.log
 "$PY" -m aegis.recheck
+if [ "${RESOURCES:-0}" = 1 ]; then "$PY" -m aegis.resources; fi
 "$PY" -m aegis.evaluate > experiments/logs/evaluate.log
 "$PY" -m aegis.report
 "$PY" -m aegis.figures
