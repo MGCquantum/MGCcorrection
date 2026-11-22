@@ -1,19 +1,19 @@
 p=0.003 predicting BP convergence (X test shots): ML router 0.957, alarm-count threshold 0.957, always-guess-majority 0.957
 p=0.004 predicting BP convergence (X test shots): ML router 0.743, alarm-count threshold 0.763, always-guess-majority 0.757
 p=0.005 predicting BP convergence (X test shots): ML router 0.577, alarm-count threshold 0.610, always-guess-majority 0.510
-sweep    p=0.003 f=0  relay        rate < 1.0e-03 (0 of 300 pairs failed)  mean 62 ms  p99 324 ms
-sweep    p=0.003 f=0  bposd        rate < 1.0e-03 (0 of 300 pairs failed)  mean 97 ms  p99 570 ms
-sweep    p=0.003 f=0  bp           rate 9.97e-03 [95% CI 6.9e-03-1.4e-02, 34/300]  mean 22 ms  p99 78 ms
-sweep    p=0.003 f=0  hybrid_rule  rate < 1.0e-03 (0 of 300 pairs failed)  mean 41 ms  p99 369 ms  escalated 4%
-sweep    p=0.003 f=0  hybrid_ml    rate < 1.0e-03 (0 of 300 pairs failed)  mean 43 ms  p99 370 ms  escalated 4%
-sweep    p=0.004 f=0  relay        rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 217 ms  p99 2700 ms
-sweep    p=0.004 f=0  bposd        rate 3.40e-03 [95% CI 1.8e-03-5.9e-03, 12/300]  mean 285 ms  p99 832 ms
-sweep    p=0.004 f=0  bp           rate 3.78e-02 [95% CI 3.1e-02-4.5e-02, 111/300]  mean 43 ms  p99 96 ms
-sweep    p=0.004 f=0  hybrid_rule  rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 200 ms  p99 2793 ms  escalated 24%
-sweep    p=0.004 f=0  hybrid_ml    rate 2.78e-04 [95% CI 7.0e-06-1.5e-03, 1/300]  mean 203 ms  p99 2795 ms  escalated 27%
-sweep    p=0.005 f=0  relay        rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1259 ms  p99 8414 ms
-sweep    p=0.005 f=0  bposd        rate 2.37e-02 [95% CI 1.9e-02-3.0e-02, 75/300]  mean 503 ms  p99 991 ms
-sweep    p=0.005 f=0  bp           rate 8.98e-02 [95% CI 7.8e-02-1.0e-01, 203/300]  mean 73 ms  p99 117 ms
-sweep    p=0.005 f=0  hybrid_rule  rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1253 ms  p99 8523 ms  escalated 51%
-sweep    p=0.005 f=0  hybrid_ml    rate 8.74e-03 [95% CI 5.9e-03-1.2e-02, 30/300]  mean 1254 ms  p99 8415 ms  escalated 74%
+sweep    p=0.003 f=0  relay        rate < 2.0e-03 (0 of 150 pairs failed)  mean 67 ms  p99 618 ms
+sweep    p=0.003 f=0  bposd        rate < 2.0e-03 (0 of 150 pairs failed)  mean 100 ms  p99 543 ms
+sweep    p=0.003 f=0  bp           rate 1.12e-02 [95% CI 6.7e-03-1.7e-02, 19/150]  mean 22 ms  p99 66 ms
+sweep    p=0.003 f=0  hybrid_rule  rate < 2.0e-03 (0 of 150 pairs failed)  mean 48 ms  p99 651 ms  escalated 4%
+sweep    p=0.003 f=0  hybrid_ml    rate < 2.0e-03 (0 of 150 pairs failed)  mean 48 ms  p99 652 ms  escalated 4%
+sweep    p=0.004 f=0  relay        rate 5.57e-04 [95% CI 1.4e-05-3.1e-03, 1/150]  mean 245 ms  p99 3171 ms
+sweep    p=0.004 f=0  bposd        rate 3.40e-03 [95% CI 1.2e-03-7.4e-03, 6/150]  mean 298 ms  p99 830 ms
+sweep    p=0.004 f=0  bp           rate 4.53e-02 [95% CI 3.5e-02-5.8e-02, 64/150]  mean 45 ms  p99 94 ms
+sweep    p=0.004 f=0  hybrid_rule  rate 5.57e-04 [95% CI 1.4e-05-3.1e-03, 1/150]  mean 229 ms  p99 3210 ms  escalated 24%
+sweep    p=0.004 f=0  hybrid_ml    rate 5.57e-04 [95% CI 1.4e-05-3.1e-03, 1/150]  mean 232 ms  p99 3211 ms  escalated 27%
+sweep    p=0.005 f=0  relay        rate 9.36e-03 [95% CI 5.3e-03-1.5e-02, 16/150]  mean 1264 ms  p99 8263 ms
+sweep    p=0.005 f=0  bposd        rate 2.85e-02 [95% CI 2.1e-02-3.8e-02, 44/150]  mean 503 ms  p99 966 ms
+sweep    p=0.005 f=0  bp           rate 8.60e-02 [95% CI 6.9e-02-1.0e-01, 99/150]  mean 73 ms  p99 117 ms
+sweep    p=0.005 f=0  hybrid_rule  rate 9.36e-03 [95% CI 5.3e-03-1.5e-02, 16/150]  mean 1252 ms  p99 8377 ms  escalated 51%
+sweep    p=0.005 f=0  hybrid_ml    rate 9.36e-03 [95% CI 5.3e-03-1.5e-02, 16/150]  mean 1256 ms  p99 8265 ms  escalated 74%
 saved results_local_timing/results.csv and results_local_timing/results.png

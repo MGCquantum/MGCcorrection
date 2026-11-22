@@ -11,10 +11,14 @@ Hybrid decoders are computed from the cache, shot by shot:
   hybrid_rule  run fast BP; if it converged keep its answer, else run relay-BP (time = BP + relay)
   hybrid_ml    the router reads the alarms first; "easy" shots follow hybrid_rule,
                "hard" shots go straight to relay-BP (time = router + relay)
-A shot pair (X shot k, Z shot partner[k]) fails if either fails; its time is the sum of the two.
-X and Z runs with the same seed get the same Stim random stream, so equal indices are correlated
-samples; each X shot is therefore paired with a different, fixed random Z shot (see z_partner),
-which makes the two halves of a pair independent, as in the kit's baseline convention.
+A shot pair (an X shot and a Z shot) fails if either fails; its time is the sum of the two.
+X and Z runs with the same seed get the same Stim random stream, so X shot k and Z shot k are
+correlated. Pairs are therefore built from disjoint shot indices (see independent_pairs): X shots
+come from one random half of the indices and Z shots from the other, so no index contributes to
+more than one pair. Pairs are then mutually independent and the Clopper-Pearson intervals and
+exact McNemar tests below are valid. The cost is that each pairing uses half the shots per basis.
+Caches made with run_job.py's seed_scheme "ss-v1" have independent X and Z streams; those are
+paired directly, row k with row k, using every shot (see pairing_for).
 """
 import argparse
 import csv
@@ -103,26 +107,48 @@ def policies(d, router):
 PAIRING_SEED = 20261121
 
 
-def z_partner(n):
-    """Index of the Z shot paired with each X shot: a fixed random derangement (no shot keeps its index)."""
+def independent_pairs(n):
+    """(X indices, Z indices) for n//2 pairs drawn from disjoint halves of a fixed random permutation.
+
+    X shot k and Z shot k share a random stream, so an index may appear in at most one pair
+    (as either its X or its Z half); otherwise neighbouring pairs would share correlated shots."""
+    if n < 2:
+        raise ValueError(f"need at least 2 shots per basis to form independent pairs, got {n}")
     order = np.random.default_rng(PAIRING_SEED).permutation(n)
-    partner = np.empty(n, int)
-    partner[order] = order[np.roll(np.arange(n), -1)]
-    return partner
+    h = n // 2
+    return order[:h], order[h:2 * h]
 
 
-def pair_arrays(px, pz, name):
+def pairing_for(dx, dz):
+    """'direct' when both records come from independent derived streams, else 'disjoint' (legacy)."""
+    schemes = {str(d.get("seed_scheme", "legacy")) for d in (dx, dz)}
+    if schemes == {"ss-v1"}:
+        if int(dx["sampler_seed"]) == int(dz["sampler_seed"]):
+            raise ValueError("X and Z records share a sampler seed")
+        if int(dx["seed"]) != int(dz["seed"]) or str(dx["split"]) != str(dz["split"]):
+            raise ValueError("X and Z records come from different runs or splits")
+        return "direct"
+    if "ss-v1" in schemes:
+        raise ValueError("cannot pair a legacy cache with an ss-v1 cache")
+    return "disjoint"
+
+
+def pair_arrays(px, pz, name, pairing="disjoint"):
     """(failed, milliseconds) per X/Z pair. Refuses mismatched sample sizes instead of broadcasting."""
     fx, tx = (np.asarray(v) for v in px[name])
     fz, tz = (np.asarray(v) for v in pz[name])
     if not (fx.ndim == 1 and fx.shape == fz.shape == tx.shape == tz.shape):
         raise ValueError(f"{name}: X and Z results have different shapes {fx.shape}, {fz.shape}, {tx.shape}, {tz.shape}")
-    j = z_partner(len(fx))
-    return fx | fz[j], (tx + tz[j]) * 1e3
+    if pairing == "direct":
+        return fx | fz, (tx + tz) * 1e3
+    if pairing != "disjoint":
+        raise ValueError(f"unknown pairing {pairing}")
+    ix, iz = independent_pairs(len(fx))
+    return fx[ix] | fz[iz], (tx[ix] + tz[iz]) * 1e3
 
 
-def paired(px, pz, name):
-    failed, ms = pair_arrays(px, pz, name)
+def paired(px, pz, name, pairing="disjoint"):
+    failed, ms = pair_arrays(px, pz, name, pairing)
     rate, lo, hi, k = per_cycle_ci(failed)
     return rate, lo, hi, k, len(failed), ms.mean(), np.percentile(ms, 99)
 
@@ -148,10 +174,12 @@ def main():
             print(f"p={p}: waiting for test_Z_p{p}.npz")
             continue
         router = train_router(args.dir, p)
-        px = policies(check_conditions(load(f"{args.dir}/test_X_p{p}.npz"), "test_X", "X", p), router)
-        pz = policies(check_conditions(load(f"{args.dir}/test_Z_p{p}.npz"), "test_Z", "Z", p), router)
+        dx = check_conditions(load(f"{args.dir}/test_X_p{p}.npz"), "test_X", "X", p)
+        dz = check_conditions(load(f"{args.dir}/test_Z_p{p}.npz"), "test_Z", "Z", p)
+        how = pairing_for(dx, dz)
+        px, pz = policies(dx, router), policies(dz, router)
         for name in [n for n in px if not n.startswith("_") and n in pz]:
-            rate, lo, hi, k, n, mean_ms, p99 = paired(px, pz, name)
+            rate, lo, hi, k, n, mean_ms, p99 = paired(px, pz, name, how)
             esc = {"hybrid_rule": px.get("_escalated_rule"), "hybrid_ml": px.get("_escalated_ml")}.get(name)
             rows.append({"experiment": "sweep", "p": p, "f": 0, "decoder": name, "rate_per_cycle": rate, "ci_low": lo,
                          "ci_high": hi, "failed_pairs": k, "pairs": n, "mean_ms": mean_ms, "p99_ms": p99, "escalated_X": esc})
@@ -163,10 +191,11 @@ def main():
         fz = fx.replace("erase_X", "erase_Z")
         if not os.path.exists(fz):
             continue
-        px = policies(check_conditions(load(fx), fx, "X", p, f), None)
-        pz = policies(check_conditions(load(fz), fz, "Z", p, f), None)
+        dx, dz = check_conditions(load(fx), fx, "X", p, f), check_conditions(load(fz), fz, "Z", p, f)
+        how = pairing_for(dx, dz)
+        px, pz = policies(dx, None), policies(dz, None)
         for name in [n for n in px if not n.startswith("_") and n in pz]:
-            rate, lo, hi, k, n, mean_ms, p99 = paired(px, pz, name)
+            rate, lo, hi, k, n, mean_ms, p99 = paired(px, pz, name, how)
             rows.append({"experiment": "erasure", "p": p, "f": f, "decoder": name, "rate_per_cycle": rate, "ci_low": lo,
                          "ci_high": hi, "failed_pairs": k, "pairs": n, "mean_ms": mean_ms, "p99_ms": p99, "escalated_X": None})
     rows += relay_flag_rows(args.dir)
@@ -186,17 +215,42 @@ def main():
     plot(rows, args.dir)
 
 
-def relay_flag_groups(dirname):
-    """erase4_{X,Z}_p{p}_f{f}_s{seed}.npz files grouped by (p, f): {(p, f): [(X record, Z record), ...]}."""
+def relay_flag_files(dirname):
+    """{(p, f, seed): {basis: path}} for every erase4 file of either basis, so orphans are visible."""
+    found = {}
+    for path in sorted(glob.glob(f"{dirname}/erase4_[XZ]_p*_f*_s*.npz")):
+        m = re.search(r"erase4_([XZ])_p([\d.]+)_f([\d.]+)_s(\d+)\.npz$", path)
+        if m is None:
+            raise ValueError(f"{path}: unrecognised erase4 file name")
+        basis, p, f, s = m.groups()
+        found.setdefault((p, f, int(s)), {})[basis] = path
+    return found
+
+
+def missing_relay_partners(dirname):
+    """Experiment identities (p, f, seed, missing basis) that have only one of their X/Z files."""
+    return [(p, f, s, b) for (p, f, s), paths in sorted(relay_flag_files(dirname).items())
+            for b in "XZ" if b not in paths]
+
+
+def relay_flag_groups(dirname, strict=False):
+    """erase4_{X,Z}_p{p}_f{f}_s{seed}.npz files grouped by (p, f): {(p, f): [(X record, Z record), ...]}.
+
+    A seed with only one basis is an incomplete experiment: strict=True raises; otherwise it is
+    reported and left out, and callers must label the remaining group as partial."""
+    missing = missing_relay_partners(dirname)
+    for p, f, s, b in missing:
+        msg = f"erase4 p={p} f={f} seed={s}: {b} file missing"
+        if strict:
+            raise ValueError(msg)
+        print(f"PARTIAL: {msg}; seed left out")
     groups = {}
-    for fx in sorted(glob.glob(f"{dirname}/erase4_X_p*_f*_s*.npz")):
-        p, f, s = re.search(r"_p([\d.]+)_f([\d.]+)_s(\d+)\.npz", fx).groups()
-        fz = fx.replace("erase4_X", "erase4_Z")
-        if not os.path.exists(fz):
-            print(f"{fx}: waiting for its Z file")
+    for (p, f, s), paths in sorted(relay_flag_files(dirname).items()):
+        if len(paths) < 2:
             continue
+        fx, fz = paths["X"], paths["Z"]
         dx, dz = check_conditions(load(fx), fx, "X", p, f), check_conditions(load(fz), fz, "Z", p, f)
-        if int(dx["seed"]) != int(s) or int(dz["seed"]) != int(s):
+        if int(dx["seed"]) != s or int(dz["seed"]) != s:
             raise ValueError(f"{fx}: stored seed differs from the file name")
         groups.setdefault((p, f), []).append((dx, dz))
     return groups
@@ -205,43 +259,50 @@ def relay_flag_groups(dirname):
 def relay_flag_rows(dirname):
     """relay-BP with flags ignored vs used, same shots, all seeds pooled (pairs formed within each seed)."""
     rows = []
+    partial = {(p, f) for p, f, _, _ in missing_relay_partners(dirname)}
     for (p, f), records in sorted(relay_flag_groups(dirname).items()):
         res = {}
         for name in ("relay", "relay_flags"):
-            parts = [pair_arrays(policies(dx, None), policies(dz, None), name) for dx, dz in records]
+            parts = [pair_arrays(policies(dx, None), policies(dz, None), name, pairing_for(dx, dz)) for dx, dz in records]
             res[name] = (np.concatenate([q[0] for q in parts]), np.concatenate([q[1] for q in parts]))
         blind, aware = res["relay"][0], res["relay_flags"][0]
         only_b, only_a = int((blind & ~aware).sum()), int((aware & ~blind).sum())
         from scipy.stats import binomtest
         mc = binomtest(only_b, only_b + only_a).pvalue if only_b + only_a else 1.0
-        print(f"relay flags p={p} f={f}: {len(blind)} pairs, failed only with flags ignored {only_b}, "
+        print(f"relay flags p={p} f={f}{' (PARTIAL: a seed is missing a basis)' if (p, f) in partial else ''}: {len(blind)} pairs, failed only with flags ignored {only_b}, "
               f"only with flags used {only_a}, exact McNemar p = {mc:.2g}")
         for name, (failed, ms) in res.items():
             rate, lo, hi, k = per_cycle_ci(failed)
-            rows.append({"experiment": "erasure_relay", "p": p, "f": f, "decoder": name, "rate_per_cycle": rate,
+            rows.append({"experiment": "erasure_relay_partial" if (p, f) in partial else "erasure_relay", "p": p, "f": f, "decoder": name, "rate_per_cycle": rate,
                          "ci_low": lo, "ci_high": hi, "failed_pairs": k, "pairs": len(failed),
                          "mean_ms": ms.mean(), "p99_ms": np.percentile(ms, 99), "escalated_X": None})
     return rows
 
 
+def ci_point(r):
+    """(y, lower error, upper error, is_upper_bound): a zero-failure row is drawn at its CI upper bound."""
+    if not r["failed_pairs"]:
+        return r["ci_high"], 0, 0, True
+    return r["rate_per_cycle"], r["rate_per_cycle"] - r["ci_low"], r["ci_high"] - r["rate_per_cycle"], False
+
+
 def _ci_plot(ax, x, rs, name):
     """Points with 95% CIs; a zero-failure point is drawn as a downward triangle at its upper bound."""
-    y = [r["rate_per_cycle"] if r["failed_pairs"] else r["ci_high"] for r in rs]
-    lo = [y[i] - r["ci_low"] if r["failed_pairs"] else 0 for i, r in enumerate(rs)]
-    hi = [r["ci_high"] - y[i] if r["failed_pairs"] else 0 for i, r in enumerate(rs)]
-    line_y = [value if rs[i]["failed_pairs"] else float("nan") for i, value in enumerate(y)]
-    line = ax.errorbar(x, line_y, [lo, hi], marker="o", label=name, capsize=3)
-    zero = [i for i, r in enumerate(rs) if not r["failed_pairs"]]
+    pts = [ci_point(r) for r in rs]
+    line = ax.errorbar(x, [float("nan") if q[3] else q[0] for q in pts], [[q[1] for q in pts], [q[2] for q in pts]],
+                       marker="o", label=name, capsize=3)
+    zero = [i for i, q in enumerate(pts) if q[3]]
     if zero:
-        ax.scatter([x[i] for i in zero], [y[i] for i in zero], marker="v", s=80, color=line[0].get_color(), zorder=5)
+        ax.scatter([x[i] for i in zero], [pts[i][0] for i in zero], marker="v", s=80, color=line[0].get_color(), zorder=5)
 
 
 def plot(rows, dirname):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    has_erasure = any(r["experiment"] == "erasure" for r in rows)
-    count = 3 if has_erasure else 2
+    erase = [r for r in rows if r["experiment"] == "erasure"]
+    relay = [r for r in rows if r["experiment"].startswith("erasure_relay")]
+    count = 2 + bool(erase) + bool(relay)
     fig, ax = plt.subplots(1, count, figsize=(5 * count, 4))
     sweep = [r for r in rows if r["experiment"] == "sweep"]
     for name in sorted({r["decoder"] for r in sweep}):
@@ -252,13 +313,22 @@ def plot(rows, dirname):
         ax[1].plot(x, [r["p99_ms"] for r in rs], ls="--", marker="x", label=f"{name} p99")
     ax[0].set(xlabel="physical error rate p", ylabel="logical error rate per cycle", yscale="log", title="Accuracy")
     ax[1].set(xlabel="physical error rate p", ylabel="decode time per shot pair (ms)", yscale="log", title="Speed")
-    erase = [r for r in rows if r["experiment"] == "erasure"]
-    for name in sorted({r["decoder"] for r in erase}):
-        rs = sorted([r for r in erase if r["decoder"] == name], key=lambda r: float(r["f"]))
-        _ci_plot(ax[2], [float(r["f"]) for r in rs], rs, name)
+    panel = 2
     if erase:
-        ax[2].set(xlabel="fraction of noise converted to heralded erasure (triangle = upper bound, 0 failures)", ylabel="logical error rate per cycle",
-                  yscale="log", title="Using erasure flags")
+        for name in sorted({r["decoder"] for r in erase}):
+            rs = sorted([r for r in erase if r["decoder"] == name], key=lambda r: float(r["f"]))
+            _ci_plot(ax[panel], [float(r["f"]) for r in rs], rs, name)
+        ax[panel].set(xlabel="fraction of noise converted to heralded erasure (triangle = upper bound, 0 failures)",
+                      ylabel="logical error rate per cycle", yscale="log", title="BP-OSD: using erasure flags")
+        panel += 1
+    if relay:
+        for f in sorted({r["f"] for r in relay}, key=float):
+            for name in sorted({r["decoder"] for r in relay}):
+                rs = sorted([r for r in relay if r["decoder"] == name and r["f"] == f], key=lambda r: float(r["p"]))
+                partial = " (partial)" if any(r["experiment"] != "erasure_relay" for r in rs) else ""
+                _ci_plot(ax[panel], [float(r["p"]) for r in rs], rs, f"{name}, f={f}{partial}")
+        ax[panel].set(xlabel="physical error rate p", ylabel="logical error rate per cycle", yscale="log",
+                      title="relay-BP: using erasure flags")
     for x in ax:
         if x.get_legend_handles_labels()[0]:
             x.legend(fontsize=7)

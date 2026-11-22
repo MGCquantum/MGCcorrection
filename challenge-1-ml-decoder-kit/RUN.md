@@ -17,8 +17,12 @@ The audit reports legacy cache limitations rather than inventing full fingerprin
 ## Regenerate training and accuracy data
 
 These commands create a separate directory, preserving the submitted caches.
-All baselines are decoded together on each sampled shot; train uses seed 1, test
-uses seed 2. Defaults below use four workers; choose fewer on a busy laptop.
+All baselines are decoded together on each sampled shot; train uses root seed 1, test
+uses root seed 2. By default (`--seed-scheme ss-v1`) `run_job.py` derives the actual Stim
+seed from (root seed, split, basis, p, f) with numpy `SeedSequence`, so X and Z, and train
+and test, use separate random streams; `analyze.py` then pairs X row k with Z row k and
+uses every shot. Add `--seed-scheme legacy` only to replay the archived caches, which
+reused one stream for X and Z and are therefore analysed with disjoint-half pairing. Defaults below use four workers; choose fewer on a busy laptop.
 On macOS, prefix the long commands with `caffeinate -i` and connect power.
 
 ```bash
@@ -63,7 +67,7 @@ caffeinate -i bash scripts/run_local_timing.sh
 .venv/bin/python demo.py --p 0.004 --basis Z
 ```
 
-The timing script uses 300 pairs per p, one worker, one numerical thread, and all
+The timing script uses 300 shots per basis and p (150 independent pairs for the legacy caches), one worker, one numerical thread, and all
 three decoders on the same shots. It writes `results_local_timing`; an intentional
 rerun replaces that directory's outputs. Close competing workloads first for an
 idle-machine benchmark. The audit's run had a separate experiment active, so its
@@ -77,7 +81,8 @@ not an end-to-end service benchmark. Setup/training are excluded from decode tim
 (including training/imports). Accuracy counts reproduce; timings naturally vary.
 
 Stim seeds are not portable across versions/builds or sample sizes. New cache
-files include the full detector/observable SHA-256 and runtime provenance.
+files include the full detector/observable SHA-256, circuit SHA-256, split, seed scheme,
+derived sampler seed and runtime provenance.
 Old files retain only seeds, conditions, round weights and flag counts; those
 compatibility checks are useful but are not a mathematical proof of identical shots.
 Never append a partial decoder rerun to incompatible shots: rerun every decoder

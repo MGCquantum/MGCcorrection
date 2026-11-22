@@ -1,12 +1,12 @@
 New shot (p=0.004, X memory, seed 99): 77 alarms over 13 rounds
   alarms per round: [4, 1, 8, 8, 1, 1, 1, 2, 14, 10, 16, 10, 1]
-Router (1.2 ms): easy -> fast BP first
-Fast BP: 3.3 ms; relay-BP: 0.0 ms; escalated: False
+Router (0.7 ms): easy -> fast BP first
+Fast BP: 1.9 ms; relay-BP: 0.0 ms; escalated: False
 Predicted logical flips: 011001110101
 True logical flips:      011001110101 -> CORRECT
 
 Resources
-  CPU: Apple M5, 10 logical cores; this demo uses 1 thread
+  CPU: Apple M4 Pro, 12 logical cores; this demo uses 1 thread
   Decoding matrix: 936 checks x 8784 error mechanisms, 30672 nonzeros
-  Decoder setup time: 0.03 s; router model size: 718 kB
-  Peak memory of this process: 191 MB
+  Decoder setup time: 0.01 s; router model size: 718 kB
+  Peak memory of this process: 245 MB

@@ -65,10 +65,16 @@ PASS: f=0.5: flags help or tie on saved pairs
 PASS: f=0.75 X: erasure metadata
 PASS: f=0.75 Z: erasure metadata
 PASS: f=0.75: flags help or tie on saved pairs
+PASS: relay flags: every erase4 seed has both X and Z files
+PASS: relay flags: (p, f) groups match the expected manifest
+PASS: relay flags p=0.004 f=0.5: seeds [32, 33] all present
+PASS: relay flags p=0.005 f=0.5: seeds [31] all present
+PASS: relay flags p=0.004 f=0.5: complete X/Z records for every expected seed
+PASS: relay flags p=0.005 f=0.5: complete X/Z records for every expected seed
 LIMITATION: results/test_X_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_Z_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_X_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_Z_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_X_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 LIMITATION: results/test_Z_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
-67/67 checks passed; run_records/challenge1_audit.json
+73/73 checks passed; run_records/challenge1_audit.json
