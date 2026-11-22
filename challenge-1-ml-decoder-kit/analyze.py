@@ -1,6 +1,6 @@
 """Turn cached run_job.py results into the comparison table and plots. Runs in seconds.
 
-  python analyze.py --dir results
+  python analyze.py --dir results_v2
 
 File names it expects (from run_job.py):
   train_{X,Z}_p{p}.npz        decoders: bp                 (seed 1)  router training data
@@ -162,7 +162,7 @@ def check_conditions(d, path, basis, p, f=0.0):
 
 def main():
     a = argparse.ArgumentParser()
-    a.add_argument("--dir", default="results")
+    a.add_argument("--dir", default="results_v2")
     a.add_argument("--train-dir", help="where train_*.npz live (default: --dir), e.g. results for results_timing")
     args = a.parse_args()
     global TRAIN_DIR

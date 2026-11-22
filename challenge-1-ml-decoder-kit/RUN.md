@@ -12,11 +12,14 @@ bash scripts/verify_submission.sh
 Python 3.13 macOS environment. Other platforms may need different wheels; relay-bp
 may require Rust. The verifier runs tests, checks every required sweep row, writes
 analysis/figures, and demonstrates fresh X and Z shots. It exits nonzero on failure.
-The audit reports legacy cache limitations rather than inventing full fingerprints.
+It audits the current evidence (`results_v2`) and, separately, the legacy caches in
+`results/`, whose limitations it reports rather than inventing full fingerprints.
 
 ## Regenerate training and accuracy data
 
-These commands create a separate directory, preserving the submitted caches.
+These commands create a separate directory, preserving the submitted caches. The
+submitted `results_v2` evidence was produced by these commands with `--workers 11` for
+every job (worker count splits decoding across processes; it does not change the sampled shots).
 All baselines are decoded together on each sampled shot; train uses root seed 1, test
 uses root seed 2. By default (`--seed-scheme ss-v1`) `run_job.py` derives the actual Stim
 seed from (root seed, split, basis, p, f) with numpy `SeedSequence`, so X and Z, and train

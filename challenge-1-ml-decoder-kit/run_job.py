@@ -1,7 +1,7 @@
 """Decode a batch of shots once with chosen decoders and cache everything the analysis needs.
 
-  python run_job.py --basis X --p 0.004 --shots 2000 --seed 2 --decoders bp relay --out results/test_X_p0.004.npz
-  python run_job.py --basis X --p 0.004 --f 0.5 --shots 2000 --seed 2 --decoders bposd bposd_flags --out results/erase_X_p0.004_f0.5.npz
+  python run_job.py --basis X --p 0.004 --shots 2000 --seed 2 --decoders bp relay --out results_new/test_X_p0.004.npz
+  python run_job.py --basis X --p 0.004 --f 0.5 --shots 2000 --seed 2 --decoders bposd bposd_flags --out results_new/erase_X_p0.004_f0.5.npz
 
 Decoders
   bp           plain min-sum BP, 200 iterations (the fast stage); records convergence

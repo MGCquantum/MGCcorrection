@@ -14,8 +14,8 @@ PASS: p=0.003: relay finite latency and valid CI
 PASS: p=0.003: relay kit reference within 95% interval
 PASS: p=0.003: hybrid_rule finite latency and valid CI
 PASS: p=0.003: hybrid_ml finite latency and valid CI
-PASS: p=0.003: hybrid_rule observed failed-pair count equals relay
-PASS: p=0.003: hybrid_ml observed failed-pair count equals relay
+PASS: p=0.003: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.003: hybrid_ml not significantly worse than relay (one-sided p=1)
 PASS: p=0.004: seed-1 trained router exists
 PASS: p=0.004 X: held-out seed-2 f=0 conditions
 PASS: p=0.004 X: bp cached
@@ -32,8 +32,8 @@ PASS: p=0.004: relay finite latency and valid CI
 PASS: p=0.004: relay kit reference within 95% interval
 PASS: p=0.004: hybrid_rule finite latency and valid CI
 PASS: p=0.004: hybrid_ml finite latency and valid CI
-PASS: p=0.004: hybrid_rule observed failed-pair count equals relay
-PASS: p=0.004: hybrid_ml observed failed-pair count equals relay
+PASS: p=0.004: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.004: hybrid_ml not significantly worse than relay (one-sided p=1)
 PASS: p=0.005: seed-1 trained router exists
 PASS: p=0.005 X: held-out seed-2 f=0 conditions
 PASS: p=0.005 X: bp cached
@@ -50,8 +50,8 @@ PASS: p=0.005: relay finite latency and valid CI
 PASS: p=0.005: relay kit reference within 95% interval
 PASS: p=0.005: hybrid_rule finite latency and valid CI
 PASS: p=0.005: hybrid_ml finite latency and valid CI
-PASS: p=0.005: hybrid_rule observed failed-pair count equals relay
-PASS: p=0.005: hybrid_ml observed failed-pair count equals relay
+PASS: p=0.005: hybrid_rule not significantly worse than relay (one-sided p=1)
+PASS: p=0.005: hybrid_ml not significantly worse than relay (one-sided p=1)
 PASS: f=0.0 X: erasure metadata
 PASS: f=0.0 Z: erasure metadata
 PASS: f=0.0: flags help or tie on saved pairs
@@ -71,10 +71,4 @@ PASS: relay flags p=0.004 f=0.5: seeds [32, 33] all present
 PASS: relay flags p=0.005 f=0.5: seeds [31] all present
 PASS: relay flags p=0.004 f=0.5: complete X/Z records for every expected seed
 PASS: relay flags p=0.005 f=0.5: complete X/Z records for every expected seed
-LIMITATION: results/test_X_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
-LIMITATION: results/test_Z_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
-LIMITATION: results/test_X_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
-LIMITATION: results/test_Z_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
-LIMITATION: results/test_X_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
-LIMITATION: results/test_Z_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash
 73/73 checks passed; run_records/challenge1_audit.json

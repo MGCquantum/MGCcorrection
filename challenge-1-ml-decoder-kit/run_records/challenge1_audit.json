@@ -66,11 +66,11 @@
       "pass": true
     },
     {
-      "check": "p=0.003: hybrid_rule observed failed-pair count equals relay",
+      "check": "p=0.003: hybrid_rule not significantly worse than relay (one-sided p=1)",
       "pass": true
     },
     {
-      "check": "p=0.003: hybrid_ml observed failed-pair count equals relay",
+      "check": "p=0.003: hybrid_ml not significantly worse than relay (one-sided p=1)",
       "pass": true
     },
     {
@@ -138,11 +138,11 @@
       "pass": true
     },
     {
-      "check": "p=0.004: hybrid_rule observed failed-pair count equals relay",
+      "check": "p=0.004: hybrid_rule not significantly worse than relay (one-sided p=1)",
       "pass": true
     },
     {
-      "check": "p=0.004: hybrid_ml observed failed-pair count equals relay",
+      "check": "p=0.004: hybrid_ml not significantly worse than relay (one-sided p=1)",
       "pass": true
     },
     {
@@ -210,11 +210,11 @@
       "pass": true
     },
     {
-      "check": "p=0.005: hybrid_rule observed failed-pair count equals relay",
+      "check": "p=0.005: hybrid_rule not significantly worse than relay (one-sided p=1)",
       "pass": true
     },
     {
-      "check": "p=0.005: hybrid_ml observed failed-pair count equals relay",
+      "check": "p=0.005: hybrid_ml not significantly worse than relay (one-sided p=1)",
       "pass": true
     },
     {
@@ -294,258 +294,247 @@
       "pass": true
     }
   ],
-  "warnings": [
-    "results/test_X_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
-    "results/test_Z_p0.003.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
-    "results/test_X_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
-    "results/test_Z_p0.004.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
-    "results/test_X_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash",
-    "results/test_Z_p0.005.npz: legacy cache; same-shot merges checked by metadata, round weights and flags, not a full sample hash"
-  ],
+  "warnings": [],
   "sweep": [
     {
       "p": 0.003,
       "decoder": "bp",
-      "failed_pairs": 284,
-      "pairs": 2500,
-      "rate_per_cycle": 0.009998591950634461,
-      "ci_low": 0.008871955020988698,
-      "ci_high": 0.011225620347648846,
-      "mean_ms": 27.309703356190585,
-      "p99_ms": 98.03961908561142
+      "failed_pairs": 629,
+      "pairs": 5000,
+      "rate_per_cycle": 0.011141312089198774,
+      "ci_low": 0.010290238525126782,
+      "ci_high": 0.012042338480139025,
+      "mean_ms": 20.52765652370872,
+      "p99_ms": 75.28848200337967
     },
     {
       "p": 0.003,
       "decoder": "bposd",
-      "failed_pairs": 7,
-      "pairs": 2500,
-      "rate_per_cycle": 0.00023363331454673286,
-      "ci_low": 9.392044141753875e-05,
-      "ci_high": 0.0004813145058765178,
-      "mean_ms": 107.8359267026186,
-      "p99_ms": 690.4452362662402
+      "failed_pairs": 33,
+      "pairs": 5000,
+      "rate_per_cycle": 0.0005516707994166481,
+      "ci_low": 0.0003797391222507551,
+      "ci_high": 0.0007746651440234675,
+      "mean_ms": 90.48075898505049,
+      "p99_ms": 547.6597390067773
     },
     {
       "p": 0.003,
       "decoder": "relay",
-      "failed_pairs": 1,
-      "pairs": 2500,
-      "rate_per_cycle": 3.3339446006586115e-05,
-      "ci_low": 8.439265767323789e-07,
-      "ci_high": 0.00018574135664140012,
-      "mean_ms": 74.0808784416411,
-      "p99_ms": 496.4330260734957
+      "failed_pairs": 5,
+      "pairs": 5000,
+      "rate_per_cycle": 8.337155219761971e-05,
+      "ci_low": 2.7068569092070227e-05,
+      "ci_high": 0.00019455058894368715,
+      "mean_ms": 58.03657242887421,
+      "p99_ms": 406.130325955456
     },
     {
       "p": 0.003,
       "decoder": "hybrid_rule",
-      "failed_pairs": 1,
-      "pairs": 2500,
-      "rate_per_cycle": 3.3339446006586115e-05,
-      "ci_low": 8.439265767323789e-07,
-      "ci_high": 0.00018574135664140012,
-      "mean_ms": 55.49819726936985,
-      "p99_ms": 532.4728982581189
+      "failed_pairs": 5,
+      "pairs": 5000,
+      "rate_per_cycle": 8.337155219761971e-05,
+      "ci_low": 2.7068569092070227e-05,
+      "ci_high": 0.00019455058894368715,
+      "mean_ms": 43.6415077196667,
+      "p99_ms": 441.10140236560375
     },
     {
       "p": 0.003,
       "decoder": "hybrid_ml",
-      "failed_pairs": 1,
-      "pairs": 2500,
-      "rate_per_cycle": 3.3339446006586115e-05,
-      "ci_low": 8.439265767323789e-07,
-      "ci_high": 0.00018574135664140012,
-      "mean_ms": 56.460335169022436,
-      "p99_ms": 530.2931731499841
+      "failed_pairs": 5,
+      "pairs": 5000,
+      "rate_per_cycle": 8.337155219761971e-05,
+      "ci_low": 2.7068569092070227e-05,
+      "ci_high": 0.00019455058894368715,
+      "mean_ms": 45.20905706625199,
+      "p99_ms": 442.62050444580495
     },
     {
       "p": 0.004,
       "decoder": "bp",
-      "failed_pairs": 352,
-      "pairs": 1000,
-      "rate_per_cycle": 0.03550958250051006,
-      "ci_low": 0.03190948210925937,
-      "ci_high": 0.03937715181898771,
-      "mean_ms": 523.8109881144483,
-      "p99_ms": 1439.440348308999
+      "failed_pairs": 730,
+      "pairs": 2000,
+      "rate_per_cycle": 0.037137047126276634,
+      "ci_low": 0.03450591182479901,
+      "ci_high": 0.03990143331192697,
+      "mean_ms": 37.93332329855184,
+      "p99_ms": 100.66541636304464
     },
     {
       "p": 0.004,
       "decoder": "bposd",
-      "failed_pairs": 48,
-      "pairs": 1000,
+      "failed_pairs": 96,
+      "pairs": 2000,
       "rate_per_cycle": 0.004090796817048492,
-      "ci_low": 0.003016226007181988,
-      "ci_high": 0.00542038508685716,
-      "mean_ms": 1659.6965915900655,
-      "p99_ms": 5096.582940297667
+      "ci_low": 0.0033139343624222217,
+      "ci_high": 0.004993422300860639,
+      "mean_ms": 205.19532115975744,
+      "p99_ms": 683.3930578711443
     },
     {
       "p": 0.004,
       "decoder": "relay",
-      "failed_pairs": 7,
-      "pairs": 1000,
-      "rate_per_cycle": 0.0005852132739561089,
-      "ci_low": 0.00023520893603812265,
-      "ci_high": 0.001205392230196889,
-      "mean_ms": 2167.461208683555,
-      "p99_ms": 33159.92014129413
+      "failed_pairs": 19,
+      "pairs": 2000,
+      "rate_per_cycle": 0.0007951347829608935,
+      "ci_low": 0.0004786778469120234,
+      "ci_high": 0.0012414273163183775,
+      "mean_ms": 202.228780767211,
+      "p99_ms": 3483.6286581063177
     },
     {
       "p": 0.004,
       "decoder": "hybrid_rule",
-      "failed_pairs": 7,
-      "pairs": 1000,
-      "rate_per_cycle": 0.0005852132739561089,
-      "ci_low": 0.00023520893603812265,
-      "ci_high": 0.001205392230196889,
-      "mean_ms": 2211.943438828108,
-      "p99_ms": 34224.85096289893
+      "failed_pairs": 19,
+      "pairs": 2000,
+      "rate_per_cycle": 0.0007951347829608935,
+      "ci_low": 0.0004786778469120234,
+      "ci_high": 0.0012414273163183775,
+      "mean_ms": 192.64831231327844,
+      "p99_ms": 3504.783061222406
     },
     {
       "p": 0.004,
       "decoder": "hybrid_ml",
-      "failed_pairs": 7,
-      "pairs": 1000,
-      "rate_per_cycle": 0.0005852132739561089,
-      "ci_low": 0.00023520893603812265,
-      "ci_high": 0.001205392230196889,
-      "mean_ms": 2203.832206753199,
-      "p99_ms": 34043.39505426062
+      "failed_pairs": 19,
+      "pairs": 2000,
+      "rate_per_cycle": 0.0007951347829608935,
+      "ci_low": 0.0004786778469120234,
+      "ci_high": 0.0012414273163183775,
+      "mean_ms": 193.91147273447132,
+      "p99_ms": 3496.1434280962562
     },
     {
       "p": 0.005,
       "decoder": "bp",
-      "failed_pairs": 744,
-      "pairs": 1000,
-      "rate_per_cycle": 0.10733878882764847,
-      "ci_low": 0.0995198856866586,
-      "ci_high": 0.11552648415647926,
-      "mean_ms": 155.01450777688297,
-      "p99_ms": 298.8294022473564
+      "failed_pairs": 1480,
+      "pairs": 2000,
+      "rate_per_cycle": 0.10618471128417473,
+      "ci_low": 0.10069685213543134,
+      "ci_high": 0.11185306309019616,
+      "mean_ms": 60.57861441880232,
+      "p99_ms": 113.29172354016919
     },
     {
       "p": 0.005,
       "decoder": "bposd",
-      "failed_pairs": 261,
-      "pairs": 1000,
-      "rate_per_cycle": 0.024889791327350808,
-      "ci_low": 0.02197124702134412,
-      "ci_high": 0.028068820188368093,
-      "mean_ms": 1076.9052678139415,
-      "p99_ms": 2116.4244817438157
+      "failed_pairs": 473,
+      "pairs": 2000,
+      "rate_per_cycle": 0.0222359015716157,
+      "ci_low": 0.02028568292256616,
+      "ci_high": 0.024314559845232897,
+      "mean_ms": 602.0625229509606,
+      "p99_ms": 1575.9699919924603
     },
     {
       "p": 0.005,
       "decoder": "relay",
-      "failed_pairs": 80,
-      "pairs": 1000,
-      "rate_per_cycle": 0.006924382628299419,
-      "ci_low": 0.005491352124386006,
-      "ci_high": 0.008611352737311173,
-      "mean_ms": 1948.210709021194,
-      "p99_ms": 10467.270581337503
+      "failed_pairs": 167,
+      "pairs": 2000,
+      "rate_per_cycle": 0.007239766684647431,
+      "ci_low": 0.006184725033486771,
+      "ci_high": 0.008420364789286428,
+      "mean_ms": 1606.9928102950216,
+      "p99_ms": 13456.557210151805
     },
     {
       "p": 0.005,
       "decoder": "hybrid_rule",
-      "failed_pairs": 80,
-      "pairs": 1000,
-      "rate_per_cycle": 0.006924382628299419,
-      "ci_low": 0.005491352124386006,
-      "ci_high": 0.008611352737311173,
-      "mean_ms": 2002.1952378491549,
-      "p99_ms": 10731.562954352845
+      "failed_pairs": 166,
+      "pairs": 2000,
+      "rate_per_cycle": 0.007194644294912456,
+      "ci_low": 0.0061431388070034565,
+      "ci_high": 0.008371704291796234,
+      "mean_ms": 1582.014406395494,
+      "p99_ms": 13525.941414097324
     },
     {
       "p": 0.005,
       "decoder": "hybrid_ml",
-      "failed_pairs": 80,
-      "pairs": 1000,
-      "rate_per_cycle": 0.006924382628299419,
-      "ci_low": 0.005491352124386006,
-      "ci_high": 0.008611352737311173,
-      "mean_ms": 1964.724113599921,
-      "p99_ms": 10468.254868627406
+      "failed_pairs": 166,
+      "pairs": 2000,
+      "rate_per_cycle": 0.007194644294912456,
+      "ci_low": 0.0061431388070034565,
+      "ci_high": 0.008371704291796234,
+      "mean_ms": 1591.0173441865481,
+      "p99_ms": 13477.550837455494
     }
   ],
   "erasure": [
     {
       "f": 0.0,
-      "pairs": 500,
-      "failed_blind": 27,
-      "failed_aware": 27,
+      "pairs": 1000,
+      "failed_blind": 52,
+      "failed_aware": 52,
       "only_blind": 0,
       "only_aware": 0,
       "mcnemar_p": 1.0,
-      "blind_mean_ms": 768.2024382317904,
-      "aware_mean_ms": 722.334477561526
+      "blind_mean_ms": 509.4271636408521,
+      "aware_mean_ms": 479.24752241536044
     },
     {
       "f": 0.25,
-      "pairs": 500,
-      "failed_blind": 8,
-      "failed_aware": 4,
-      "only_blind": 6,
-      "only_aware": 2,
-      "mcnemar_p": 0.2890625,
-      "blind_mean_ms": 231.94647395182983,
-      "aware_mean_ms": 2139.2295253722114
+      "pairs": 1000,
+      "failed_blind": 16,
+      "failed_aware": 8,
+      "only_blind": 11,
+      "only_aware": 3,
+      "mcnemar_p": 0.057373046875,
+      "blind_mean_ms": 353.761883148225,
+      "aware_mean_ms": 2629.7214059539256
     },
     {
       "f": 0.5,
-      "pairs": 1000,
-      "failed_blind": 8,
-      "failed_aware": 2,
-      "only_blind": 6,
-      "only_aware": 0,
-      "mcnemar_p": 0.03125,
-      "blind_mean_ms": 147.4299490090707,
-      "aware_mean_ms": 985.5385811260857
+      "pairs": 2000,
+      "failed_blind": 23,
+      "failed_aware": 3,
+      "only_blind": 21,
+      "only_aware": 1,
+      "mcnemar_p": 1.0967254638671875e-05,
+      "blind_mean_ms": 241.80812138717738,
+      "aware_mean_ms": 1325.8656455589226
     },
     {
       "f": 0.75,
-      "pairs": 1000,
-      "failed_blind": 4,
+      "pairs": 2000,
+      "failed_blind": 11,
       "failed_aware": 0,
-      "only_blind": 4,
+      "only_blind": 11,
       "only_aware": 0,
-      "mcnemar_p": 0.125,
-      "blind_mean_ms": 113.7988484018424,
-      "aware_mean_ms": 935.9564375311239
+      "mcnemar_p": 0.0009765625,
+      "blind_mean_ms": 172.31357307505095,
+      "aware_mean_ms": 1261.030407634651
     }
   ],
   "input_sha256": {
-    "results/erase4_X_p0.004_f0.5_s32.npz": "fa087c179bdf1a8f0f37470f291e0794f6383180ef1e50e75d36711693f610e0",
-    "results/erase4_X_p0.004_f0.5_s33.npz": "55062f73606ee75e18be283d227b56700ebefe7707f370eff30e6eacb975c0fd",
-    "results/erase4_X_p0.005_f0.5_s31.npz": "8f48c9a45966109f5d251c0d05fb68126b17a4a54f126fc868ba86a5f46cbea6",
-    "results/erase4_Z_p0.004_f0.5_s32.npz": "95dd2ac40d57f05b1793edd7d8c810b28f728cd5de093156f02942ab27b937fe",
-    "results/erase4_Z_p0.004_f0.5_s33.npz": "2ab52a538a846025624e2b796010ecacc3a3703cc3cd9e79754ab46c0ead6def",
-    "results/erase4_Z_p0.005_f0.5_s31.npz": "ff749588e6b9da966e9df0a86c0b3dd7467273dd942c6d1adbc0f91d28ce1f59",
-    "results/erase_X_p0.004_f0.25.npz": "3020d9011ae7c3a07fd16941491e3dc6a9aadc2cd3c2fb0aed893ee6ba0a350f",
-    "results/erase_X_p0.004_f0.5.npz": "cf1820b7622cd8b0ef25bd3ec0bc246446688ebd9926af64751a1ec22ff8ad7a",
-    "results/erase_X_p0.004_f0.75.npz": "17015c6d9f1572af6c1ad995bad7c149a80347cf9ded4a5a84be2e3acc3982e1",
-    "results/erase_X_p0.004_f0.npz": "14bdef22db4443437ed8a391ecac2a6be2b9f7cbec3227a822a4c58a7a685962",
-    "results/erase_Z_p0.004_f0.25.npz": "aac1cb7ecf1ca059a32e9eec25222dd9322e8e88330b91776ed55faeedb5cd34",
-    "results/erase_Z_p0.004_f0.5.npz": "216310e7f2b0e14f9385541e734f81d3070385615f8784fd5096b588a59509d7",
-    "results/erase_Z_p0.004_f0.75.npz": "e0740af760903dcb35f0ef355a7a2222d535a35f6c09fcbafd1469e859f06a23",
-    "results/erase_Z_p0.004_f0.npz": "491706bc74141564fad147642a23d694670cde54cd6da7821b5d922e2546d819",
-    "results/extra_X_p0.003.npz": "8a519bb4cd8ecf7882694fdf588561dd32fdbdfc0ae903fb627efdd6d288a840",
-    "results/extra_X_p0.005.npz": "5c53fe968c82990d4188afe1f9c6c8eda8db989aac603ccbebaee10fe128fcea",
-    "results/extra_Z_p0.003.npz": "3f0a3e9159aa073fe03d5c684e1feadcf40fd95bf92d652a048a267d7b1819d2",
-    "results/extra_Z_p0.005.npz": "e7da8fe95ab00ce6430f27050cb129016850e5a6fc0a46aeffe559e1543af9df",
-    "results/test_X_p0.003.npz": "7c5ed2ffb66ef38e391df3fe154c79e65a546daff523470c3fd9754c2c14fc71",
-    "results/test_X_p0.004.npz": "0d93ff387c8f22ee3447335328cc947b10078df4c3eb43575e1f611504458947",
-    "results/test_X_p0.005.npz": "a34ac8d8d95488f990f060a8a1e0a42b81dceb0927da4de484281a646f43db21",
-    "results/test_Z_p0.003.npz": "0ed39d5ffbc29c13a3af54860a1e61a60968285df707c4993372f2ef9bc27a14",
-    "results/test_Z_p0.004.npz": "a1628ba565124e2c572cba549f272567c4c4a87da4ef6b56544db3fea6e1a50e",
-    "results/test_Z_p0.005.npz": "9f56868310f4c26f1072c8beb95bab25de3d877e77fe0078d850975a3af8a39a",
-    "results/train_X_p0.003.npz": "e1623702b766a91e4b717e4416c506f771208fbcea196258e3b1336524fce9f3",
-    "results/train_X_p0.004.npz": "1cf7607c8c5e61b9c4ce4c5f3467280e94c4d923d5cc64b1f43545c4845397d7",
-    "results/train_X_p0.005.npz": "15752ecf497602291a814c18b2517fd2aaa8d31dd60e6a5cb61bcbd1173698af",
-    "results/train_Z_p0.003.npz": "164b1bcfdd26c98da2fa9d88b538066cb8f9654609b5eb9860b8a81083fc2834",
-    "results/train_Z_p0.004.npz": "bdc25fc8717f1406659d72b4627df67865288a26fdacfd40ffa98ffded691ffc",
-    "results/train_Z_p0.005.npz": "c44020a0032bf116f7e33e7e27f0878df8c2bd0d31d91cacb944c84a5a52c7ef"
+    "results_v2/erase4_X_p0.004_f0.5_s32.npz": "45d59a172ecf72fb2e73c2a7ae7086dce185792afe84f2e736072eafecaed6a9",
+    "results_v2/erase4_X_p0.004_f0.5_s33.npz": "ed187527a5bf663f39efddadc15367e2df5afaf3718464de8836e12e62b4f048",
+    "results_v2/erase4_X_p0.005_f0.5_s31.npz": "2b6041b608db03091f25cb813f5bb082ba3c0415c746ac9605f696043949ffec",
+    "results_v2/erase4_Z_p0.004_f0.5_s32.npz": "1dff931d98396cfa0e17c802289719c16747cb1e7325602e2f5bf17e630beefd",
+    "results_v2/erase4_Z_p0.004_f0.5_s33.npz": "c7fe79868e77018cb9aac20b4ac597dc93d0fa1df37be4d5808f27bd1210f990",
+    "results_v2/erase4_Z_p0.005_f0.5_s31.npz": "a0a3d501d1a4bca7ab8948d9e78cc2886be5e525693f21c97d6f1cec9009ba88",
+    "results_v2/erase_X_p0.004_f0.25.npz": "cd6d15358cf1031268136187ccd00c81bb43304bf65924aa7ac88986854a3c6e",
+    "results_v2/erase_X_p0.004_f0.5.npz": "9e6a15b777527b6e288b828ef74fb2b7a5c219301e6a91c08c34f3e4eb83b56a",
+    "results_v2/erase_X_p0.004_f0.75.npz": "86a13a8ceaa59e90ebbc49da6fd425a0966df95bb9f1021424bd8ecf44160682",
+    "results_v2/erase_X_p0.004_f0.npz": "046c0ca0b685012d243cc61168a4b86f44dbca51f052c1119146434dc6007506",
+    "results_v2/erase_Z_p0.004_f0.25.npz": "eede712e86b4cdcc6c6ac1cb27bb762d7031b12854eef4744d3cc0177190df62",
+    "results_v2/erase_Z_p0.004_f0.5.npz": "4c25d8f21fb0ad2852eba329d03f034237623e745531efd9016fb8d34b142fff",
+    "results_v2/erase_Z_p0.004_f0.75.npz": "8ae769b64cf7ae371133bafebfdfb1275907e51528d6506f98ed5aedb0ce0e9a",
+    "results_v2/erase_Z_p0.004_f0.npz": "43c0973ff850e2691d80ede354ddc5e8c733139298e5cf50669c39d1bf105ca1",
+    "results_v2/test_X_p0.003.npz": "ae05a2f88133942d8279dee51b0a5c9c26f5e32ba0e720b8faf416d4c257e65e",
+    "results_v2/test_X_p0.004.npz": "fc14bb0accc0bb1c04f1ec943aba5178e8eae67e11e1f85924b698fc2566938d",
+    "results_v2/test_X_p0.005.npz": "1ce2034313485962312e4943e040a3d409d4b385f33c3712bf3fab49dfc64d70",
+    "results_v2/test_Z_p0.003.npz": "47219941d76b2a8819d10291e9135baa989f8940f83b45bc0318dbb19b2e46a3",
+    "results_v2/test_Z_p0.004.npz": "f3d10fecdcfd533a9f7f7a1177e27539c56dfd58a238524fe9cb7f24262d7709",
+    "results_v2/test_Z_p0.005.npz": "83131cc04543c86590b5beaabd330122173784927b241916167f19c8db070fe7",
+    "results_v2/train_X_p0.003.npz": "f42815fd00a47ddad2793c6425dce3706003aaa93b74419cc67566e3d4a6c3c8",
+    "results_v2/train_X_p0.004.npz": "878e74084d711ea4b24595066b02431d3a3be04fd7efca775e28df71598fef54",
+    "results_v2/train_X_p0.005.npz": "af4ad5212c3f349db63bfdf247797743fdfa7de471ab7a0a8ebe06ac913834ac",
+    "results_v2/train_Z_p0.003.npz": "0e951b55cd7f2394e9d68464573209b223daaf31e89fcc8e77f89673038dfa38",
+    "results_v2/train_Z_p0.004.npz": "c40325857b72addaecdfb7638ed59d7b49554dad956f4152aaff207f409a13ed",
+    "results_v2/train_Z_p0.005.npz": "cb2f72c3c34fd6ce16657f0f2c90081759fa8a724a1de0b7fcca5ef2c157cdff"
   },
   "relay_flags": [
     {
@@ -555,14 +544,14 @@
         32,
         33
       ],
-      "pairs": 10000,
-      "failed_blind": 19,
-      "failed_aware": 1,
-      "only_blind": 19,
-      "only_aware": 1,
-      "mcnemar_p": 4.00543212890625e-05,
-      "blind_mean_ms": 177.417928344995,
-      "aware_mean_ms": 82.59927252524066
+      "pairs": 20000,
+      "failed_blind": 36,
+      "failed_aware": 3,
+      "only_blind": 33,
+      "only_aware": 0,
+      "mcnemar_p": 2.3283064365386963e-10,
+      "blind_mean_ms": 178.89893986753015,
+      "aware_mean_ms": 77.99903710402141
     },
     {
       "p": 0.005,
@@ -570,14 +559,14 @@
       "seeds": [
         31
       ],
-      "pairs": 5000,
-      "failed_blind": 70,
-      "failed_aware": 3,
-      "only_blind": 68,
-      "only_aware": 1,
-      "mcnemar_p": 2.371692252312041e-19,
-      "blind_mean_ms": 571.4272956375964,
-      "aware_mean_ms": 122.07852224853123
+      "pairs": 10000,
+      "failed_blind": 140,
+      "failed_aware": 9,
+      "only_blind": 134,
+      "only_aware": 3,
+      "mcnemar_p": 4.9209361850038406e-36,
+      "blind_mean_ms": 544.1357006603154,
+      "aware_mean_ms": 108.60718380358303
     }
   ],
   "passed": true

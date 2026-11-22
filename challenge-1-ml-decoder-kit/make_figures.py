@@ -20,7 +20,7 @@ def rows(path):
                 for r in csv.DictReader(fh)]
 
 
-main = rows("results/results.csv")
+main = rows("results_v2/results.csv")
 erase = sorted([r for r in main if r["experiment"] == "erasure"], key=lambda r: r["f"])
 fig, ax = plt.subplots(figsize=(6.5, 4.5))
 for name, label, color in [("bposd", "Decoder ignores loss flags", "#888780"),

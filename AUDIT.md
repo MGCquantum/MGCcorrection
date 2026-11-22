@@ -16,12 +16,12 @@ Gross-code circuits remain unchanged; our extensions sit alongside them.
 | Set up Gross-code memory experiments and reproduce BP-OSD and relay-BP | Unchanged sponsor circuits/settings; both baselines in all three sweep points; kit references lie inside the cached 95% intervals | PASS |
 | Simulate noise and use heralding where available | `lossy.py`, corrected conditional priors, paired flag-hidden/flag-used runs at f=0, 0.25, 0.5, 0.75 | PASS |
 | Working ML-assisted decoder using syndrome information | Shared `hybrid.py` training/features/live inference; asserted tests run the real fast-BP, relay-BP and fallback paths; `demo.py` shows a fresh shot | PASS |
-| Same-data baseline comparison at p=0.003, 0.004, 0.005 | Full accuracy sweep, both X/Z bases, BP-OSD, relay-BP, rule and ML hybrids; no test labels enter router training | PASS |
-| Report logical error rate | Exact Clopper-Pearson intervals and failed-pair counts in `results/results.csv` | PASS |
+| Same-data baseline comparison at p=0.003, 0.004, 0.005 | Full accuracy sweep on independent X/Z streams, both bases, BP-OSD, relay-BP, rule and ML hybrids; no test labels enter router training | PASS |
+| Report logical error rate | Exact Clopper-Pearson intervals and failed-pair counts in `results_v2/results.csv` | PASS |
 | Report decoding latency | Mean/p99 in accuracy caches plus a complete same-shot local comparison (300 shots per basis, 150 independent pairs) with both baselines in `results_local_timing` | PASS, concurrent-load caveat |
-| Report resource requirements | Local Apple M5 demos: 718 kB router; 191–196 MB peak process RSS including imports/training; 936 x 8784 matrix; roughly 0.02–0.03 s setup | PASS |
+| Report resource requirements | Local Apple M4 Pro demos: 718 kB router; 237–240 MB peak process RSS including imports/training (191–196 MB earlier on an Apple M5); 936 x 8784 matrix; roughly 0.02 s setup | PASS |
 | GitHub code for decoder, data generation and evaluation | `run_job.py`, `make_dataset.py`, `hybrid.py`, `analyze.py`; complete commands in `RUN.md`; dependencies and local lockfile | PASS |
-| Comparison plot | `figures/erasure.png`, `figures/relay_flags.png`, `figures/speed_local.png`, and `results/results.png` (all experiments, including relay flags); zero-failure bounds use separate triangles | PASS |
+| Comparison plot | `figures/erasure.png`, `figures/relay_flags.png`, `figures/speed_local.png`, and `results_v2/results.png` (all experiments, including relay flags); zero-failure bounds use separate triangles | PASS |
 | Short presentation or demo | Updated root `PITCH.md`; successful fresh X and Z live demos, seed 99 | PASS |
 | Explain strengths, weaknesses, and ML's role | README/PITCH explicitly separate the erasure gain from the router's negative result | PASS |
 
@@ -37,14 +37,17 @@ bash scripts/verify_submission.sh
   herald-conditioned priors, cache integrity, training/test separation, independent
   pairing, seed derivation, incomplete-experiment rejection, plot coverage, and the real
   live fast-BP, relay-BP and fallback decoding paths.
-- **73/73 data/evaluation checks pass:** `run_records/challenge1_audit.json` includes
-  every check, hashes of 30 input files, exact paired-test statistics and caveats. The
+- **73/73 data/evaluation checks pass** on the current independent-stream evidence
+  (`results_v2`): `run_records/challenge1_audit.json` includes every check, hashes of
+  26 input files and exact paired-test statistics. The legacy caches in `results/` are
+  audited separately (`run_records/legacy_audit.json`, with their cache limitations). The
   relay-flags experiment is checked against an explicit expected seed manifest
   (`EXPECTED_RELAY_SEEDS`); a missing X or Z file fails the audit.
 - `run_records/verification.log` records the successful full verification run.
 - `run_records/demo_local_X.log` and `demo_local_Z.log` show fresh-shot demos
   (illustrative; the asserted live checks are the tests).
-- `run_records/corrected_erasure.log` and `local_timing.log` record completed jobs;
+- `run_records/independent_streams_rerun.log` records every `results_v2` job;
+  `run_records/corrected_erasure.log` and `local_timing.log` record earlier jobs;
   `local_timing_analysis.log` is the final timing analysis.
 - `requirements-local-lock.txt` records the actual Python 3.13 environment.
 
@@ -66,17 +69,18 @@ All six nonzero-erasure X/Z runs were regenerated with both decoders together;
 training seeds, test seeds and shot counts were preserved. The no-erasure sweep
 is unaffected. Prior results remain available in Git history, not as current claims.
 
-Corrected paired results (BP-OSD; independent disjoint-half pairs, see below):
+Corrected paired results (BP-OSD; current `results_v2` data, independent X/Z streams, every shot paired):
 
 | Erasure fraction | Pairs | Flags hidden failures | Flags used failures | Exact paired p-value |
 |---|---:|---:|---:|---:|
-| 0% | 500 | 27 | 27 | 1 |
-| 25% | 500 | 8 | 4 | 0.289 |
-| 50% | 1,000 | 8 | 2 | 0.031 |
-| 75% | 1,000 | 4 | 0 | 0.125 |
+| 0% | 1,000 | 52 | 52 | 1 |
+| 25% | 1,000 | 16 | 8 | 0.057 |
+| 50% | 2,000 | 23 | 3 | 1.1e-5 |
+| 75% | 2,000 | 11 | 0 | 0.001 |
 
-Only the 50% result is significant, with about 6.7x more decode time. Zero failures at
-75% is an upper-bound result, not zero underlying error probability. See README for intervals.
+The 50% and 75% results are significant; 25% is borderline. Flag-aware BP-OSD takes about
+5.5–7.4x more decode time. Zero failures at 75% is an upper-bound result, not zero
+underlying error probability. See README for intervals.
 
 ## Independent review fixes (2026-11-21)
 
@@ -108,7 +112,7 @@ Reviews of 7f3d3a0 and 6d298eb found, and this revision fixes:
   `SeedSequence` from (scheme, root seed, split, basis, p, f), records `split`,
   `seed_scheme`, `sampler_seed` and `circuit_sha256`, and keeps `seed` as the root run
   identity. Such caches are paired row by row (`analyze.pairing_for`); mixing them with
-  legacy caches is rejected. The existing evidence was not regenerated with this scheme.
+  legacy caches is rejected. All evidence was then regenerated with this scheme (below).
 - **Incomplete relay experiments now fail the audit.** Files of both bases are enumerated
   first, orphans are reported, and the audit checks an expected seed manifest. Analysis of a
   partial set is labelled `erasure_relay_partial`.
@@ -119,12 +123,32 @@ Reviews of 7f3d3a0 and 6d298eb found, and this revision fixes:
   scripts share one CI helper. "Slowest 1%" is relabelled p99 latency; hybrid-only
   limitations are labelled as such; planning notes moved to `docs/history/`.
 
+## Independent-stream regeneration (2026-11-22)
+
+Every training, sweep, BP-OSD erasure and relay-flags cache was regenerated into
+`results_v2` with the `ss-v1` seed scheme, using the same root seeds, shot counts and
+commands as before (RUN.md); seeds were fixed in advance, not selected by outcome. X and Z
+rows are paired directly, so every comparison uses all shots (twice the pairs of the
+disjoint-half analysis). All 26 caches carry full detector/observable and circuit
+SHA-256 fingerprints, so the audit reports no legacy-cache limitations for them.
+
+- The legacy caches stay in `results/` as history (see its README) and are still audited.
+  Of 24 matching rows, 23 show no significant legacy-vs-new difference (Fisher exact
+  p > 0.05); the exception is BP-OSD at p = 0.003 (7/2,500 vs 33/5,000, p = 0.04), about
+  what 24 tests give by chance; the new value is closer to the kit reference.
+- One audit check was changed: "hybrid failed-pair count equals relay" was an observed
+  coincidence, not a guarantee (the hybrid keeps BP's converged answer). On the new data the
+  hybrids fail 166 pairs at p = 0.005 against relay-BP's 167. The check now requires the
+  hybrid not to be significantly worse than relay-BP (one-sided exact paired test).
+- Router accuracy and the BP-convergence result are recomputed on the new held-out shots:
+  fast BP was never wrong on any of 14,089 converged test shots.
+
 ## Relay-BP with loss flags
 
 | p | Pairs | Flags ignored failures | Flags used failures | Only ignored / only used | Exact paired p-value | Mean ms ignored -> used |
 |---|---:|---:|---:|---:|---:|---:|
-| 0.004 | 10,000 | 19 | 1 | 19 / 1 | 4.0e-5 | 177 -> 83 |
-| 0.005 | 5,000 | 70 | 3 | 68 / 1 | 2.4e-19 | 571 -> 122 |
+| 0.004 | 20,000 | 36 | 3 | 33 / 0 | 2.3e-10 | 179 -> 78 |
+| 0.005 | 10,000 | 140 | 9 | 134 / 3 | 4.9e-36 | 544 -> 109 |
 
 ## Remaining limitations and optional work
 
@@ -136,15 +160,15 @@ Reviews of 7f3d3a0 and 6d298eb found, and this revision fixes:
 - [Stim's heralded-erasure reference](https://github.com/quantumlib/Stim/blob/main/doc/gates.md#heralded_erase)
   explains the independent-error DEM approximation. We sample circuits, not DEMs;
   corrected marginal priors still do not make BP-OSD an exact joint decoder.
-- Legacy caches lack full sample hashes. Extra-cache compatibility uses seed,
+- The legacy caches in `results/` lack full sample hashes (the current `results_v2` caches
+  have them). Their extra-cache compatibility uses seed,
   conditions, round weights and flag counts. This is not a mathematical proof of
   shot identity. New runs include full detector/observable SHA-256 fingerprints.
 - Local timing overlapped other computation and is labeled accordingly. Historical
   idle-laptop timing is retained separately and lacks BP-OSD. Hybrid times compose
   cached branch costs plus measured inference; they are not a service benchmark.
-- Samples are finite, particularly at p=0.003 and in the 150-pair timing sweeps. Legacy
-  caches use disjoint-half pairing, which discards half the shots per comparison; rerunning
-  with the `ss-v1` seed scheme would recover full sample sizes.
+- Samples are finite, particularly at p=0.003 (5 relay-BP failures) and in the 150-pair
+  timing sweeps. The timing caches predate `ss-v1` and use disjoint-half pairing.
   Same observed hybrid/relay failure counts do not prove equal underlying rates.
 - Optional stretch goals: the learned router is implemented and CPU resources are
   measured. Second-code evaluation, sliding windows, distance scaling and GPU cost

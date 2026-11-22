@@ -2,7 +2,7 @@
 
   python demo.py --p 0.004 --basis X
 
-1. Trains the router on the cached training shots (results/train_*_p<p>.npz, seed 1).
+1. Trains the router on the cached training shots (results_v2/train_*_p<p>.npz, root seed 1).
 2. Simulates one NEW shot (seed 99, never seen before).
 3. The router reads the alarm counts and picks a path: fast BP (escalating to relay-BP if BP
    does not converge) or straight to relay-BP. The chosen decoders run live.
@@ -45,7 +45,7 @@ def main():
     a.add_argument("--p", type=float, default=0.004)
     a.add_argument("--basis", choices=["X", "Z"], default="X")
     a.add_argument("--seed", type=int, default=99)
-    a.add_argument("--train-dir", default="results")
+    a.add_argument("--train-dir", default="results_v2")
     args = a.parse_args()
 
     trained = train_router(args.train_dir, args.p)

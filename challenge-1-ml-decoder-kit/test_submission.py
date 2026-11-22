@@ -141,7 +141,7 @@ def test_analysis_rejects_mislabelled_records():
 
 def _copy_relay_results(tmp_path):
     import shutil
-    for path in Path(__file__).parent.joinpath('results').glob('*.npz'):
+    for path in Path(__file__).parent.joinpath('results_v2').glob('*.npz'):
         shutil.copy(path, tmp_path / path.name)
     return tmp_path
 
