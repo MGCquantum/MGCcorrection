@@ -10,3 +10,19 @@ Status: environment setup in progress; no new decoder results yet.
 - If shots differ, run bp, relay, and bposd together for that basis.
 - Validate analysis and all five requested checks before publishing results to main.
 - Progress is saved on this branch. This record is not evidence of a completed run.
+
+## Environment and compatibility
+
+Dependencies installed successfully in the kit's local `.venv` using Python 3.13.
+Versions: stim 1.16.0, ldpc 2.4.1, numpy 2.5.5, scipy 1.18.1,
+relay-bp 0.2.2, scikit-learn 1.9.1.
+
+- X: SAME as saved round weights.
+- Z: SAME as saved round weights.
+- Both bases: full detector and observable samples from the compatibility check
+  also equal the flattened circuit sampling path actually used by run_job.py.
+- No existing run_job.py process was present before launch.
+- Run both bases concurrently with 4 workers each to share the 10 local CPU cores.
+- Laptop reported 22% battery before launch; user was asked to connect power.
+
+Status: ready to run BP-OSD only, 2000 shots per basis, seed 2.
