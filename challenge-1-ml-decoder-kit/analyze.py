@@ -11,7 +11,10 @@ Hybrid decoders are computed from the cache, shot by shot:
   hybrid_rule  run fast BP; if it converged keep its answer, else run relay-BP (time = BP + relay)
   hybrid_ml    the router reads the alarms first; "easy" shots follow hybrid_rule,
                "hard" shots go straight to relay-BP (time = router + relay)
-A shot pair (X shot k, Z shot k) fails if either fails; its time is the sum of the two.
+A shot pair (X shot k, Z shot partner[k]) fails if either fails; its time is the sum of the two.
+X and Z runs with the same seed get the same Stim random stream, so equal indices are correlated
+samples; each X shot is therefore paired with a different, fixed random Z shot (see z_partner),
+which makes the two halves of a pair independent, as in the kit's baseline convention.
 """
 import argparse
 import csv
@@ -72,7 +75,7 @@ def train_router(dirname, p):
 
 def policies(d, router):
     """(fail, time) per shot for each decoder and hybrid available in one test file."""
-    out = {n: (d[f"fail_{n}"], d[f"time_{n}"]) for n in ("relay", "bposd", "bp", "bposd_flags") if f"fail_{n}" in d}
+    out = {n: (d[f"fail_{n}"], d[f"time_{n}"]) for n in ("relay", "bposd", "bp", "bposd_flags", "bp_flags", "relay_flags") if f"fail_{n}" in d}
     if "fail_bp" in d and "fail_relay" in d:
         conv = d["conv_bp"]
         rule_fail = np.where(conv, d["fail_bp"], d["fail_relay"])
@@ -97,12 +100,38 @@ def policies(d, router):
     return out
 
 
+PAIRING_SEED = 20261121
+
+
+def z_partner(n):
+    """Index of the Z shot paired with each X shot: a fixed random derangement (no shot keeps its index)."""
+    order = np.random.default_rng(PAIRING_SEED).permutation(n)
+    partner = np.empty(n, int)
+    partner[order] = order[np.roll(np.arange(n), -1)]
+    return partner
+
+
+def pair_arrays(px, pz, name):
+    """(failed, milliseconds) per X/Z pair. Refuses mismatched sample sizes instead of broadcasting."""
+    fx, tx = (np.asarray(v) for v in px[name])
+    fz, tz = (np.asarray(v) for v in pz[name])
+    if not (fx.ndim == 1 and fx.shape == fz.shape == tx.shape == tz.shape):
+        raise ValueError(f"{name}: X and Z results have different shapes {fx.shape}, {fz.shape}, {tx.shape}, {tz.shape}")
+    j = z_partner(len(fx))
+    return fx | fz[j], (tx + tz[j]) * 1e3
+
+
 def paired(px, pz, name):
-    fx, tx = px[name]
-    fz, tz = pz[name]
-    rate, lo, hi, k = per_cycle_ci(fx | fz)
-    ms = (tx + tz) * 1e3
-    return rate, lo, hi, k, len(fx), ms.mean(), np.percentile(ms, 99)
+    failed, ms = pair_arrays(px, pz, name)
+    rate, lo, hi, k = per_cycle_ci(failed)
+    return rate, lo, hi, k, len(failed), ms.mean(), np.percentile(ms, 99)
+
+
+def check_conditions(d, path, basis, p, f=0.0):
+    """The record's own metadata must match the conditions its file name claims."""
+    if str(d["basis"]) != basis or not np.isclose(float(d["p"]), float(p)) or not np.isclose(float(d["f"]), float(f)):
+        raise ValueError(f"{path}: stored basis/p/f = {d['basis']}/{d['p']}/{d['f']} do not match {basis}/{p}/{f}")
+    return d
 
 
 def main():
@@ -119,8 +148,8 @@ def main():
             print(f"p={p}: waiting for test_Z_p{p}.npz")
             continue
         router = train_router(args.dir, p)
-        px = policies(load(f"{args.dir}/test_X_p{p}.npz"), router)
-        pz = policies(load(f"{args.dir}/test_Z_p{p}.npz"), router)
+        px = policies(check_conditions(load(f"{args.dir}/test_X_p{p}.npz"), "test_X", "X", p), router)
+        pz = policies(check_conditions(load(f"{args.dir}/test_Z_p{p}.npz"), "test_Z", "Z", p), router)
         for name in [n for n in px if not n.startswith("_") and n in pz]:
             rate, lo, hi, k, n, mean_ms, p99 = paired(px, pz, name)
             esc = {"hybrid_rule": px.get("_escalated_rule"), "hybrid_ml": px.get("_escalated_ml")}.get(name)
@@ -134,11 +163,13 @@ def main():
         fz = fx.replace("erase_X", "erase_Z")
         if not os.path.exists(fz):
             continue
-        px, pz = policies(load(fx), None), policies(load(fz), None)
+        px = policies(check_conditions(load(fx), fx, "X", p, f), None)
+        pz = policies(check_conditions(load(fz), fz, "Z", p, f), None)
         for name in [n for n in px if not n.startswith("_") and n in pz]:
             rate, lo, hi, k, n, mean_ms, p99 = paired(px, pz, name)
             rows.append({"experiment": "erasure", "p": p, "f": f, "decoder": name, "rate_per_cycle": rate, "ci_low": lo,
                          "ci_high": hi, "failed_pairs": k, "pairs": n, "mean_ms": mean_ms, "p99_ms": p99, "escalated_X": None})
+    rows += relay_flag_rows(args.dir)
     if not rows:
         print("no result files found")
         return
@@ -153,6 +184,44 @@ def main():
         print(f"{r['experiment']:8s} p={r['p']} f={r['f']}  {r['decoder']:12s} rate {rate}  "
               f"mean {r['mean_ms']:.0f} ms  p99 {r['p99_ms']:.0f} ms{esc}")
     plot(rows, args.dir)
+
+
+def relay_flag_groups(dirname):
+    """erase4_{X,Z}_p{p}_f{f}_s{seed}.npz files grouped by (p, f): {(p, f): [(X record, Z record), ...]}."""
+    groups = {}
+    for fx in sorted(glob.glob(f"{dirname}/erase4_X_p*_f*_s*.npz")):
+        p, f, s = re.search(r"_p([\d.]+)_f([\d.]+)_s(\d+)\.npz", fx).groups()
+        fz = fx.replace("erase4_X", "erase4_Z")
+        if not os.path.exists(fz):
+            print(f"{fx}: waiting for its Z file")
+            continue
+        dx, dz = check_conditions(load(fx), fx, "X", p, f), check_conditions(load(fz), fz, "Z", p, f)
+        if int(dx["seed"]) != int(s) or int(dz["seed"]) != int(s):
+            raise ValueError(f"{fx}: stored seed differs from the file name")
+        groups.setdefault((p, f), []).append((dx, dz))
+    return groups
+
+
+def relay_flag_rows(dirname):
+    """relay-BP with flags ignored vs used, same shots, all seeds pooled (pairs formed within each seed)."""
+    rows = []
+    for (p, f), records in sorted(relay_flag_groups(dirname).items()):
+        res = {}
+        for name in ("relay", "relay_flags"):
+            parts = [pair_arrays(policies(dx, None), policies(dz, None), name) for dx, dz in records]
+            res[name] = (np.concatenate([q[0] for q in parts]), np.concatenate([q[1] for q in parts]))
+        blind, aware = res["relay"][0], res["relay_flags"][0]
+        only_b, only_a = int((blind & ~aware).sum()), int((aware & ~blind).sum())
+        from scipy.stats import binomtest
+        mc = binomtest(only_b, only_b + only_a).pvalue if only_b + only_a else 1.0
+        print(f"relay flags p={p} f={f}: {len(blind)} pairs, failed only with flags ignored {only_b}, "
+              f"only with flags used {only_a}, exact McNemar p = {mc:.2g}")
+        for name, (failed, ms) in res.items():
+            rate, lo, hi, k = per_cycle_ci(failed)
+            rows.append({"experiment": "erasure_relay", "p": p, "f": f, "decoder": name, "rate_per_cycle": rate,
+                         "ci_low": lo, "ci_high": hi, "failed_pairs": k, "pairs": len(failed),
+                         "mean_ms": ms.mean(), "p99_ms": np.percentile(ms, 99), "escalated_X": None})
+    return rows
 
 
 def _ci_plot(ax, x, rs, name):

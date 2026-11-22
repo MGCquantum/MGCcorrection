@@ -89,3 +89,33 @@ def test_herald_flags_and_conditioned_priors():
     fired=shot_priors(p,hc,herald_ids(c),nc)
     assert np.all(unfired[hc>=0] == UNFLAGGED_PRIOR)
     assert np.allclose(fired[hc>=0], .5)
+
+
+def test_fold_priors_uses_parity_and_keeps_half():
+    from lossy import fold_priors
+    m = np.array([0, 0, 1, 1, 2, 2])
+    q = np.array([0.1, 0.2, 0.5, 0.3, 0.3, 0.3])
+    out = fold_priors(q, m, 3)
+    assert np.allclose(out, [0.1 * 0.8 + 0.2 * 0.9, 0.5, 0.3 * 0.7 * 2])
+
+
+def test_z_partner_is_a_fixed_derangement():
+    from analyze import z_partner
+    j = z_partner(1000)
+    assert sorted(j) == list(range(1000)) and not (j == np.arange(1000)).any()
+    assert np.array_equal(j, z_partner(1000))
+
+
+def test_paired_refuses_mismatched_shapes():
+    from analyze import paired
+    px = {'d': (np.array([True]), np.array([1.]))}
+    pz = {'d': (np.array([False, False, True]), np.array([1., 1., 1.]))}
+    with pytest.raises(ValueError):
+        paired(px, pz, 'd')
+
+
+def test_analysis_rejects_mislabelled_records():
+    from analyze import check_conditions
+    d = {'basis': np.array('X'), 'p': np.array(0.005), 'f': np.array(0.0)}
+    with pytest.raises(ValueError):
+        check_conditions(d, 'test_X_p0.004.npz', 'X', '0.004')

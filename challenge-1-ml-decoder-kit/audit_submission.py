@@ -13,7 +13,7 @@ import numpy as np
 from threadpoolctl import threadpool_limits
 from scipy.stats import binomtest
 
-from analyze import load, paired, policies, train_router
+from analyze import load, pair_arrays, paired, policies, relay_flag_groups, train_router
 
 REFERENCE = {0.003: {'relay': 4.2e-5, 'bposd': 4.7e-4},
              0.004: {'relay': 8.7e-4, 'bposd': 4.4e-3},
@@ -90,19 +90,34 @@ def audit(dirname):
             check(f'f={f} {basis}: erasure metadata', float(d['f']) == f and float(d['p']) == .004
                   and str(d['basis']) == basis and int(d['seed']) == 2)
             arrays.append(d)
-        blind = arrays[0]['fail_bposd'] | arrays[1]['fail_bposd']
-        aware = arrays[0]['fail_bposd_flags'] | arrays[1]['fail_bposd_flags']
+        pol = [policies(d, None) for d in arrays]
+        blind, blind_ms = pair_arrays(*pol, 'bposd')
+        aware, aware_ms = pair_arrays(*pol, 'bposd_flags')
         only_blind = int((blind & ~aware).sum())
         only_aware = int((aware & ~blind).sum())
         discordant = only_blind + only_aware
         report['erasure'].append(dict(f=f, pairs=len(blind), failed_blind=int(blind.sum()),
             failed_aware=int(aware.sum()), only_blind=only_blind, only_aware=only_aware,
             mcnemar_p=binomtest(only_blind, discordant, .5).pvalue if discordant else 1.,
-            blind_mean_ms=float((arrays[0]['time_bposd']+arrays[1]['time_bposd']).mean()*1000),
-            aware_mean_ms=float((arrays[0]['time_bposd_flags']+arrays[1]['time_bposd_flags']).mean()*1000)))
+            blind_mean_ms=float(blind_ms.mean()), aware_mean_ms=float(aware_ms.mean())))
         check(f'f={f}: flags help or tie on saved pairs', aware.sum() <= blind.sum())
         if f == 0:
             check('f=0: flag-hidden and flag-used answers have identical failures', np.array_equal(blind, aware))
+    report['relay_flags'] = []
+    for (p, f), records in sorted(relay_flag_groups(str(dirname)).items()):
+        for dx, dz in records:
+            for d in (dx, dz):
+                validate_cache(d, f"erase4 p={p} f={f} seed={int(d['seed'])} {d['basis']}")
+        parts = {n: [pair_arrays(policies(dx, None), policies(dz, None), n) for dx, dz in records] for n in ('relay', 'relay_flags')}
+        blind = np.concatenate([q[0] for q in parts['relay']]); aware = np.concatenate([q[0] for q in parts['relay_flags']])
+        only_blind, only_aware = int((blind & ~aware).sum()), int((aware & ~blind).sum())
+        report['relay_flags'].append(dict(p=float(p), f=float(f), seeds=[int(dx['seed']) for dx, _ in records],
+            pairs=len(blind), failed_blind=int(blind.sum()), failed_aware=int(aware.sum()),
+            only_blind=only_blind, only_aware=only_aware,
+            mcnemar_p=binomtest(only_blind, only_blind + only_aware, .5).pvalue if only_blind + only_aware else 1.,
+            blind_mean_ms=float(np.concatenate([q[1] for q in parts['relay']]).mean()),
+            aware_mean_ms=float(np.concatenate([q[1] for q in parts['relay_flags']]).mean())))
+        check(f'relay flags p={p} f={f}: complete X/Z records for every seed', len(records) > 0)
     report['passed'] = all(item['pass'] for item in report['checks'])
     return report
 

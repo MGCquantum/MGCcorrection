@@ -160,8 +160,13 @@ def blind_column_map(blind, aware):
 
 
 def fold_priors(aware_priors, column_map, n_blind):
-    """Per-shot aware priors folded onto the blind columns (independent errors combine as 1 - prod(1 - q))."""
+    """Per-shot aware priors folded onto the blind columns.
+
+    Aware columns that share a blind column have identical detector/observable effects, and two
+    occurrences cancel, so independent contributions combine by parity: (1 - prod(1 - 2q)) / 2.
+    A flagged effect that is equally likely present or absent stays at exactly 0.5.
+    """
     keep = column_map >= 0
-    log_ok = np.zeros(n_blind)
-    np.add.at(log_ok, column_map[keep], np.log1p(-np.minimum(aware_priors[keep], 0.499)))
-    return np.clip(-np.expm1(log_ok), 1e-12, 0.499)
+    product = np.ones(n_blind)
+    np.multiply.at(product, column_map[keep], 1 - 2 * np.asarray(aware_priors, float)[keep])
+    return np.clip((1 - product) / 2, 1e-12, 0.5)
