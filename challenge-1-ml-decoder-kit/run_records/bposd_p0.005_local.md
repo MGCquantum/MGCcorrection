@@ -26,3 +26,10 @@ relay-bp 0.2.2, scikit-learn 1.9.1.
 - Laptop reported 22% battery before launch; user was asked to connect power.
 
 Status: ready to run BP-OSD only, 2000 shots per basis, seed 2.
+
+## Launch
+
+Both BP-OSD jobs launched locally under caffeinate with `--workers 4`.
+A separate pre-existing `aegis.collect` experiment in another checkout was observed
+using eight workers after launch. It was not interrupted. Runtime measurements
+from this concurrent run must not be treated as idle-machine speed benchmarks.
