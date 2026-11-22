@@ -46,12 +46,20 @@ def rows(result):
             for key in STYLE if key == "aegis" or key in result["decoders"]}
 
 
-def save(fig, name):
+def save(fig, name, caption_lines=0):
+    """caption_lines: lines of fig.text caption at the bottom; the axes are kept clear of them."""
     FIGURES.mkdir(parents=True, exist_ok=True)
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0.035 * caption_lines, 1, 1))
     fig.savefig(FIGURES / name, dpi=160)
     plt.close(fig)
     print("wrote", FIGURES / name)
+
+
+def plain_log_ticks(axis):
+    """Log axis labelled 10, 20, 50, 100 ... instead of overlapping 2×10^1, 3×10^1 labels."""
+    axis.set_major_locator(LogLocator(subs=(1, 2, 5)))
+    axis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
+    axis.set_minor_formatter(NullFormatter())
 
 
 def ler_vs_p(report):
@@ -92,7 +100,7 @@ def latency(report):
         ax.grid(axis="x", visible=False)
     axes[0].legend(loc="upper left")
     fig.text(0.01, 0.005, f"Latency run: {note}. Pair time = X decode + Z decode. Labels in ms.", fontsize=8, color=MUTED)
-    save(fig, "latency.png")
+    save(fig, "latency.png", caption_lines=1)
 
 
 def pareto(report):
@@ -113,11 +121,12 @@ def pareto(report):
         ax.scatter(d["ms_mean"], d["ler"], s=110, color="#1baf7a", marker="D", edgecolor=INK, linewidth=1.2, zorder=4,
                    label="QEC-Aegis, chosen threshold")
         ax.set(xscale="log", yscale="log", xlabel="mean decode time per shot pair (ms)", title=f"p = {p}")
+        plain_log_ticks(ax.xaxis)
     np.atleast_1d(axes)[0].set_ylabel("logical error rate per cycle")
     np.atleast_1d(axes)[-1].legend(fontsize=8, loc="upper right")
     fig.text(0.01, 0.005, "Lower left is better. The threshold was chosen on validation shots; the curve is the same policy at every other "
              "threshold on the test shots. Times from the parallel test run.", fontsize=8, color=MUTED)
-    save(fig, "pareto.png")
+    save(fig, "pareto.png", caption_lines=1)
 
 
 def routing(report):
@@ -128,9 +137,10 @@ def routing(report):
     unconverged = np.array([100 * q["unconverged"] / q["shots"] for q in d])
     flagged = np.array([100 * q["flagged_by_model"] / q["shots"] for q in d])
     axes[0].bar(x, unconverged, 0.5, color="#eda100", label="tier 1 did not converge")
-    axes[0].bar(x, flagged, 0.5, bottom=unconverged + 0.02 * (unconverged + flagged).max(), color="#1baf7a", label="flagged by the risk model")
+    gap = 0.02 * (unconverged + flagged).max()          # white line between the two causes
+    axes[0].bar(x, flagged, 0.5, bottom=unconverged + gap, color="#1baf7a", label="flagged by the risk model")
     for i, total in enumerate(unconverged + flagged):
-        axes[0].text(i, total * 1.04 + 0.05, f"{total:.1f}%", ha="center", fontsize=9, color=INK)
+        axes[0].text(i, unconverged[i] + gap + flagged[i] + 2 * gap, f"{total:.2g}%", ha="center", va="bottom", fontsize=9, color=INK)
     axes[0].set(xticks=x, xticklabels=[f"p = {p}" for p in ps], ylabel="shots sent to tier 2 (%)", title="How often tier 2 runs")
     axes[0].legend(loc="upper left")
     axes[0].grid(axis="x", visible=False)
@@ -172,10 +182,11 @@ def loss(report):
                 xticks=[float(f) for f in fs], title="Using the herald flags, p = 0.004")
     axes[1].set(yscale="log", xlabel="fraction f of gate noise converted to heralded erasure", ylabel="mean decode time per shot pair (ms)",
                 xticks=[float(f) for f in fs], title="Decode time")
+    plain_log_ticks(axes[1].yaxis)
     axes[0].legend(fontsize=8)
     fig.text(0.01, 0.005, "Simplified heralded-erasure model. Dashed: herald flags ignored. Solid: flags used as per-shot priors. "
              "A point at zero failures is drawn at its upper 95% bound's lower edge.", fontsize=8, color=MUTED)
-    save(fig, "loss.png")
+    save(fig, "loss.png", caption_lines=1)
 
 
 def calibration():
@@ -246,7 +257,7 @@ def v2_latency(v2):
     pairs = " / ".join(f"{v2['timing'][p]['decoders']['relay']['pairs']:,}" for p in ps)
     fig.text(0.01, 0.005, f"Fresh timing shots (seed 8): one worker, mains power, nothing else running; {pairs} pairs. "
              "Pair time = X decode + Z decode.\nMean: 95% bootstrap intervals. p99 rests on 5–20 shots.", fontsize=8, color=MUTED)
-    save(fig, "v2_latency.png")
+    save(fig, "v2_latency.png", caption_lines=2)
 
 
 def v2_tradeoff(v2):
@@ -262,14 +273,12 @@ def v2_tradeoff(v2):
                         xerr=[[t["ms_mean"] - tlow], [thigh - t["ms_mean"]]], color=color, marker=marker, ms=8, lw=1.2,
                         capsize=2, label=label, markeredgecolor=SURFACE)
         ax.set(xscale="log", yscale="log", xlabel="mean decode time per shot pair (ms)", title=f"p = {p}")
-        ax.xaxis.set_major_locator(LogLocator(subs=(1, 2, 5)))
-        ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
-        ax.xaxis.set_minor_formatter(NullFormatter())
+        plain_log_ticks(ax.xaxis)
     axes[0].set_ylabel("logical error rate per cycle")
     axes[-1].legend(fontsize=8, loc="upper right")
     fig.text(0.01, 0.005, "Lower left is better. Error rate: fresh test shots (seed 7). Time: fresh single-worker timing shots (seed 8). "
              "Bars: 95% intervals.", fontsize=8, color=MUTED)
-    save(fig, "v2_tradeoff.png")
+    save(fig, "v2_tradeoff.png", caption_lines=1)
 
 
 def main():

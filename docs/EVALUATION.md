@@ -13,6 +13,14 @@ The headline numbers are in the [README](../README.md); every generated table is
 
 Error rates are statistically indistinguishable from relay-BP at every p; the point estimate is worse at p = 0.003 and 0.004 (LER ratio 1.27 and 1.17, both intervals include 1). Times are from separate single-worker timing shots (seed 5). The gain shrinks with noise as more shots need tier 2 (0.04%, 1.1% and 6.8% escalated), and at p = 0.005 the slowest 1% are slower than relay-BP. The required sweep (LER, latency percentiles and per-decoder resources for BP-OSD, relay-BP and QEC-Aegis side by side) is the first section of [docs/RESULTS.md](RESULTS.md), followed by the oracle-router bound, erasure settings and calibration; verify with `scripts/reproduce.sh`.
 
+![Logical error rate, v1, seed-2 test shots](figures/ler_vs_p.png)
+![Mean and 99th-percentile latency, v1, single worker](figures/latency.png)
+![Error rate against time for every threshold](figures/pareto.png)
+![How often tier 2 runs; converged-but-wrong answers caught or missed](figures/routing.png)
+![Error rate and decode time with herald flags at p = 0.004](figures/loss.png)
+
+What each plot shows: [FIGURES.md](FIGURES.md).
+
 ## v2 on fresh shots (seeds 7 and 8)
 **QEC-Aegis v2 (fresh shots).** v2 keeps v1's risk models but picks the second tier and threshold separately for each setting, on validation shots only, in two modes: *speed* (fastest with no more failed pairs than relay-BP) and *accuracy* (fewest failed pairs, no slower than relay-BP). Its files were hashed in `experiments/reports/v2_frozen.json` before decoding. Because the v1 test results shaped v2, v2 is scored only on fresh shots: seed 7 for error rates, and seed 8 for single-worker timing on mains power with nothing else running. Baselines and v1 were decoded again on the same shots. The risk model now runs as a compiled tree walk (same value as scikit-learn, ~60 µs instead of ~600 µs per call), and v1 uses it too here.
 
@@ -23,6 +31,9 @@ Error rates are statistically indistinguishable from relay-BP at every p; the po
 | 0.005 | 407 | 367 | 399 | 359 | 484 / 397 / 325 / 482 |
 
 Test pairs: 30,000, 10,000 and 5,000. Full tables, paired comparisons and erasure settings are in [docs/RESULTS.md](RESULTS.md) under "QEC-Aegis v2 on fresh shots".
+
+![Logical error rate on fresh test shots](figures/v2_ler_vs_p.png)
+![Latency on fresh timing shots](figures/v2_latency.png)
 
 ## Where it works and where it falls short
 

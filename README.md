@@ -42,11 +42,22 @@ Same fresh shots for every decoder (seed 7: 30,000 / 10,000 / 5,000 independent 
 All limitations: [`docs/EVALUATION.md`](docs/EVALUATION.md#where-it-works-and-where-it-falls-short).
 
 <p align="center">
-  <img src="docs/figures/v2_ler_vs_p.png" alt="Logical error rate per cycle against p for every decoder" width="49%">
-  <img src="docs/figures/v2_tradeoff.png" alt="Error rate against mean decode time at each p" width="49%">
+  <img src="docs/figures/v2_ler_vs_p.png" alt="Logical error rate per cycle against p for every decoder" width="70%">
 </p>
 
 ![Mean and 99th-percentile decode time per X/Z pair, single worker](docs/figures/v2_latency.png)
+![Error rate against mean decode time at each p; lower left is better](docs/figures/v2_tradeoff.png)
+
+**Why the machine learning works.**
+- **Calibrated (left):** the model's predicted risk matches how often tier 1 is really wrong, so one threshold works at every noise level.
+- **Selective (right):** only 0.045–6.8% of shots go to tier 2. Many of the converged-but-wrong answers that a convergence check cannot see are caught; the rest are the headroom.
+
+<p align="center">
+  <img src="docs/figures/calibration.png" alt="Calibration: predicted risk against observed fraction of wrong tier-1 answers" width="38%">
+  <img src="docs/figures/routing.png" alt="How often tier 2 runs, and converged-but-wrong answers caught or missed" width="60%">
+</p>
+
+**All 13 figures**, each with how to read it, are in [`docs/FIGURES.md`](docs/FIGURES.md).
 
 ## Quickstart
 Tested with Python 3.13. `relay-bp` builds with Rust ([rustup.rs](https://rustup.rs)).
@@ -100,7 +111,7 @@ scripts/
   reproduce.sh                 one-command verification of every result
   run_fresh_evaluation.sh      decode the fresh test and timing shots from scratch
 tests/                       QEC-Aegis tests (55)
-docs/                        architecture, results, evaluation, presentation, erasure study
+docs/                        architecture, results, figures, evaluation, presentation, erasure study
 challenge-1-ml-decoder-kit/  the challenge kit, the erasure study and the team's baselines
 ```
 
@@ -110,6 +121,7 @@ challenge-1-ml-decoder-kit/  the challenge kit, the erasure study and the team's
 |---|---|
 | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | The idea from first principles, a code tour in reading order, and the data flow |
 | [`docs/RESULTS.md`](docs/RESULTS.md) | Every result table, generated from the stored evaluation |
+| [`docs/FIGURES.md`](docs/FIGURES.md) | Every plot, with what it shows and how to read it |
 | [`docs/EVALUATION.md`](docs/EVALUATION.md) | Full discussion: v1 and v2, where it works and falls short, data and seeds |
 | [`docs/PRESENTATION.md`](docs/PRESENTATION.md) | The five-slide talk |
 | [`docs/ERASURE.md`](docs/ERASURE.md) | Companion study: decoding with erasure (loss) flags, the hybrid decoder and the ML router |
