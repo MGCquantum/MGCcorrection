@@ -1,0 +1,7 @@
+X metadata and saved-shot compatibility: PASS
+Z metadata and saved-shot compatibility: PASS
+a) bposd row exists: PASS
+b) bposd rate in [0.018, 0.028]: PASS
+c) relay rate in [0.005, 0.0085]: PASS
+d) both hybrid failed-pair counts equal relay: PASS
+e) bposd fails more than relay: PASS

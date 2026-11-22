@@ -33,3 +33,11 @@ Both BP-OSD jobs launched locally under caffeinate with `--workers 4`.
 A separate pre-existing `aegis.collect` experiment in another checkout was observed
 using eight workers after launch. It was not interrupted. Runtime measurements
 from this concurrent run must not be treated as idle-machine speed benchmarks.
+
+## Completion
+
+Both local BP-OSD runs completed. Analysis and all five requested sanity checks
+passed; the raw extras also match the original metadata, round weights, and flags.
+See the adjacent basis, analysis, and validation logs for exact counts and timings.
+Figures were regenerated. No Python source files were changed.
+Results are checkpointed on the progress branch pending final main publication.
