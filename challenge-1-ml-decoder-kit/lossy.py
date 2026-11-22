@@ -134,15 +134,48 @@ def aware_matrices(circuit, basis):
             np.array([count[k] for k in keys]))
 
 
-def shot_priors(base_priors, herald_col, fired_heralds, n_components):
+def shot_priors(base_priors, herald_col, fired_heralds, n_components, weights=None):
     """Priors for one shot. An erasure column whose herald fired gets (merged components) x 1/4,
-    e.g. 0.5 when Y and Z were merged; erasure columns whose herald did not fire get UNFLAGGED_PRIOR."""
+    e.g. 0.5 when Y and Z were merged; erasure columns whose herald did not fire get UNFLAGGED_PRIOR.
+
+    weights (optional, same length as fired_heralds): probability that each flagged location really
+    was erased, for flags whose timing is uncertain; the flagged priors are scaled by it."""
     p = base_priors.copy()
     is_erasure = herald_col >= 0
     fired = np.isin(herald_col, fired_heralds)
-    p[is_erasure & fired] = np.minimum(COMPONENT_PRIOR * n_components[is_erasure & fired], 0.75)
+    full = np.minimum(COMPONENT_PRIOR * n_components[is_erasure & fired], 0.75)
+    if weights is not None:
+        w = dict(zip(np.asarray(fired_heralds).tolist(), np.asarray(weights, float).tolist()))
+        full = full * np.array([w[h] for h in herald_col[is_erasure & fired]])
+        full = np.maximum(full, UNFLAGGED_PRIOR)
+    p[is_erasure & fired] = full
     p[is_erasure & ~fired] = UNFLAGGED_PRIOR
     return p
+
+
+def herald_qubits(circuit):
+    """Qubit of each herald, in herald (detector) order: each HERALDED_ERASE target is followed by its herald."""
+    return np.array([t.value for ins in circuit.flattened() if ins.name == "HERALDED_ERASE"
+                     for t in ins.targets_copy()], dtype=int)
+
+
+def timing_window_flags(fired, herald_qubit, window, rng):
+    """Flags whose timing is uncertain: the decoder learns the lost qubit and a window of `window`
+    consecutive erasure opportunities on that qubit that contains the true one (true position uniform
+    in the window). Returns (flagged herald positions, probability each was the erased one).
+
+    fired holds herald positions (0..n_heralds-1), not detector ids."""
+    if window <= 1 or len(fired) == 0:
+        return np.asarray(fired, int), np.ones(len(fired))
+    weight = {}
+    for h in fired:
+        slots = np.flatnonzero(herald_qubit == herald_qubit[h])          # this qubit's opportunities, in time order
+        i = int(np.searchsorted(slots, h))
+        start = min(max(i - int(rng.integers(window)), 0), max(len(slots) - window, 0))
+        for s in slots[start:start + window]:
+            weight[int(s)] = min(weight.get(int(s), 0.0) + 1.0 / min(window, len(slots)), 1.0)
+    keys = np.array(sorted(weight), int)
+    return keys, np.array([weight[k] for k in keys])
 
 
 def blind_column_map(blind, aware):

@@ -38,7 +38,7 @@ from circuit import GROSS_CIRCUITS, detector_ids, load_circuit, sample
 from decoders import bposd_decoder, relay_decoder
 from hybrid import FAST_BP
 from threadpoolctl import threadpool_limits
-from lossy import aware_matrices, blind_column_map, blind_matrices, fold_priors, herald_ids, lossy_circuit, shot_priors
+from lossy import aware_matrices, blind_column_map, blind_matrices, fold_priors, herald_ids, herald_qubits, lossy_circuit, shot_priors, timing_window_flags
 
 
 
@@ -56,6 +56,9 @@ def parse_args():
                    help="imperfect detection: each real loss flag is hidden from the decoders with this probability")
     a.add_argument("--flag-false", type=float, default=0.0,
                    help="imperfect detection: each location without a loss raises a false flag with this probability")
+    a.add_argument("--flag-window", type=int, default=1,
+                   help="uncertain timing: the decoder learns the lost qubit and a window of this many consecutive "
+                        "erasure opportunities on it containing the true one (1 = exact timing)")
     a.add_argument("--out", required=True)
     args = a.parse_args()
     if args.shots < 1 or args.workers < 1 or args.chunk < 1 or not 0 < args.p < 1 or not 0 <= args.f <= 1:
@@ -111,7 +114,8 @@ def work(job):
     every chunk so that its random stream, and therefore its answers, depend only on the chunk.
     BP and BP-OSD are deterministic; the *_flags decoders get their priors set per shot.
     """
-    circuit_text, basis, names, syn, obs, fired_lists = job
+    circuit_text, basis, names, syn, obs, fired_lists = job[:6]
+    weight_lists = job[6] if len(job) > 6 else [None] * len(syn)
     import stim
     threadpool_limits(limits=1)
     key = (circuit_text, basis, tuple(names))
@@ -132,9 +136,9 @@ def work(job):
         for k in range(n):
             t = time.perf_counter()     # the per-shot prior update counts as decode time
             if name == "relay_flags":
-                d = relay_decoder(mats["blind"][0], fold_priors(shot_priors(p, hc, fired_lists[k], nc), mats["column_map"], mats["blind"][0].shape[1]))
+                d = relay_decoder(mats["blind"][0], fold_priors(shot_priors(p, hc, fired_lists[k], nc, weight_lists[k]), mats["column_map"], mats["blind"][0].shape[1]))
             elif flags:
-                d.update_channel_probs(shot_priors(p, hc, fired_lists[k], nc))
+                d.update_channel_probs(shot_priors(p, hc, fired_lists[k], nc, weight_lists[k]))
             e = np.asarray(d.decode(syn[k]), np.uint8)
             secs[k] = time.perf_counter() - t
             fail[k] = ((L @ e) % 2 != obs[k]).any()
@@ -160,15 +164,23 @@ def main():
             seen.append(hid[shown])
     else:
         seen = fired
+    weights = [None] * a.shots
+    if a.flag_window > 1:
+        rng = np.random.default_rng([a.seed, 104729])
+        hq = herald_qubits(circuit)
+        pos = {d: i for i, d in enumerate(hid)}
+        windowed = [timing_window_flags(np.array([pos[d] for d in s], int), hq, a.flag_window, rng) for s in seen]
+        seen = [hid[w[0]] for w in windowed]
+        weights = [w[1] for w in windowed]
     text = str(circuit)
-    jobs = [(text, a.basis, a.decoders, syn[lo:hi], obs[lo:hi], seen[lo:hi]) for lo, hi in chunk_bounds(a.shots, a.chunk)]
+    jobs = [(text, a.basis, a.decoders, syn[lo:hi], obs[lo:hi], seen[lo:hi], weights[lo:hi]) for lo, hi in chunk_bounds(a.shots, a.chunk)]
     start = time.time()
     with Pool(min(a.workers, len(jobs))) as pool:
         parts = pool.map(work, jobs, chunksize=1)   # results come back in chunk order
     save = {"p": a.p, "f": a.f, "seed": a.seed, "basis": a.basis, "shots": a.shots,
             "round_weights": syn.reshape(a.shots, -1, 72).sum(axis=2),
             "n_flags": np.array([len(x) for x in fired]),
-            "n_flags_seen": np.array([len(x) for x in seen]), "flag_miss": a.flag_miss, "flag_false": a.flag_false,
+            "n_flags_seen": np.array([len(x) for x in seen]), "flag_miss": a.flag_miss, "flag_false": a.flag_false, "flag_window": a.flag_window,
             "sample_sha256": hashlib.sha256(det.tobytes() + obs.tobytes()).hexdigest(),
             "provenance_json": json.dumps({"python": platform.python_version(),
                 "platform": platform.platform(), "workers": a.workers, "chunk": a.chunk, "threads_per_worker": 1,

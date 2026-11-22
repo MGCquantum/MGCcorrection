@@ -149,3 +149,12 @@ def test_run_job_chunk_ignores_what_the_worker_decoded_before():
     again = run_job.work(job(0, 6))["relay"]
     assert np.array_equal(first[0], again[0]) and np.array_equal(first[2], again[2])
     assert run_job.chunk_bounds(10, 4) == [(0, 4), (4, 8), (8, 10)]
+
+
+def test_timing_window_flags_spread_one_loss_over_its_qubit():
+    from lossy import timing_window_flags
+    hq = np.array([0, 1, 0, 1, 0, 1, 0, 1])          # qubit of each herald, in time order
+    keys, w = timing_window_flags(np.array([4]), hq, 3, np.random.default_rng(1))
+    assert len(keys) == 3 and 4 in keys and set(hq[keys]) == {0} and np.allclose(w, 1 / 3)
+    keys, w = timing_window_flags(np.array([4]), hq, 1, np.random.default_rng(1))
+    assert list(keys) == [4] and np.allclose(w, 1)
