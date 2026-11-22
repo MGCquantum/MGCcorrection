@@ -52,6 +52,10 @@ def parse_args():
     a.add_argument("--decoders", nargs="+", required=True)
     a.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     a.add_argument("--chunk", type=int, default=CHUNK, help="shots per chunk; relay-BP restarts its random stream per chunk")
+    a.add_argument("--flag-miss", type=float, default=0.0,
+                   help="imperfect detection: each real loss flag is hidden from the decoders with this probability")
+    a.add_argument("--flag-false", type=float, default=0.0,
+                   help="imperfect detection: each location without a loss raises a false flag with this probability")
     a.add_argument("--out", required=True)
     args = a.parse_args()
     if args.shots < 1 or args.workers < 1 or args.chunk < 1 or not 0 < args.p < 1 or not 0 <= args.f <= 1:
@@ -147,14 +151,24 @@ def main():
     ids, hid = detector_ids(circuit, a.basis), herald_ids(circuit)
     syn = det[:, ids]
     fired = [hid[det[k, hid] == 1] for k in range(a.shots)] if len(hid) else [np.array([], int)] * a.shots
+    if a.flag_miss or a.flag_false:   # the decoders see a noisy copy; the true flags are still saved
+        rng = np.random.default_rng([a.seed, 7919])
+        seen = []
+        for k in range(a.shots):
+            real = det[k, hid] == 1
+            shown = (real & (rng.random(len(hid)) >= a.flag_miss)) | (~real & (rng.random(len(hid)) < a.flag_false))
+            seen.append(hid[shown])
+    else:
+        seen = fired
     text = str(circuit)
-    jobs = [(text, a.basis, a.decoders, syn[lo:hi], obs[lo:hi], fired[lo:hi]) for lo, hi in chunk_bounds(a.shots, a.chunk)]
+    jobs = [(text, a.basis, a.decoders, syn[lo:hi], obs[lo:hi], seen[lo:hi]) for lo, hi in chunk_bounds(a.shots, a.chunk)]
     start = time.time()
     with Pool(min(a.workers, len(jobs))) as pool:
         parts = pool.map(work, jobs, chunksize=1)   # results come back in chunk order
     save = {"p": a.p, "f": a.f, "seed": a.seed, "basis": a.basis, "shots": a.shots,
             "round_weights": syn.reshape(a.shots, -1, 72).sum(axis=2),
             "n_flags": np.array([len(x) for x in fired]),
+            "n_flags_seen": np.array([len(x) for x in seen]), "flag_miss": a.flag_miss, "flag_false": a.flag_false,
             "sample_sha256": hashlib.sha256(det.tobytes() + obs.tobytes()).hexdigest(),
             "provenance_json": json.dumps({"python": platform.python_version(),
                 "platform": platform.platform(), "workers": a.workers, "chunk": a.chunk, "threads_per_worker": 1,
