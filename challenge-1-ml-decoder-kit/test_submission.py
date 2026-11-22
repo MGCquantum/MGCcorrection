@@ -119,3 +119,33 @@ def test_analysis_rejects_mislabelled_records():
     d = {'basis': np.array('X'), 'p': np.array(0.005), 'f': np.array(0.0)}
     with pytest.raises(ValueError):
         check_conditions(d, 'test_X_p0.004.npz', 'X', '0.004')
+
+
+def test_run_job_records_do_not_depend_on_worker_count(tmp_path):
+    """Fixed chunks with relay-BP restarted per chunk: the same seed gives the same record with any --workers."""
+    import subprocess, sys
+    out = {}
+    for workers in (1, 3):
+        path = tmp_path / f"w{workers}.npz"
+        subprocess.run([sys.executable, "run_job.py", "--basis", "X", "--p", "0.005", "--shots", "12", "--seed", "7",
+                        "--decoders", "bp", "relay", "--workers", str(workers), "--chunk", "4", "--out", str(path)],
+                       check=True, capture_output=True)
+        out[workers] = dict(np.load(path))
+    for key in ("sample_sha256", "round_weights", "fail_bp", "conv_bp", "fail_relay", "conv_relay"):
+        assert np.array_equal(out[1][key], out[3][key]), key
+
+
+def test_run_job_chunk_ignores_what_the_worker_decoded_before():
+    """relay-BP's random stream runs on between shots; run_job.work rebuilds it at every chunk."""
+    import stim
+    import run_job
+    from circuit import GROSS_CIRCUITS, detector_ids, load_circuit, sample
+    circuit = load_circuit(GROSS_CIRCUITS["X"], 0.006)
+    det, obs = sample(circuit, 12, 3)
+    syn = det[:, detector_ids(circuit, "X")]
+    job = lambda lo, hi: (str(circuit), "X", ["relay"], syn[lo:hi], obs[lo:hi], [np.array([], int)] * (hi - lo))
+    first = run_job.work(job(0, 6))["relay"]
+    run_job.work(job(6, 12))
+    again = run_job.work(job(0, 6))["relay"]
+    assert np.array_equal(first[0], again[0]) and np.array_equal(first[2], again[2])
+    assert run_job.chunk_bounds(10, 4) == [(0, 4), (4, 8), (8, 10)]

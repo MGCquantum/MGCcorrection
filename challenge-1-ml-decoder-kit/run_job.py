@@ -13,6 +13,14 @@ Decoders
 
 Saved per shot: fail_<dec>, time_<dec> (seconds, decode call only), conv_<dec> (BP decoders),
 round_weights (alarms per round, router features), n_flags.
+
+Reproducibility: relay-BP draws the memory strengths of its relay legs from a random stream that
+runs on from shot to shot, so its answer on a hard shot depends on the shots it decoded before.
+Shots are therefore split into fixed chunks of --chunk shots (not one chunk per worker) and
+relay-BP is rebuilt at the start of every chunk. A record is then a function of (basis, p, f,
+seed, shots, chunk) and the installed package versions, and does not depend on --workers or on
+scheduling. Caches written before this change used one chunk per worker; they remain valid
+samples but are not bit-for-bit regenerable with another worker count.
 """
 import argparse
 import hashlib
@@ -43,10 +51,11 @@ def parse_args():
     a.add_argument("--seed", type=int, required=True, help="train and test must use different seeds")
     a.add_argument("--decoders", nargs="+", required=True)
     a.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
+    a.add_argument("--chunk", type=int, default=CHUNK, help="shots per chunk; relay-BP restarts its random stream per chunk")
     a.add_argument("--out", required=True)
     args = a.parse_args()
-    if args.shots < 1 or args.workers < 1 or not 0 < args.p < 1 or not 0 <= args.f <= 1:
-        a.error("shots/workers must be positive; 0 < p < 1 and 0 <= f <= 1")
+    if args.shots < 1 or args.workers < 1 or args.chunk < 1 or not 0 < args.p < 1 or not 0 <= args.f <= 1:
+        a.error("shots/workers/chunk must be positive; 0 < p < 1 and 0 <= f <= 1")
     return args
 
 
@@ -82,13 +91,32 @@ def build(circuit, basis, names):
     return out, dec
 
 
+CHUNK = 50
+_built = {}   # per worker process: (circuit text, basis, decoders) -> (matrices, decoders)
+
+
+def chunk_bounds(shots, chunk=CHUNK):
+    """[start, stop) of every chunk: fixed size, independent of the number of workers."""
+    return [(a, min(a + chunk, shots)) for a in range(0, shots, chunk)]
+
+
 def work(job):
-    """Decode one chunk of shots with every requested decoder."""
+    """Decode one chunk of shots with every requested decoder.
+
+    Matrices and decoders are built once per worker process. relay-BP is rebuilt at the start of
+    every chunk so that its random stream, and therefore its answers, depend only on the chunk.
+    BP and BP-OSD are deterministic; the *_flags decoders get their priors set per shot.
+    """
     circuit_text, basis, names, syn, obs, fired_lists = job
     import stim
     threadpool_limits(limits=1)
-    circuit = stim.Circuit(circuit_text)
-    mats, dec = build(circuit, basis, names)
+    key = (circuit_text, basis, tuple(names))
+    if key not in _built:
+        _built.clear()
+        _built[key] = build(stim.Circuit(circuit_text), basis, names)
+    mats, dec = _built[key]
+    if "relay" in dec:
+        dec["relay"] = relay_decoder(*mats["blind"][::2])
     n = len(syn)
     res = {}
     for name, d in dec.items():
@@ -119,17 +147,17 @@ def main():
     ids, hid = detector_ids(circuit, a.basis), herald_ids(circuit)
     syn = det[:, ids]
     fired = [hid[det[k, hid] == 1] for k in range(a.shots)] if len(hid) else [np.array([], int)] * a.shots
-    chunks = np.array_split(np.arange(a.shots), a.workers)
-    jobs = [(str(circuit), a.basis, a.decoders, syn[c], obs[c], [fired[k] for k in c]) for c in chunks if len(c)]
+    text = str(circuit)
+    jobs = [(text, a.basis, a.decoders, syn[lo:hi], obs[lo:hi], fired[lo:hi]) for lo, hi in chunk_bounds(a.shots, a.chunk)]
     start = time.time()
-    with Pool(len(jobs)) as pool:
-        parts = pool.map(work, jobs)
+    with Pool(min(a.workers, len(jobs))) as pool:
+        parts = pool.map(work, jobs, chunksize=1)   # results come back in chunk order
     save = {"p": a.p, "f": a.f, "seed": a.seed, "basis": a.basis, "shots": a.shots,
             "round_weights": syn.reshape(a.shots, -1, 72).sum(axis=2),
             "n_flags": np.array([len(x) for x in fired]),
             "sample_sha256": hashlib.sha256(det.tobytes() + obs.tobytes()).hexdigest(),
             "provenance_json": json.dumps({"python": platform.python_version(),
-                "platform": platform.platform(), "workers": a.workers, "threads_per_worker": 1,
+                "platform": platform.platform(), "workers": a.workers, "chunk": a.chunk, "threads_per_worker": 1,
                 "versions": {n: version(n) for n in ["stim", "numpy", "ldpc", "relay-bp"]}})}
     for name in a.decoders:
         for i, key in enumerate(["fail", "time", "conv"]):
