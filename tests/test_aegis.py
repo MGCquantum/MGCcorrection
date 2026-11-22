@@ -259,7 +259,7 @@ def test_threshold_selection():
 
 def test_splits_use_distinct_seeds():
     assert len({TRAIN_SEED, TEST_SEED, VAL_SEED, collect.SEEDS["calib"]}) == 4
-    assert (TRAIN_SEED, TEST_SEED) == (1, 2)   # TEAM_PLAN.md
+    assert (TRAIN_SEED, TEST_SEED) == (1, 2)   # fixed by the team before any decoding
     a, b = Problem("Z", 0.004).sample(10, TRAIN_SEED), Problem("Z", 0.004).sample(10, TEST_SEED)
     assert (a[0] != b[0]).any()
 

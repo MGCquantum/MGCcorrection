@@ -22,8 +22,8 @@ Gross-code circuits remain unchanged; our extensions sit alongside them.
 | Report resource requirements | Local Apple M5 demos: 718 kB router; 191–196 MB peak process RSS including imports/training; 936 x 8784 matrix; roughly 0.02–0.03 s setup | PASS |
 | GitHub code for decoder, data generation and evaluation | `run_job.py`, `make_dataset.py`, `hybrid.py`, `analyze.py`; complete commands in `RUN.md`; dependencies and local lockfile | PASS |
 | Comparison plot | Updated `figures/erasure.png`, `figures/speed_local.png`, `results/results.png`; zero-failure bounds use separate triangles | PASS |
-| Short presentation or demo | Updated root `PITCH.md`; successful fresh X and Z live demos, seed 99 | PASS |
-| Explain strengths, weaknesses, and ML's role | README/PITCH explicitly separate the erasure gain from the router's negative result | PASS |
+| Short presentation or demo | [`docs/PRESENTATION.md`](PRESENTATION.md); successful fresh X and Z live demos, seed 99 | PASS |
+| Explain strengths, weaknesses, and ML's role | README and presentation explicitly separate the erasure gain from the router's negative result | PASS |
 
 ## Repeatable checks and evidence files
 

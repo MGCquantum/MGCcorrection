@@ -22,7 +22,7 @@ This challenge focuses on using machine learning to improve decoding, especially
 
 Build an ML-assisted decoder that improves an existing QEC decoder. Start with the BP-OSD and relay-BP decoders as baselines and examine whether a machine-learning approach can improve its accuracy, speed, or ability to handle loss.
 
-**We have provided a possible scaffolding for this decoder comparison [here](challenge-1-ml-decoder-kit.zip). Download the zip file and follow its setup instructions before implementing your decoder.**
+**We have provided a possible scaffolding for this decoder comparison [here](challenge-1-ml-decoder-kit/). Download the zip file and follow its setup instructions before implementing your decoder.**
 
 One approach is hierarchical decoding: use a fast first-stage decoder for simpler error patterns and pass harder cases to a stronger decoder. Machine learning could help identify likely errors, make use of loss information, or decide when a result should be passed to the next stage.
 
@@ -30,7 +30,7 @@ The goal is to see whether your decoder can outperform the baseline, particularl
 
 ## Requirements
 
-- Set up the code and baseline decoders. Download the [decoder kit](challenge-1-ml-decoder-kit.zip) and run the BP-OSD and relay-BP decoders, then reproduce their baseline performance before making changes.
+- Set up the code and baseline decoders. Download the [decoder kit](challenge-1-ml-decoder-kit/) and run the BP-OSD and relay-BP decoders, then reproduce their baseline performance before making changes.
 - Simulate memory experiments with noise. Use heralding information, such as loss-detection flags, where available.
 - Build your ML-assisted decoder. Use syndrome information and, where applicable, loss information. You can build a standalone decoder or add a learned component to an existing decoding pipeline.
 - Compare your decoder against the baseline approaches under the same noise conditions.

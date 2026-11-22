@@ -1,6 +1,6 @@
 # Erasure-aware decoding: using loss flags on the Gross code
 
-This is the first study in this repository, built on the challenge kit in `challenge-1-ml-decoder-kit/`. It asks how much a decoder gains on the [[144,12,12]] Gross code when some noise is converted into heralded erasures whose location is flagged, and whether a learned router can cut decoding time. The learned decoder that came out of it, QEC-Aegis, is described in [EVALUATION.md](EVALUATION.md). Evidence checks for this study are in [AUDIT.md](../AUDIT.md).
+This is the first study in this repository, built on the challenge kit in `challenge-1-ml-decoder-kit/`. It asks how much a decoder gains on the [[144,12,12]] Gross code when some noise is converted into heralded erasures whose location is flagged, and whether a learned router can cut decoding time. The learned decoder that came out of it, QEC-Aegis, is described in [EVALUATION.md](EVALUATION.md). Evidence checks for this study are in [AUDIT.md](AUDIT.md).
 
 ## 1. Using erasure flags (headline)
 **relay-BP, the strongest decoder in the kit, with the loss flags.** relay-BP has no per-shot prior update, so it is rebuilt for every shot (about 17 ms, included in its time) on the flag-blind matrix, with each flagged location's error probability raised (`lossy.fold_priors`, combining identical effects by parity). 50% of gate/idle noise flagged as erasure; the same shots are decoded with flags ignored and with flags used.
@@ -15,7 +15,7 @@ Roughly 20× fewer failed pairs, 2–5× faster on average and 6–11× faster o
 ![relay flags](../challenge-1-ml-decoder-kit/figures/relay_flags.png)
 
 **BP-OSD with the loss flags** (the first experiment; the flags enter BP-OSD's priors through its per-shot update):
-These results include the corrected herald-conditioned prior calculation (see [AUDIT.md](../AUDIT.md)); the erasure runs were regenerated locally after the fix.
+These results include the corrected herald-conditioned prior calculation (see [AUDIT.md](AUDIT.md)); the erasure runs were regenerated locally after the fix.
 p = 0.004, 12 syndrome cycles, X and Z memory. The same simulated shots are decoded with flags hidden and with flags visible. Rates are logical errors per cycle with exact (Clopper-Pearson) 95% intervals.
 
 | Noise flagged as erasure | Flags hidden (BP-OSD) | Flags used (BP-OSD) | Gain | Pairs |

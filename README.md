@@ -113,7 +113,7 @@ challenge-1-ml-decoder-kit/  the challenge kit, the erasure study and the team's
 | [`docs/EVALUATION.md`](docs/EVALUATION.md) | Full discussion: v1 and v2, where it works and falls short, data and seeds |
 | [`docs/PRESENTATION.md`](docs/PRESENTATION.md) | The five-slide talk |
 | [`docs/ERASURE.md`](docs/ERASURE.md) | Companion study: decoding with erasure (loss) flags, the hybrid decoder and the ML router |
-| [`AUDIT.md`](AUDIT.md) | Evidence checks for the erasure study |
+| [`docs/AUDIT.md`](docs/AUDIT.md) | Evidence checks for the erasure study |
 
 ## How the numbers were obtained
 - **Data splits:** the model is trained on seed-1 shots, calibrated on seed-4 shots, and its thresholds are chosen on seed-3 validation shots.
