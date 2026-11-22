@@ -1,3 +1,7 @@
 results/
 .venv/
 __pycache__/
+data/
+.pytest_cache/
+.venv
+experiments/logs/

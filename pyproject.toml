@@ -1,0 +1,6 @@
+# Test configuration for the QEC-Aegis extension. The kit's own tests run from
+# challenge-1-ml-decoder-kit (scripts/verify_submission.sh); scripts/verify_aegis.sh runs both.
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "challenge-1-ml-decoder-kit"]
+addopts = "-q"
